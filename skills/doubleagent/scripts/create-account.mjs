@@ -219,10 +219,15 @@ async function resolveSite(args, api) {
   throw new CliError(`several sites: pass --site (${all.map((s) => s.id).join(", ")})`);
 }
 var rowsOf = (d) => Array.isArray(d) ? d : d?.keys ?? [];
+var keyRowOf = (r) => {
+  const { key, ...flat } = r ?? {};
+  return key && typeof key === "object" ? { ...key, ...flat } : { ...flat, ...typeof key === "string" ? { key } : {} };
+};
 var secretOf = (k) => k.secret ?? (k.key?.startsWith("sk_") ? k.key : void 0);
+var when = (t) => typeof t === "number" ? new Date(t * 1e3).toISOString() : t;
 function printKey(io, k) {
-  const state = k.revoked_at ? "revoked" : k.expires_at ? `expires ${k.expires_at}` : "active";
-  io.out(`  ${k.id}  ${k.kind ?? "?"}_${k.env ?? "?"}  ${k.public_key ?? k.prefix ?? ""}  ${state}${k.last_used_at ? `  last used ${k.last_used_at}` : ""}`);
+  const state = k.revoked_at ? "revoked" : k.expires_at ? `expires ${when(k.expires_at)}` : "active";
+  io.out(`  ${k.id}  ${k.kind ?? "?"}_${k.env ?? "?"}  ${k.public_key ?? k.prefix ?? ""}  ${state}${k.last_used_at ? `  last used ${when(k.last_used_at)}` : ""}`);
 }
 function showSecret(io, k) {
   const s = secretOf(k);
@@ -272,7 +277,7 @@ async function keys(args, io) {
   } else if (sub === "revoke") {
     io.out(`Revoked ${args.pos[1]}.`);
   } else {
-    const k = result?.key && typeof result.key === "object" ? result.key : result;
+    const k = keyRowOf(result);
     io.out(sub === "rotate" ? "Rotated. The old key keeps working for 24 h." : "Created:");
     printKey(io, k);
     showSecret(io, k);
