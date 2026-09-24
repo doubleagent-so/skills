@@ -1,6 +1,7 @@
 ---
 name: doubleagent
 description: Install Double Agent bot and AI-agent detection on a website. Use when asked to add Double Agent, detect bots or AI agents, tag analytics or ad conversions with human/bot/agent verdicts, or protect forms and checkout from bots. Covers Next.js, Vite/React, static HTML, Astro, Nuxt, SvelteKit, Remix, WordPress, Shopify, Wix, Squarespace, Webflow and AI builders (Lovable, Bolt, v0, Emergent).
+license: MIT
 ---
 
 # Double Agent install
