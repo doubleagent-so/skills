@@ -11,5 +11,8 @@
 
 ## Notes
 - **Create React App:** edit `public/index.html` in the same way.
-- **SPAs:** the SDK handles route changes itself. It sends one beacon per page load, and verdicts carry over through `sessionStorage`.
+- **SPAs:** install the SDK once in the HTML entry; do not inject another copy on
+  each route. The SDK observes route changes and uses `sessionStorage` for the tab session.
 - **Lovable, Bolt:** these are Vite projects. See [ai-builders.md](ai-builders.md).
+- **Verify:** follow [the published-site checks](verify.md), including navigation
+  to a second route after the initial load.

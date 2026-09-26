@@ -108,14 +108,27 @@ The properties it sets are `da_class`, `da_agent`, `da_score`, `da_bucket`, `da_
 Bot ad conversions (Purchase, Lead and so on) are dropped by default. Consent is respected: Google Consent Mode, OneTrust, Cookiebot and Shopify privacy. Don't add any glue code.
 
 ## 4. Verify
-After deploying, run one of these:
+For hosted-platform users, follow [references/verify.md](references/verify.md): check
+the published site in a browser and confirm reporting when consent permits. Keep
+local helper commands in developer/agent instructions, not mandatory customer steps.
+
+For a developer check after deployment, use the CLI from any directory:
 
 ```sh
-node scripts/verify.mjs https://your-site.example            # exit 0 = installed correctly
+npx @doubleagent-so/cli verify https://your-site.example --json
+```
+
+Alternatively, from the installed skill directory containing this `SKILL.md`:
+
+```sh
+node scripts/verify.mjs https://your-site.example --json
 curl -s "https://api.doubleagent.so/v1/install-check?url=https://your-site.example"
 ```
 
-`scripts/verify.mjs` prints each problem together with its fix. Apply the fix and run it again. A keyless install reports `keyless: yes` and a claim URL, which counts as correct.
+Exit `0` from the CLI/helper reflects HTML presence and key-format checks, not
+runtime execution or detection accuracy. Inspect API diagnostics separately. A
+keyless setup is valid. Client-side injection may need browser verification even
+when the HTML checker cannot find the script. Report any unverified step explicitly.
 
 If you can't deploy (local dev), check that the two lines are in the served HTML, the stub before the SDK tag.
 

@@ -30,4 +30,6 @@
 ## Notes
 - Don't use `@doubleagent-so/js` from npm in the same app as the tag. Use one or the other.
 - **v0:** projects are Next.js app router projects, so the same edit applies.
-- **Verify:** `node scripts/verify.mjs https://<deployed-url>`. The tag is serialised into `self.__next_s` in the HTML, and verify understands that form.
+- **Verify:** follow [the published-site checks](verify.md). For a developer check,
+  run `npx @doubleagent-so/cli verify https://your-site.example --json`. Confirm
+  execution in a browser as well as the script's presence in the returned HTML.
