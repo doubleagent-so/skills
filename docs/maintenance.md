@@ -2,6 +2,9 @@
 
 [Documentation home](../README.md) · [Contributing](../CONTRIBUTING.md)
 
+Use this guide to validate and publish changes from the source monorepo.
+Maintainer access is required for the source repository and publication.
+
 ## Source of truth
 
 The [Double Agent monorepo](https://github.com/doubleagent-so/doubleagent) owns the
@@ -21,20 +24,26 @@ same CLI implementation used by the npm package.
 
 ## Validate a source change
 
-From the monorepo root:
+From the monorepo root, install dependencies and rebuild the CLI and bundled helpers:
 
 ```sh
 npm ci
 npm run build -w @doubleagent-so/cli
+```
+
+Check types and run the installer/skill tests:
+
+```sh
 npm run typecheck -w @doubleagent-so/cli
-npx vitest run packages/cli/test/skill.test.ts
+npx vitest run packages/cli/test
 ```
 
 The skill tests check frontmatter, local references, exact snippet agreement with
 the installer, generated-script freshness and helper behavior against a local API.
 They do not provision real accounts.
 
-For the distribution repository documentation, assemble a local preview and run its checker:
+Still from the monorepo root, assemble a temporary distribution preview and run
+its checker. This command block uses a POSIX-compatible shell:
 
 ```sh
 SKILLS_PREVIEW="$(mktemp -d)"
@@ -45,10 +54,11 @@ cp skills/LICENSE "$SKILLS_PREVIEW/LICENSE"
 node "$SKILLS_PREVIEW/tools/check-docs.mjs"
 ```
 
-The documentation check validates local Markdown links and anchors, the referenced
-brand asset, helper syntax and stack-snippet output. It makes no network requests
+The documentation check validates local Markdown links and anchors, language-tagged
+code fences, command formatting, the brand asset, helper syntax and stack-snippet output. It makes no network requests
 and does not create accounts. GitHub Actions runs it on pushes and pull requests.
 External product links and hosted-platform instructions still need editorial review.
+Inspect rendered Markdown, especially code blocks and tables, before publishing.
 
 ## Publish
 

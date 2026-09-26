@@ -1,54 +1,77 @@
 ---
 name: doubleagent
-description: Install Double Agent bot and AI-agent detection on a website. Use when asked to add Double Agent, detect bots or AI agents, tag analytics or ad conversions with human/bot/agent verdicts, or protect forms and checkout from bots. Covers Next.js, Vite/React, static HTML, Astro, Nuxt, SvelteKit, Remix, WordPress, Shopify, Wix, Squarespace, Webflow and AI builders (Lovable, Bolt, v0, Emergent).
+description: Install and verify Double Agent bot and agent detection on a website. Use when asked to add the Double Agent browser SDK, configure its analytics tagging, or check an existing installation. Covers Next.js, Vite, static HTML, Astro, Nuxt, SvelteKit, Remix, WordPress, Shopify, Wix, Squarespace, Webflow and AI-generated projects.
 license: MIT
 ---
 
-# Double Agent install
+# Install Double Agent
 
-This skill is the recommended way for agents to install Double Agent. It works in two ways:
+Use this runbook to add the SDK and verify the deployed website. For a CLI preview,
+run from the website project:
 
-- **Deterministic:** `npx @doubleagent-so/cli init --yes --json` detects the stack and makes the edit for you.
-- **By hand:** follow this runbook.
+```sh
+npx @doubleagent-so/cli init --dry-run
+```
 
-To install the skill itself, run `npx skills add doubleagent-so/skills`.
+After reviewing the plan, apply an authorized installation:
 
-## Rules
-1. **Install keyless.** Add the script tag with no `data-key`. It works right away, with no account needed.
-2. **Do not create an account unless the human asks.** An account is an optional upgrade (see [Unlock more](#unlock-more)).
-3. **Never put an `sk_…` secret key in client code**, HTML, a repo or a chat log. Only a `pk_…` key belongs in `data-key`.
-4. **One edit per site**, in the `<head>` of every page, before other scripts. The stub goes first, then the SDK tag. Don't add `defer`, don't change the order, don't self-host.
-5. **When you finish, tell the human in one sentence:** "Claim <domain> at https://app.doubleagent.so/claim to see the data. Everything collected so far is kept."
+```sh
+npx @doubleagent-so/cli init --yes --json
+```
+
+To install this skill itself, run from the project:
+
+```sh
+npx skills add doubleagent-so/skills
+```
+
+## Integration rules
+
+- Use the standard keyless snippet unless the user supplies a public key. Check
+  whether `DOUBLEAGENT_KEY` is set before relying on the CLI's keyless default.
+- Do not create an account unless the user asks. See [account access](#account-access).
+- Never put an `sk_` secret key in client code, HTML, a repository or shared output.
+- Install once per page through the shared head or framework layout. Keep the queue
+  stub before the SDK, preserve loading attributes and use the official CDN.
+- Report files changed, verification results and any step not completed. Link to
+  [claiming](references/claim.md) for HQ access; retained history is subject to limits.
 
 ## 1. Detect the stack
-Check these in order; the first match wins.
 
-| Check | Stack | Edit |
-|---|---|---|
-| `layout/theme.liquid` exists | Shopify theme | **No code.** Use the app embed: [references/shopify.md](references/shopify.md) |
-| `header.php`, or `style.css` containing `Theme Name:` | WordPress | [references/wordpress.md](references/wordpress.md) |
-| `next` in package.json, with `app/layout.*` | Next.js app router | [§ Next.js](#nextjs) · [references/nextjs.md](references/nextjs.md) |
-| `next` in package.json, no app dir | Next.js pages router | `pages/_document.*` `<Head>`: [references/nextjs.md](references/nextjs.md) |
-| `nuxt` dependency or `nuxt.config.*` | Nuxt | [§ Nuxt](#nuxt) |
-| `@sveltejs/kit` | SvelteKit | `src/app.html`, before `%sveltekit.head%` ([§ HTML](#html-vite-sveltekit-wordpress)) |
-| `astro` dependency or `astro.config.*` | Astro | [§ Astro](#astro) |
-| `@remix-run/react` or `@react-router/dev`, plus `app/root.*` | Remix / React Router | [§ Remix](#remix) |
-| `vite` plus `index.html` (Lovable, Bolt, most React/Vue) | Vite | `index.html` ([§ HTML](#html-vite-sveltekit-wordpress)) · [references/vite-react.md](references/vite-react.md) |
-| `*.html` at the root, or `public/index.html` | Static HTML | every page: [references/html.md](references/html.md) |
-| Hosted builder with no repo | Wix / Squarespace / Webflow | [references/wix.md](references/wix.md) · [references/squarespace.md](references/squarespace.md) · [references/webflow.md](references/webflow.md) |
-| Lovable, Bolt, v0, Emergent project | builder | [references/ai-builders.md](references/ai-builders.md) |
+Inspect the actual files and dependencies. In a monorepo, work in the website package.
 
-Not sure? `node scripts/snippet.mjs <stack>` prints the exact lines and where they go. Stacks: `html`, `vite`, `next-app`, `next-pages`, `astro`, `nuxt`, `sveltekit`, `remix`, `wordpress`, `wix`, `squarespace`, `webflow`, `shopify`.
+| Evidence | Integration |
+| --- | --- |
+| `layout/theme.liquid` | Shared theme head: [Shopify](references/shopify.md) |
+| Classic or block WordPress theme | Header plugin or child theme: [WordPress](references/wordpress.md) |
+| Next.js with a root app layout | [Next.js App Router](references/nextjs.md#app-router) |
+| Next.js with a pages directory | [Next.js Pages Router](references/nextjs.md#pages-router) |
+| Nuxt dependency or configuration | [Nuxt](#nuxt) |
+| SvelteKit dependency | Shared HTML template: [HTML snippet](#html-vite-and-sveltekit) |
+| Astro dependency or configuration | [Astro](#astro) |
+| Remix or React Router with `app/root.*` | [Remix](#remix) |
+| Vite with root `index.html` | [Vite](references/vite-react.md) |
+| Static HTML or shared HTML layout | [HTML](references/html.md) |
+| Hosted platform settings | [Wix](references/wix.md), [Squarespace](references/squarespace.md), [Webflow](references/webflow.md) |
+| Generated project | Inspect the framework: [AI builders](references/ai-builders.md) |
+
+To generate exact snippet instructions, run from the installed skill directory
+containing this file. Replace `vite` with the detected stack ID:
+
+```sh
+node scripts/snippet.mjs vite --json
+```
+
+The helper accepts `html`, `vite`, `next-app`, `next-pages`, `astro`, `nuxt`,
+`sveltekit`, `remix`, `wordpress`, `shopify`, `wix`, `squarespace` and `webflow`.
 
 ## 2. Make the edit
 
-### HTML, Vite, SvelteKit, WordPress
-Put these lines inside `<head>`, before any other `<script>`:
+### HTML, Vite and SvelteKit
 
-- Vite: `index.html`
-- SvelteKit: `src/app.html`, before `%sveltekit.head%`
-- WordPress: `header.php`, before `wp_head()`
-- Static sites: every page
+Insert both tags inside the head, before other scripts. Use Vite's root
+`index.html`, SvelteKit's `src/app.html` before its head placeholder, or the static
+site's shared layout. The platform guides cover WordPress and Shopify placement.
 
 <!-- snippet:html -->
 ```html
@@ -57,7 +80,16 @@ Put these lines inside `<head>`, before any other `<script>`:
 ```
 
 ### Next.js
-In `app/layout.tsx`, put the lines right after `<head>`. If the layout has no `<head>`, put them first inside `<body>`. Add `import Script from 'next/script';` unless the file already imports it; if it's imported under another name, use that name.
+
+In the App Router root layout, add the import if it is not already present:
+
+```tsx
+import Script from 'next/script';
+```
+
+Insert the elements inside the head, or first inside the body if there is no head.
+Reuse the existing import name. For the Pages Router, use the [Next.js guide](references/nextjs.md).
+
 <!-- snippet:next-app -->
 ```tsx
 <Script id="doubleagent-stub" strategy="beforeInteractive">
@@ -67,7 +99,10 @@ In `app/layout.tsx`, put the lines right after `<head>`. If the layout has no `<
 ```
 
 ### Astro
-In every layout with a `<head>` (usually `src/layouts/Layout.astro`). `is:inline` is required.
+
+In each shared layout that supplies a head, insert the tags before other scripts.
+Keep the inline directive so Astro preserves the snippet:
+
 <!-- snippet:astro -->
 ```astro
 <script is:inline>window.doubleagent=window.doubleagent||{q:[],push(){this.q.push(arguments)}};</script>
@@ -75,7 +110,10 @@ In every layout with a `<head>` (usually `src/layouts/Layout.astro`). `is:inline
 ```
 
 ### Nuxt
-Add this as the first entry inside `defineNuxtConfig({ … })` in `nuxt.config.ts`. If an `app.head` already exists, merge the two `script` entries into it.
+
+In `nuxt.config.ts`, insert this property fragment into the existing configuration
+object. Merge its script entries into an existing app/head configuration:
+
 <!-- snippet:nuxt -->
 ```ts
 app: {
@@ -89,53 +127,63 @@ app: {
 ```
 
 ### Remix
-Put these lines in `app/root.tsx`, right after `<head>`:
+
+In `app/root.tsx`, insert these elements inside the head, before other scripts:
+
 <!-- snippet:remix -->
 ```tsx
 <script dangerouslySetInnerHTML={{ __html: "window.doubleagent=window.doubleagent||{q:[],push(){this.q.push(arguments)}};" }} />
 <script async src="https://cdn.doubleagent.so/v1/doubleagent.js" data-profile="auto" />
 ```
 
-## 3. Integrations (nothing to do)
-With `integrations: 'auto'` (the default), the SDK tags whatever analytics and ad tools it finds on the page:
+## 3. Check integrations
 
-- GA4, GTM, Meta Pixel, TikTok, Google Ads
-- Shopify, Mixpanel, Segment, PostHog, Amplitude
-- Klaviyo, Mailchimp, HubSpot, Intercom, Clarity, Hotjar
+Automatic integration detection is enabled by default. It uses supported analytics
+and marketing SDKs already present on the page; it does not install those services.
+Fields include `da_class`, `da_agent`, `da_score`, `da_bucket`, `da_rec` and `da_verified`.
+Supported ad-conversion hooks suppress bot conversions by default. Confirm the
+site's configuration and consent behavior before reporting that tagging works.
 
-The properties it sets are `da_class`, `da_agent`, `da_score`, `da_bucket`, `da_rec` and `da_verified`.
-
-Bot ad conversions (Purchase, Lead and so on) are dropped by default. Consent is respected: Google Consent Mode, OneTrust, Cookiebot and Shopify privacy. Don't add any glue code.
+For Shopify, the standard snippet writes cart attributes when a cart exists and
+consent permits. Follow the [cart verification steps](references/shopify.md#check-the-installation).
 
 ## 4. Verify
-After deploying, run one of these:
+
+Follow [Verify a published installation](references/verify.md), including browser
+execution and collection. Hosted-platform users do not need a terminal for that path.
+
+For an additional HTML check, replace the example URL and run from any directory:
 
 ```sh
-node scripts/verify.mjs https://your-site.example            # exit 0 = installed correctly
+npx @doubleagent-so/cli verify https://your-site.example --json
+```
+
+Or use the bundled helper from the installed skill directory:
+
+```sh
+node scripts/verify.mjs https://your-site.example --json
+```
+
+For direct API diagnostics, use the published URL in this request:
+
+```sh
 curl -s "https://api.doubleagent.so/v1/install-check?url=https://your-site.example"
 ```
 
-`scripts/verify.mjs` prints each problem together with its fix. Apply the fix and run it again. A keyless install reports `keyless: yes` and a claim URL, which counts as correct.
+Inspect the complete result. Exit `0` checks HTML presence and key format; it does
+not prove browser execution, successful reporting or classification accuracy.
+For local-only sites, use browser checks and report remote verification as incomplete.
 
-If you can't deploy (local dev), check that the two lines are in the served HTML, the stub before the SDK tag.
+## Account access
 
-## Unlock more
-Only do this if the human asks. A key and a claimed domain add:
+Only create an account when the user asks. From the installed skill directory:
 
-- dashboard access
-- live view
-- `check()` / `getToken()` / `protect()` signed tokens
-- webhooks and server relabelling
+```sh
+node scripts/create-account.mjs --email you@example.com --domain your-site.example
+```
 
-Two ways to get a key:
-
-- `node scripts/create-account.mjs --email you@example.com --domain your-site.example` solves the proof-of-work, creates the account and prints the keys **once**.
-- Or `npx @doubleagent-so/cli init --email you@example.com`, which also writes the `pk_live` key into the tag.
-
-What to do with the keys:
-
-- Put the `pk_live_…` key in `data-key="…"` on the SDK tag.
-- Hand the `sk_test_…` key to the human for server-side use only. Never commit it.
-- To see the data, verify the domain: [references/claim.md](references/claim.md).
-
-Capability matrix: https://doubleagent.so/docs/capabilities/
+Replace the example email and hostname. The command can print credentials once;
+store them privately. Use public keys in browser configuration and keep secret keys
+server-side. Follow [Claim a domain](references/claim.md) for HQ access, and the
+[capability matrix](https://doubleagent.so/docs/capabilities/) for signed-token and
+other feature requirements.

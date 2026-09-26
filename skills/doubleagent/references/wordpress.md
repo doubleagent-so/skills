@@ -1,9 +1,13 @@
-# WordPress
+# Install Double Agent on WordPress
 
-## Classic theme (`header.php` exists)
+Add the keyless snippet once through a site-wide header setting or a child theme.
+You need permission to manage the relevant plugin or theme files and publish changes.
 
-- Put the lines inside `<head>`, before `<?php wp_head(); ?>`.
-- Use a **child theme** so theme updates don't remove the lines.
+## Use a header-code plugin
+
+If your site already uses a header-code plugin, paste both tags into its site-wide
+head field and save. Check that the field accepts script tags and applies to all
+intended pages:
 
 <!-- snippet:wordpress -->
 ```html
@@ -11,9 +15,17 @@
 <script async src="https://cdn.doubleagent.so/v1/doubleagent.js" data-profile="auto"></script>
 ```
 
-## Block theme (no `header.php`), or you'd rather not touch theme files
-- Use a header-code plugin, such as **WPCode** or "Insert Headers and Footers". Paste the same two lines into **Header**.
-- Or, in a child theme's `functions.php`:
+Use one installation method. A second copy in the theme or another plugin can
+produce duplicate initialization.
+
+## Use a child theme
+
+For a classic theme with `header.php`, add the same tags inside the head, before
+the WordPress head hook. Make the edit in a child theme so a parent-theme update
+does not overwrite it.
+
+For a block theme or a theme without a suitable header file, add this PHP fragment
+to the child theme's `functions.php`, inside its existing PHP context:
 
 ```php
 add_action('wp_head', function () {
@@ -22,6 +34,18 @@ add_action('wp_head', function () {
 }, 1);
 ```
 
-## Notes
-- **Caching and optimisation plugins** (WP Rocket, Autoptimize, LiteSpeed): exclude `cdn.doubleagent.so` from "delay/defer JavaScript" and don't combine the inline stub.
-- **WooCommerce:** checkout and payment are detected automatically (PCI-lite mode on card fields).
+Use the hook as an alternative to the plugin or header edit. See the
+[WordPress head-hook reference](https://developer.wordpress.org/reference/hooks/wp_head/)
+and [child-theme guide](https://developer.wordpress.org/themes/advanced-topics/child-themes/).
+
+## Check the installation
+
+Publish the change, clear the site's page cache and follow
+[Verify a published installation](verify.md). If an optimization plugin delays or
+combines scripts, preserve the stub's order and the SDK's loading behavior in its
+exclusion settings.
+
+For WooCommerce, check the storefront and checkout separately. Third-party payment
+iframes do not expose their contents to the page's SDK; loading the SDK does not
+establish payment-field coverage or compliance. To view data in HQ,
+[claim the domain](claim.md).

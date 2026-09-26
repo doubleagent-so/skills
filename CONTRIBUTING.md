@@ -1,6 +1,7 @@
 # Contributing
 
-Thank you for helping improve Double Agent's installation experience.
+Help improve the skill, platform guides and installation helpers by reporting a
+reproducible problem or proposing a focused change.
 
 ## Report an issue
 
@@ -9,9 +10,9 @@ for skill instructions, platform guidance and helper problems. Include the
 framework and version, Node.js version, command, expected result, actual result
 and a minimal reproduction. Redact credentials and private customer information.
 
-For SDK behavior or classification errors, use the
-[Double Agent issue tracker](https://github.com/doubleagent-so/doubleagent/issues).
-Report credential exposures and vulnerabilities through [Security](SECURITY.md).
+You can report SDK behavior or classification errors here too; maintainers will
+route them to the product repository. Use [Security](SECURITY.md) for credential
+exposures and vulnerabilities.
 
 ## Propose a change
 

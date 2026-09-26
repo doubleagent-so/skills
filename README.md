@@ -23,7 +23,7 @@ data in HQ.
 
 ## Get started
 
-Install the skill in your website project:
+With Node.js and npm available, install the skill from your website project:
 
 ```sh
 npx skills add doubleagent-so/skills
@@ -31,16 +31,23 @@ npx skills add doubleagent-so/skills
 
 Then ask your coding agent:
 
-> Install Double Agent on this website. Use the keyless setup and verify the integration.
+```text
+Install Double Agent on this website. Use the keyless setup and verify the integration.
+```
 
 The agent follows a stack-specific runbook: detect the framework, place the SDK
 correctly, preserve the queue stub, and check the published page. Account creation
 is optional and requires your request.
 
-Prefer to use the CLI directly? Preview the changes, then install:
+To use the CLI directly, preview the changes from your website project:
 
 ```sh
 npx @doubleagent-so/cli init --dry-run
+```
+
+Review the proposed diff, then install:
+
+```sh
 npx @doubleagent-so/cli init
 ```
 
@@ -65,7 +72,7 @@ runs in the Double Agent SDK and service; the skill itself is not a detector.
 | Static HTML and shared HTML layouts | Site-wide head snippet | [HTML](skills/doubleagent/references/html.md) |
 | Astro, Nuxt, SvelteKit, Remix / React Router | Framework-specific layout or configuration | [Framework runbook](skills/doubleagent/SKILL.md#2-make-the-edit) |
 | WordPress / WooCommerce | Theme header or header-code plugin | [WordPress](skills/doubleagent/references/wordpress.md) |
-| Shopify | App embed and customer-events pixel | [Shopify](skills/doubleagent/references/shopify.md) |
+| Shopify | Shared theme snippet with automatic cart attributes | [Shopify](skills/doubleagent/references/shopify.md) |
 | Wix, Squarespace and Webflow | Platform custom-code settings | [Wix](skills/doubleagent/references/wix.md) · [Squarespace](skills/doubleagent/references/squarespace.md) · [Webflow](skills/doubleagent/references/webflow.md) |
 | Lovable, Bolt, v0 and Emergent | Follow the generated project's framework | [AI builders](skills/doubleagent/references/ai-builders.md) |
 
@@ -78,8 +85,8 @@ platform requires changes in its own editor.
 - **Visitor classification:** human, bot and agent verdicts in the browser.
 - **Integration tagging:** detection results for supported analytics and marketing
   integrations, subject to their setup and consent state.
-- **An upgrade path:** add a public key and verify the domain for HQ access and
-  features that require a trusted site, including signed-token workflows.
+- **HQ access:** claim and verify the domain to view retained site data.
+- **Signed tokens:** configure a public key and verified origin for token workflows.
 
 Detection is evidence-based and can be uncertain. A bot or agent classification
 does not, by itself, mean malicious behavior. See the

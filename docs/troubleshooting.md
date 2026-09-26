@@ -2,90 +2,124 @@
 
 [Documentation home](../README.md) · [Command reference](command-reference.md)
 
-Start by recording the framework, Node.js version, command and exact error. Share
-redacted output when requesting help. Installation failures and detection errors
-need different evidence: the verifier checks integration structure, not accuracy.
+Find the symptom below, check the likely cause and repeat the affected verification
+step. When requesting help, include the platform, command and redacted error output.
 
 ## The coding agent cannot find the skill
 
-Confirm that the skills installer selected the coding agent you are using and the
-intended project or user scope. Check its installed skill list with `npx skills list`.
-If required by your agent, reload the project or start a new agent session.
+From the project where you installed the skill, list the installed skills:
 
-The skill is named `doubleagent`. Ask explicitly to use it. The installation
-mechanism is maintained by the [skills CLI project](https://github.com/vercel-labs/skills).
+```sh
+npx skills list
+```
+
+Check that the installer selected your coding agent and intended project or user
+scope. Reload the project or start a new agent session if your agent requires it.
+Ask the agent to use the skill named `doubleagent`.
+
+If installation failed because GitHub requested authentication, use an account
+with access to the repository. See the [skills CLI documentation](https://github.com/vercel-labs/skills)
+for authentication and installation scopes.
 
 ## The CLI does not recognize the project
 
-Run `init --dry-run` from the website root, where its framework configuration and
-entry files live. In a monorepo, use `--cwd` for the website package. Check the
-reported stack before applying the diff.
+From the website root, where its framework configuration and entry files live,
+preview the installation:
 
-If it returns unsupported-stack advice, follow the relevant
-[platform guide](../README.md#supported-platforms). A custom repository layout can
-require a manual edit even when the framework itself is documented.
+```sh
+npx @doubleagent-so/cli init --dry-run
+```
+
+In a monorepo, point the CLI at the website package. Replace `/path/to/site`:
+
+```sh
+npx @doubleagent-so/cli init --cwd /path/to/site --dry-run
+```
+
+Check the reported stack before applying changes. For an unsupported or unusual
+layout, use the [platform guide](../README.md#supported-platforms) to make the
+manual edit. Framework guidance does not imply every directory layout can be
+edited automatically.
 
 ## The script or queue stub is missing
 
-Inspect the HTML returned by the deployed URL, not only the source template. Check
-that the stub precedes the SDK tag and that the deployment includes your change.
-Look for a cache, tag manager, optimization plugin or platform setting that may
-delay, remove or duplicate the scripts.
+1. Confirm that the deployed files include both snippet tags in the intended order.
+2. Check whether a cache, consent manager, tag manager or optimization plugin delays
+   or changes the scripts.
+3. Open the published page in a browser and follow the
+   [runtime checks](../skills/doubleagent/references/verify.md#check-loading-and-collection).
 
-Use the [Next.js guide](../skills/doubleagent/references/nextjs.md) for `next/script`
-placement. A script injected only after hydration may not be visible to the HTML
-verifier; confirm its execution in a real browser as well.
+A script added after page load may be absent from the returned HTML. An HTML-only
+failure therefore needs a browser check. For framework placement, use the
+[Next.js guide](../skills/doubleagent/references/nextjs.md) or the matching platform guide.
 
 ## The browser blocks the SDK or collection request
 
-Check the browser console and Network panel for CSP errors, request blocking or
-failed responses. The standard installation loads from `https://cdn.doubleagent.so`
-and reports to `https://api.doubleagent.so`.
+Inspect the browser **Console** and **Network** panels for the failed URL and
+error. The standard installation loads its SDK from the CDN and sends collection
+requests to the API.
 
-For a restrictive Content Security Policy, allow the required script and connection
-origins within your existing policy. Authorize the inline queue stub with the site's
-nonce or hash mechanism. Do not broadly disable the policy to resolve an install error.
-Also check privacy extensions and the site's consent state.
+| Request | Origin | Relevant CSP directive |
+| --- | --- | --- |
+| SDK script | `https://cdn.doubleagent.so` | `script-src`, or `script-src-elem` when set |
+| Collection | `https://api.doubleagent.so` | `connect-src` |
+
+Add the needed origins to your existing Content Security Policy (CSP). Authorize
+the inline queue stub through the site's nonce or hash mechanism. A framework or
+proxy may require additional policy configuration; retain the rest of the site's
+policy. Also check privacy extensions, network filtering and consent settings.
 
 ## Verification passes but data is missing
 
-The verifier's exit status checks that the returned HTML contains the SDK, stub and
-a valid key format or keyless setup. Read `installCheck` and its reported problems
-separately. A successful HTML check does not establish successful runtime reporting.
+The verifier checks HTML presence and key format. Read `status`, `problems` and
+`installCheck` even when its exit code is zero.
 
-Visit the published site in a browser and inspect collection requests. Confirm that
-consent permits reporting, the intended SDK is loaded once, and you are looking at
-the correct site and data environment in HQ. Keyless data requires a verified
-domain before it can be accessed in an account.
+1. Follow the [browser checks](../skills/doubleagent/references/verify.md) to inspect
+   loading and collection requests.
+2. Confirm that consent permits reporting and the SDK loads once.
+3. In HQ, check the site, date range and live/test environment.
+4. If the installation is keyless, [claim and verify the domain](../skills/doubleagent/references/claim.md)
+   before trying to view its data in your account.
 
-An unavailable API install check or a missing last-beacon timestamp needs follow-up;
-do not substitute demonstration data to make the installation appear successful.
+If the API check fails or no collection request arrives, retain that failure in
+the report and investigate it. HTML success does not resolve a reporting failure.
 
-## The site is keyless or a token method reports `key_required`
+## A token method reports key_required
 
-Keyless is the default, valid installation. Signed-token methods require a public
-key and a verified site origin. Follow the
-[claiming guide](../skills/doubleagent/references/claim.md), add the site's public
-key, and check the [capability matrix](https://doubleagent.so/docs/capabilities/).
+The standard keyless snippet can classify visits. Signed-token methods need the
+site's public key and a verified origin. Follow the
+[claiming guide](../skills/doubleagent/references/claim.md), configure that key and
+check the [capability matrix](https://doubleagent.so/docs/capabilities/).
 
-If a secret key was placed in client code, remove and rotate it. See
-[Security](../SECURITY.md) for the private reporting channel.
+If a secret key was placed in client code, remove it and rotate or revoke it.
+See [Security](../SECURITY.md).
 
 ## A hosted platform does not show the integration
 
-Check the published domain and all-pages/header settings. Editor previews and
-production pages can behave differently. Confirm the platform plan allows custom
-code. For Shopify, use the app embed and customer-events setup described in its
-[guide](../skills/doubleagent/references/shopify.md), rather than a second theme edit.
+Check the published domain, the site-wide header setting and the platform's custom
+code requirements. Editor previews can behave differently from published pages.
+
+For Shopify, confirm the snippet is in the published theme and a cart exists.
+Check its attributes after visiting the cart page with consent granted. Follow the
+[Shopify guide](../skills/doubleagent/references/shopify.md).
+
+## A domain is not verified yet
+
+Publish the exact proof shown in HQ or by the CLI, then repeat the check. Confirm
+that it is on the hostname being verified. DNS changes may take time to become
+visible; HTML and file proofs must be accessible on the published site.
+
+See [Claim a domain](../skills/doubleagent/references/claim.md) for complete examples
+and the distinction between DNS, meta, file and script methods.
 
 ## A human, bot or agent is classified incorrectly
 
-Installation verification cannot determine whether a verdict is correct. Record
-the session ID, observation time and timezone, SDK/model version, verdict and
-reason codes if available. Describe the actual interaction sequence and what
-independently establishes the expected class. Note whether the result came from
-the SDK, Labs or HQ.
+Record the session ID, time and timezone, SDK/model version, verdict and reason
+codes if available. Describe the interaction sequence and the evidence for the
+expected classification. State whether the result came from the SDK, Labs or HQ.
+Installation verification does not evaluate classification accuracy.
 
-File a [detection issue](https://github.com/doubleagent-so/doubleagent/issues) with a
-minimal reproduction, or contact support privately for sensitive session evidence.
-Do not publish cookies, tokens, personal input contents or unredacted session exports.
+Send a minimal reproduction through the [issue form](https://github.com/doubleagent-so/skills/issues/new/choose),
+or contact [support@doubleagent.so](mailto:support@doubleagent.so) for private session
+evidence. Maintainers can route detector issues to the product repository. Remove
+cookies, tokens, personal input and private session exports from issue attachments.
