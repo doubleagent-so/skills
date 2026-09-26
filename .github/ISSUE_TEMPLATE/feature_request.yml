@@ -1,0 +1,16 @@
+name: Platform or documentation request
+description: Suggest a platform integration, clearer guide or skill improvement.
+title: "[Request]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the platform, task and missing guidance.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested improvement
+      description: Include a proposed workflow or example, if you have one.
