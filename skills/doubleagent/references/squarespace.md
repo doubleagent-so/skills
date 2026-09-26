@@ -30,7 +30,7 @@ that page; use the site-wide field for this installation.
 
 Follow [Verify a published installation](verify.md) on the live site, outside the
 editing interface. Check a normal content page and a second page reached through
-navigation. No terminal or local checkout is required for these browser checks.
+navigation. The verification guide explains the expected requests and reporting results.
 
 If data is missing, inspect the site's consent settings and check that a second
 copy of the snippet was not added through another integration. To see collected

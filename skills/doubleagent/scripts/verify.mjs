@@ -748,7 +748,7 @@ var installedIn = (p) => p.files().filter((f) => INSTALLED_RE.test(p.read(f) ?? 
 function planInstall(p, stack, o) {
   const notes = [];
   if (stack.id === "shopify-theme") {
-    notes.push("Shopify themes should use the Double Agent app embed rather than an edited theme.liquid: it survives theme updates and respects customer privacy settings.");
+    notes.push("Add the SDK snippet once to the head of layout/theme.liquid. The CLI provides instructions without editing the theme; Shopify cart attributes are written by the SDK when a cart exists and consent permits.");
     return { status: "advice", changes: [], notes };
   }
   const existing = installedIn(p);
@@ -843,10 +843,10 @@ var GUIDES = {
   squarespace: { file: "Settings \u2192 Developer tools \u2192 Code injection", where: "Header", lines: htmlSnippet },
   webflow: { file: "Site settings \u2192 Custom code", where: "Head code, then Publish", lines: htmlSnippet },
   shopify: {
-    file: "Theme editor \u2192 App embeds",
-    where: 'enable "Double Agent"',
-    lines: () => [],
-    note: 'Do not edit theme.liquid. Install the Double Agent Shopify app, then Online Store \u2192 Themes \u2192 Customize \u2192 App embeds \u2192 enable "Double Agent".'
+    file: "layout/theme.liquid",
+    where: HEAD,
+    lines: htmlSnippet,
+    note: "Add the snippet once to the shared theme head. The SDK detects Shopify and writes cart attributes when a cart exists and consent permits."
   }
 };
 var SNIPPET_STACKS = Object.keys(GUIDES);
@@ -1061,24 +1061,24 @@ function nextSteps(c) {
   const { stack, plan } = c;
   if (stack.id === "shopify-theme") {
     return [
-      "Install the Double Agent Shopify app.",
-      'Online Store \u2192 Themes \u2192 Customize \u2192 App embeds \u2192 enable "Double Agent".',
-      "Enable the Double Agent customer-events pixel for checkout coverage."
+      "Add these tags once inside the head of layout/theme.liquid, before other scripts:",
+      ...htmlSnippet({ key: c.key, profile: c.profile }).map((l) => `  ${l}`),
+      "Save and publish the theme, then visit the storefront with a cart to check the _da_* cart attributes."
     ];
   }
   if (plan.status === "unsupported") {
-    return ["Paste this into the <head> of every page, before other scripts:", ...htmlSnippet({ key: c.key, profile: "auto" }).map((l) => `  ${l}`)];
+    return ["Paste this into the <head> of every page, before other scripts:", ...htmlSnippet({ key: c.key, profile: c.profile }).map((l) => `  ${l}`)];
   }
   const site = c.domain ?? "<your-domain>";
   const steps = [];
   if (c.keyless) {
-    steps.push(`Installed without a key. Claim ${site} at ${c.claimUrl} to see the data (everything collected until then is kept).`);
+    steps.push(`Installed without a key. Claim ${site} at ${c.claimUrl} to see retained data. Retention and collection limits apply.`);
   }
   steps.push(`Deploy, then run: npx @doubleagent-so/cli verify https://${site}`);
   if (c.account) {
     const v = c.account.verify;
     steps.push(`Confirm your email: check ${c.email} for the login link${c.account.login_url ? ` (or open ${c.account.login_url})` : ""}.`);
-    if (v?.token) steps.push(`Verify ${v.hostname ?? site} to see data: DNS TXT _doubleagent.${v.hostname ?? site} "da-verify=${v.token}" (or run: npx @doubleagent-so/cli login && npx @doubleagent-so/cli verify-domain ${v.hostname ?? site} --method dns|meta|file|script)`);
+    if (v?.token) steps.push(`Verify ${v.hostname ?? site} to see data: DNS TXT _doubleagent.${v.hostname ?? site} "da-verify=${v.token}" (then run: npx @doubleagent-so/cli login && npx @doubleagent-so/cli verify-domain ${v.hostname ?? site} --method dns)`);
   } else if (!c.keyless) {
     steps.push(`Unlock the dashboard: npx @doubleagent-so/cli login, then npx @doubleagent-so/cli verify-domain ${site} --method dns`);
   } else {
@@ -1138,7 +1138,7 @@ async function init(args, io) {
     }
     applied = plan.changes.length > 0;
   }
-  const ctx = { stack, plan, key: finalKey, keyless: !email && !given, domain, claimUrl, account, email };
+  const ctx = { stack, plan, profile, key: finalKey, keyless: !email && !given, domain, claimUrl, account, email };
   const steps = nextSteps(ctx);
   const code = plan.status === "unsupported" ? 2 : 0;
   if (asJson) {

@@ -1,107 +1,111 @@
-# Getting started
+# Install Double Agent with a coding agent or CLI
 
 [Documentation home](../README.md) · [Command reference](command-reference.md) · [Troubleshooting](troubleshooting.md)
 
-## Choose your installation route
+Add the browser SDK to your website, deploy the change and check the installation.
+The standard snippet works without a Double Agent account or API key. This is
+called a **keyless installation**.
+
+## Before you start
+
+You need access to the website's source files or its platform settings. For
+terminal commands, install Node.js and npm; the Double Agent CLI requires Node.js
+18 or later. Use a supported Node.js release for your environment.
+
+Choose the route that fits your site:
 
 | Route | Use it when |
 | --- | --- |
-| Agent skill | You want a coding agent to detect the stack and follow the integration runbook |
-| Double Agent CLI | You want to preview and apply the supported file edits directly |
-| Platform guide | Your site is managed in Shopify, WordPress or a hosted builder |
+| [Coding agent](#install-with-a-coding-agent) | You want your agent to inspect the project and perform the integration |
+| [CLI](#install-with-the-cli) | You want to preview and apply file changes yourself |
+| [Platform guide](../README.md#supported-platforms) | You manage the site in a hosted editor or platform dashboard |
 
-You need access to the website project or its platform settings. The Double Agent
-CLI and bundled helpers require Node.js 18 or later; use a supported Node.js release
-for your environment. Installing packages with `npx` requires npm and network access.
+The coding-agent route needs an agent that supports skills. The platform guides
+explain any additional access or plan requirements.
 
-An account is not required for the default keyless integration. A compatible coding
-agent is required only for the agent-skill route.
+## Install with a coding agent
 
-## Install the agent skill
-
-From your website project, run:
+From your website project, install the skill:
 
 ```sh
 npx skills add doubleagent-so/skills
 ```
 
 Choose your coding agent in the installer. To inspect the available skill before
-installation, use `npx skills add doubleagent-so/skills --list`. Installation scope
-and agent selection are managed by the [skills CLI](https://github.com/vercel-labs/skills).
+installing it, run:
 
-Repository access is required. If GitHub requests authentication, use an account
-with access to `doubleagent-so/skills`; the skills installer can use your configured
-Git or GitHub CLI authentication.
+```sh
+npx skills add doubleagent-so/skills --list
+```
 
-Ask the agent:
+The [skills CLI](https://github.com/vercel-labs/skills) manages agent selection and
+installation scope. If GitHub requests authentication, use an account with access
+to this repository through your configured Git or GitHub CLI authentication.
 
-> Install Double Agent on this site using the doubleagent skill. Start keyless,
-> explain which file or platform setting changes, and verify the deployed URL.
+Ask your agent:
 
-Installing the skill adds instructions to the coding agent. It does not install
-the browser SDK into the website until the agent performs the integration.
+```text
+Install Double Agent on this website using the doubleagent skill.
+Use the default keyless setup where supported. Explain the file or setting changes,
+then verify the deployed URL. Do not create an account for me.
+```
+
+Installing the skill adds instructions to your agent. The website receives the
+SDK only after the agent performs the integration and you deploy the change.
 
 ## Install with the CLI
 
-Run these commands from the website project, not this skills repository:
+From your website project, preview the integration:
 
 ```sh
 npx @doubleagent-so/cli init --dry-run
+```
+
+Check the detected framework, target files and proposed diff. The preview does
+not edit files or create an account. If the plan matches your project, apply it:
+
+```sh
 npx @doubleagent-so/cli init
 ```
 
-The preview reports the detected stack and proposed diff without editing files or
-creating an account. Review the result, then apply it. The default install is keyless.
-The CLI may give platform instructions instead of editing files, particularly for
-Shopify or a hosted editor.
+The CLI installs keyless unless you supply a public key or have set
+`DOUBLEAGENT_KEY`. Some platforms return manual instructions instead of file edits.
+Follow the relevant [platform guide](../README.md#supported-platforms) when needed.
+Use one SDK installation per page; check for an existing tag, plugin or npm setup.
 
-For an authorized automated workflow, `init --yes --json` applies the changes and
-returns a structured result. `--json` is not a preview; pair it with `--dry-run` when
-you only want to inspect the plan.
-
-Use the [platform table](../README.md#supported-platforms) if the detected framework
-does not match your project. Avoid installing the SDK twice through a tag and an
-npm integration, or through two separate plugins.
+For automation and JSON output, see the [command reference](command-reference.md).
 
 ## Deploy and verify
 
-Build and deploy through your site's normal process, then check its public URL:
+Deploy through your site's normal process. Open the published URL, interact with
+the page and follow [Verify a published installation](../skills/doubleagent/references/verify.md).
+That guide covers browser loading, collection requests and HQ reporting.
+
+For an additional HTML check, replace the example URL and run from any directory:
 
 ```sh
-npx @doubleagent-so/cli verify https://your-site.example
+npx @doubleagent-so/cli verify https://your-site.example --json
 ```
 
-The verifier inspects the served HTML for the SDK, queue stub and key format, then
-requests an API install check. A keyless result is valid. Read any API diagnostics
-as well as the command's exit status: HTML presence alone does not prove a browser
-has sent data or that classification is accurate.
+Read the full result, including API diagnostics. A successful HTML check alone
+does not prove that the SDK ran or classified a visit correctly.
 
-For local development, inspect the served page and browser Network panel. A remote
-install checker cannot fetch a service available only on your machine. See
-[verification limits](troubleshooting.md#verification-passes-but-data-is-missing).
+For local development, use the browser checks. The remote installation service
+cannot reach a server available only on your computer.
 
-## Add an account when you need it
+## View your data in HQ
 
-For HQ access, start at [Claim your domain](https://app.doubleagent.so/claim) and
-complete domain verification. The [claiming guide](../skills/doubleagent/references/claim.md)
-describes the available verification methods and retained keyless history.
+[Claim your domain](https://app.doubleagent.so/claim) when you want access to its
+data in HQ. Domain verification links retained keyless data to your account;
+retention limits still apply. Follow the [claiming guide](../skills/doubleagent/references/claim.md).
 
-To use an existing public key, update the installation from the website project:
+To add an existing public key, replace the marked value and run from the website
+project:
 
 ```sh
 npx @doubleagent-so/cli init --key pk_live_REPLACEWITHYOURPUBLICKEY
 ```
 
-Replace the example with the site's actual public key. `pk_…` keys may appear in
-browser configuration. `sk_…` keys belong only on the server and must not be placed
-in HTML, frontend code or public logs.
-
-If you explicitly want the CLI to create an account and install its public key:
-
-```sh
-npx @doubleagent-so/cli init --email you@example.com --domain your-site.example
-```
-
-This creates account resources and may print a secret key once. Store that output
-privately. Domain verification and feature-specific configuration still apply;
-creating an account alone does not complete every integration.
+Use only a public key in browser configuration. Keep secret keys on the server.
+For optional account creation through the CLI, see
+[Create an account](command-reference.md#create-an-account).

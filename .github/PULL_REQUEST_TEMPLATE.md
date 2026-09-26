@@ -10,7 +10,14 @@ Direct distribution edits can be overwritten by the publisher.
 
 ## Validation
 
-- [ ] Ran `node tools/check-docs.mjs` on the published tree.
+From the distribution repository root, run:
+
+```sh
+node tools/check-docs.mjs
+```
+
+- [ ] The documentation checker passes.
+- [ ] Reviewed rendered prose, commands and code blocks.
 - [ ] Checked examples and links relevant to this change.
 - [ ] Updated source rather than hand-editing generated helper scripts.
 - [ ] Removed credentials and private data from examples and logs.

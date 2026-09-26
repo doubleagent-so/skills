@@ -6,8 +6,7 @@ account is optional for the initial installation.
 ## Before you start
 
 You need access to **Custom code** through a paid Site plan or an eligible Workspace
-plan. A paid Site plan is not the only way to enable custom code; eligible Workspace
-plans can also support staging sites. Check [Webflow's plan guidance](https://help.webflow.com/hc/en-us/articles/33961218263059-Choose-a-Workspace-plan)
+plan. Eligible Workspace plans can also support custom code on staging sites. Check [Webflow's plan guidance](https://help.webflow.com/hc/en-us/articles/33961218263059-Choose-a-Workspace-plan)
 and the options available in your workspace.
 
 ## Add the snippet
@@ -35,5 +34,4 @@ URL if that is your test environment, then repeat on the production domain when
 you publish there. A working preview does not establish that the live site has
 received the change.
 
-These browser checks do not require a terminal or repository checkout. To access
-site data in HQ, [claim and verify the relevant domain](claim.md).
+To access site data in HQ, [claim and verify the relevant domain](claim.md).

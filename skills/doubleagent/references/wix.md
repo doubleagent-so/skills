@@ -30,9 +30,8 @@ not an HTML embed element inside a page.
 
 ## Check the installation
 
-Follow [Verify a published installation](verify.md). No terminal or repository
-checkout is required for the browser checks. Double Agent does not add a visible
-widget to your page.
+Follow [Verify a published installation](verify.md). Check SDK loading and collection in the browser. Double Agent does not add a
+visible widget to your page.
 
 Test the published site, including navigation to another page. Wix custom code runs
 in the browser and does not run in the editor; Wix recommends checking the live
