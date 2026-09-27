@@ -24,7 +24,13 @@ for (const [file, body] of bodies) {
   const counts = new Map(), ids = new Set();
   let inFence = false;
   for (const line of body.split('\n')) {
-    if (/^\s*```/.test(line)) { inFence = !inFence; continue; }
+    const fence = /^\s*```(.*)$/.exec(line);
+    if (fence) {
+      if (!inFence) assert(/^[a-z][a-z0-9_-]*$/.test(fence[1]), `${relative(root, file)}: code fence needs a lowercase language`);
+      else assert(!fence[1].trim(), `${relative(root, file)}: unexpected content on closing code fence`);
+      inFence = !inFence;
+      continue;
+    }
     if (inFence) continue;
     const heading = /^#{1,6}\s+(.+?)\s*#*\s*$/.exec(line);
     if (!heading) continue;
@@ -37,7 +43,9 @@ for (const [file, body] of bodies) {
 }
 let links = 0;
 for (const [file, body] of bodies) {
-  const prose = body.replace(/^\s*```[^\n]*\n[\s\S]*?^\s*```\s*$/gm, '').replace(/`[^`\n]+`/g, '');
+  const withoutBlocks = body.replace(/^\s*```[^\n]*\n[\s\S]*?^\s*```\s*$/gm, '');
+  assert(!/`(?:npx|npm|node|curl|bash|git|python3?)\s+[^`\n]+`/.test(withoutBlocks), `${relative(root, file)}: put runnable commands in fenced code blocks`);
+  const prose = withoutBlocks.replace(/`[^`\n]+`/g, '');
   const targets = [
     ...[...prose.matchAll(/\[[^\]\n]*\]\(([^)\s]+)\)/g)].map(m => m[1]),
     ...[...prose.matchAll(/(?:href|src)="([^"]+)"/g)].map(m => m[1]),
@@ -47,6 +55,10 @@ for (const [file, body] of bodies) {
     const [path, fragment] = target.split('#');
     const dest = path ? resolve(dirname(file), decodeURIComponent(path)) : file;
     assert(!relative(root, dest).startsWith('..'), `${relative(root, file)}: link escapes repository: ${target}`);
+    const skillRoot = resolve(root, 'skills/doubleagent');
+    if (!relative(skillRoot, file).startsWith('..')) {
+      assert(!relative(skillRoot, dest).startsWith('..'), `${relative(root, file)}: local link escapes installed skill: ${target}`);
+    }
     assert(existsSync(dest), `${relative(root, file)}: missing target ${target}`);
     if (fragment && statSync(dest).isFile() && extname(dest) === '.md') {
       assert(anchors.get(dest)?.has(decodeURIComponent(fragment)), `${relative(root, file)}: missing anchor ${target}`);
@@ -59,13 +71,15 @@ const frontmatter = /^---\n([\s\S]*?)\n---/.exec(skill)?.[1] ?? '';
 assert(/^name: doubleagent$/m.test(frontmatter), 'Missing doubleagent skill name');
 assert(/^license: MIT$/m.test(frontmatter), 'Missing skill license');
 const helper = name => resolve(root, 'skills/doubleagent/scripts', `${name}.mjs`);
-for (const name of ['snippet', 'verify', 'create-account']) execFileSync(process.execPath, ['--check', helper(name)]);
+for (const name of ['snippet', 'verify', 'create-account', 'simulate', 'agents']) execFileSync(process.execPath, ['--check', helper(name)]);
+assert(execFileSync(process.execPath, [helper('agents'), '--help'], { encoding: 'utf8' }).includes('agent-name'));
+execFileSync(process.execPath, ['--check', resolve(root, 'skills/doubleagent/scripts/simulation-probe.js')]);
+assert(JSON.parse(execFileSync(process.execPath, [helper('simulate'), '--list'], { encoding: 'utf8' })).agents.length > 0);
 const stacks = ['html','vite','next-app','next-pages','astro','nuxt','sveltekit','remix','wordpress','wix','squarespace','webflow','shopify'];
 for (const stack of stacks) {
   const result = JSON.parse(execFileSync(process.execPath, [helper('snippet'), stack, '--json'], { encoding: 'utf8' }));
   assert.equal(result.stack, stack); assert(result.file && result.where);
   assert(Array.isArray(result.lines));
-  if (stack === 'shopify') assert.equal(result.lines.length, 0);
-  else assert(result.lines.join('\n').includes('https://cdn.doubleagent.so/v1/doubleagent.js'));
+  assert(result.lines.join('\n').includes('https://cdn.doubleagent.so/v1/doubleagent.js'));
 }
-console.log(`Checked ${documents.length} Markdown files, ${links} local references, 3 helper scripts and ${stacks.length} platform snippets.`);
+console.log(`Checked ${documents.length} Markdown files, ${links} local references, 5 helper scripts and the simulation probe and ${stacks.length} platform snippets.`);

@@ -2,6 +2,9 @@
 
 [Documentation home](../README.md) · [Contributing](../CONTRIBUTING.md)
 
+Use this guide to validate and publish changes from the source monorepo.
+Maintainer access is required for the source repository and publication.
+
 ## Source of truth
 
 The [Double Agent monorepo](https://github.com/doubleagent-so/doubleagent) owns the
@@ -15,26 +18,42 @@ source. This repository distributes a self-contained skill and its documentation
 | `skills/repository/` | Repository root | Copied by the publisher, including dotfiles |
 | `skills/LICENSE` | `LICENSE` | Copied by the publisher |
 
-The published helper scripts are generated and have no external runtime
-dependencies. Their compatibility floor is Node.js 18. Their entry points call the
+The published helper scripts are generated. Installation helpers have no external
+runtime dependencies and support Node.js 18+. Simulation requires Node.js 20+,
+Playwright and Chromium. Its generated `simulation-probe.js` browser asset must
+ship beside `simulate.mjs`. Their entry points call the
 same CLI implementation used by the npm package.
+
+The `agents.mjs` registry helper also bundles its dependencies, including the pinned
+ABI codec from `packages/identity`. It supports Node.js 18+ and needs an HTTPS RPC
+for direct lookups. Test identity resolution with the CLI tests when changing it:
+
+```sh
+npx vitest run packages/identity/test packages/cli/test apps/api/test/agent-identities.test.ts
+```
 
 ## Validate a source change
 
-From the monorepo root:
+From the monorepo root, install dependencies and rebuild the CLI and bundled helpers:
 
 ```sh
 npm ci
 npm run build -w @doubleagent-so/cli
+```
+
+Check types and run the installer/skill tests:
+
+```sh
 npm run typecheck -w @doubleagent-so/cli
-npx vitest run packages/cli/test/skill.test.ts
+npx vitest run packages/cli/test
 ```
 
 The skill tests check frontmatter, local references, exact snippet agreement with
 the installer, generated-script freshness and helper behavior against a local API.
 They do not provision real accounts.
 
-For the distribution repository documentation, assemble a local preview and run its checker:
+Still from the monorepo root, assemble a temporary distribution preview and run
+its checker. This command block uses a POSIX-compatible shell:
 
 ```sh
 SKILLS_PREVIEW="$(mktemp -d)"
@@ -45,10 +64,11 @@ cp skills/LICENSE "$SKILLS_PREVIEW/LICENSE"
 node "$SKILLS_PREVIEW/tools/check-docs.mjs"
 ```
 
-The documentation check validates local Markdown links and anchors, the referenced
-brand asset, helper syntax and stack-snippet output. It makes no network requests
+The documentation check validates local Markdown links and anchors, language-tagged
+code fences, command formatting, the brand asset, helper syntax and stack-snippet output. It makes no network requests
 and does not create accounts. GitHub Actions runs it on pushes and pull requests.
 External product links and hosted-platform instructions still need editorial review.
+Inspect rendered Markdown, especially code blocks and tables, before publishing.
 
 ## Publish
 

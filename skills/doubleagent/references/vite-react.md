@@ -1,7 +1,12 @@
-# Vite (React, Vue, Svelte, Solid)
+# Install Double Agent in a Vite app
 
-- Edit `index.html` at the project root. It is the HTML entry, not the one under `public/`.
-- Put the lines inside `<head>`, before `<script type="module" src="/src/main.tsx">` and any other script.
+Add the keyless snippet to the app's HTML entry point. This applies to Vite projects
+using React, Vue, Svelte or Solid. You need access to the project and its deployment.
+
+## Add the snippet
+
+Open `index.html` at the project root. Insert both tags inside the head, before
+the module script that loads the app:
 
 <!-- snippet:vite -->
 ```html
@@ -9,7 +14,19 @@
 <script async src="https://cdn.doubleagent.so/v1/doubleagent.js" data-profile="auto"></script>
 ```
 
-## Notes
-- **Create React App:** edit `public/index.html` in the same way.
-- **SPAs:** the SDK handles route changes itself. It sends one beacon per page load, and verdicts carry over through `sessionStorage`.
-- **Lovable, Bolt:** these are Vite projects. See [ai-builders.md](ai-builders.md).
+The Vite entry point is normally at the project root, not inside `public/`.
+For an existing Create React App project, use `public/index.html` instead.
+
+Install the SDK once in the HTML entry. The SDK observes route changes, so route
+components do not need to inject another copy. It uses browser session storage
+with an in-memory fallback when storage is unavailable.
+
+## Check the installation
+
+Build and deploy through your project's normal process. Follow
+[Verify a published installation](verify.md), including navigation to a second
+route after the first page loads.
+
+For generated projects, inspect the actual framework before editing. See
+[AI app builders](ai-builders.md). To view collected data in HQ,
+[claim the domain](claim.md).

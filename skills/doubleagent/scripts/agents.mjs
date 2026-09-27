@@ -10813,5 +10813,5 @@ async function main(p2, prefix = []) {
   return code;
 }
 
-// src/skill-bin/verify.ts
-void main(process, ["verify"]);
+// src/skill-bin/agents.ts
+await main(process, ["agents"]);
