@@ -31,6 +31,9 @@ From your website project, install the skill:
 npx skills add doubleagent-so/skills
 ```
 
+The same command installs `doubleagent-agents`, for AI agents themselves: registration, Agent Cards, the directory and
+observability. Start at its [SKILL.md](../skills/doubleagent-agents/SKILL.md).
+
 Choose your coding agent in the installer. To inspect the available skill before
 installing it, run:
 

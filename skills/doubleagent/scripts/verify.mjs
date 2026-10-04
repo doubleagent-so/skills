@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from packages/cli (github.com/doubleagent-so/doubleagent). Do not edit.
+// Generated helper from Double Agent (source and issues: github.com/doubleagent-so/skills). Do not edit.
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __esm = (fn, res, err) => function __init() {
   if (err) throw err[0];
@@ -1155,14 +1155,14 @@ function pad(hexOrBytes, { dir, size: size2 = 32 } = {}) {
 function padHex(hex_, { dir, size: size2 = 32 } = {}) {
   if (size2 === null)
     return hex_;
-  const hex = hex_.replace("0x", "");
-  if (hex.length > size2 * 2)
+  const hex2 = hex_.replace("0x", "");
+  if (hex2.length > size2 * 2)
     throw new SizeExceedsPaddingSizeError({
-      size: Math.ceil(hex.length / 2),
+      size: Math.ceil(hex2.length / 2),
       targetSize: size2,
       type: "hex"
     });
-  return `0x${hex[dir === "right" ? "padEnd" : "padStart"](size2 * 2, "0")}`;
+  return `0x${hex2[dir === "right" ? "padEnd" : "padStart"](size2 * 2, "0")}`;
 }
 function padBytes(bytes, { dir, size: size2 = 32 } = {}) {
   if (size2 === null)
@@ -1242,21 +1242,21 @@ function assertSize(hexOrBytes, { size: size2 }) {
       maxSize: size2
     });
 }
-function hexToBigInt(hex, opts = {}) {
+function hexToBigInt(hex2, opts = {}) {
   const { signed } = opts;
   if (opts.size)
-    assertSize(hex, { size: opts.size });
-  const value = BigInt(hex);
+    assertSize(hex2, { size: opts.size });
+  const value = BigInt(hex2);
   if (!signed)
     return value;
-  const size2 = Math.ceil((hex.length - 2) / 2);
+  const size2 = Math.ceil((hex2.length - 2) / 2);
   const max = (1n << BigInt(size2) * 8n - 1n) - 1n;
   if (value <= max)
     return value;
   return value - BigInt(`0x${"f".padStart(size2 * 2, "f")}`) - 1n;
 }
-function hexToNumber(hex, opts = {}) {
-  const value = hexToBigInt(hex, opts);
+function hexToNumber(hex2, opts = {}) {
+  const value = hexToBigInt(hex2, opts);
   const number = Number(value);
   if (!Number.isSafeInteger(number))
     throw new IntegerOutOfRangeError({
@@ -1287,24 +1287,24 @@ function toHex(value, opts = {}) {
   return bytesToHex(value, opts);
 }
 function boolToHex(value, opts = {}) {
-  const hex = `0x${Number(value)}`;
+  const hex2 = `0x${Number(value)}`;
   if (typeof opts.size === "number") {
-    assertSize(hex, { size: opts.size });
-    return pad(hex, { size: opts.size });
+    assertSize(hex2, { size: opts.size });
+    return pad(hex2, { size: opts.size });
   }
-  return hex;
+  return hex2;
 }
 function bytesToHex(value, opts = {}) {
   let string = "";
   for (let i2 = 0; i2 < value.length; i2++) {
     string += hexes[value[i2]];
   }
-  const hex = `0x${string}`;
+  const hex2 = `0x${string}`;
   if (typeof opts.size === "number") {
-    assertSize(hex, { size: opts.size });
-    return pad(hex, { dir: "right", size: opts.size });
+    assertSize(hex2, { size: opts.size });
+    return pad(hex2, { dir: "right", size: opts.size });
   }
-  return hex;
+  return hex2;
 }
 function numberToHex(value_, opts = {}) {
   const { signed, size: size2 } = opts;
@@ -1329,10 +1329,10 @@ function numberToHex(value_, opts = {}) {
       value: `${value_}${suffix}`
     });
   }
-  const hex = `0x${(signed && value < 0 ? (1n << BigInt(size2 * 8)) + BigInt(value) : value).toString(16)}`;
+  const hex2 = `0x${(signed && value < 0 ? (1n << BigInt(size2 * 8)) + BigInt(value) : value).toString(16)}`;
   if (size2)
-    return pad(hex, { size: size2 });
-  return hex;
+    return pad(hex2, { size: size2 });
+  return hex2;
 }
 function stringToHex(value_, opts = {}) {
   const value = encoder.encode(value_);
@@ -1378,12 +1378,12 @@ function charCodeToBase16(char) {
   return void 0;
 }
 function hexToBytes(hex_, opts = {}) {
-  let hex = hex_;
+  let hex2 = hex_;
   if (opts.size) {
-    assertSize(hex, { size: opts.size });
-    hex = pad(hex, { dir: "right", size: opts.size });
+    assertSize(hex2, { size: opts.size });
+    hex2 = pad(hex2, { dir: "right", size: opts.size });
   }
-  let hexString = hex.slice(2);
+  let hexString = hex2.slice(2);
   if (hexString.length % 2)
     hexString = `0${hexString}`;
   const length = hexString.length / 2;
@@ -1399,8 +1399,8 @@ function hexToBytes(hex_, opts = {}) {
   return bytes;
 }
 function numberToBytes(value, opts) {
-  const hex = numberToHex(value, opts);
-  return hexToBytes(hex);
+  const hex2 = numberToHex(value, opts);
+  return hexToBytes(hex2);
 }
 function stringToBytes(value, opts = {}) {
   const bytes = encoder2.encode(value);
@@ -2712,8 +2712,8 @@ var init_cursor2 = __esm({
 function bytesToBigInt(bytes, opts = {}) {
   if (typeof opts.size !== "undefined")
     assertSize(bytes, { size: opts.size });
-  const hex = bytesToHex(bytes);
-  return hexToBigInt(hex, opts);
+  const hex2 = bytesToHex(bytes);
+  return hexToBigInt(hex2, opts);
 }
 function bytesToBool(bytes_, opts = {}) {
   let bytes = bytes_;
@@ -2728,8 +2728,8 @@ function bytesToBool(bytes_, opts = {}) {
 function bytesToNumber(bytes, opts = {}) {
   if (typeof opts.size !== "undefined")
     assertSize(bytes, { size: opts.size });
-  const hex = bytesToHex(bytes);
-  return hexToNumber(hex, opts);
+  const hex2 = bytesToHex(bytes);
+  return hexToNumber(hex2, opts);
 }
 function bytesToString(bytes_, opts = {}) {
   let bytes = bytes_;
@@ -3670,23 +3670,23 @@ function abool(title, value) {
     throw new Error(title + " boolean expected, got " + value);
 }
 function numberToHexUnpadded(num) {
-  const hex = num.toString(16);
-  return hex.length & 1 ? "0" + hex : hex;
+  const hex2 = num.toString(16);
+  return hex2.length & 1 ? "0" + hex2 : hex2;
 }
-function hexToNumber2(hex) {
-  if (typeof hex !== "string")
-    throw new Error("hex string expected, got " + typeof hex);
-  return hex === "" ? _0n2 : BigInt("0x" + hex);
+function hexToNumber2(hex2) {
+  if (typeof hex2 !== "string")
+    throw new Error("hex string expected, got " + typeof hex2);
+  return hex2 === "" ? _0n2 : BigInt("0x" + hex2);
 }
 function bytesToHex2(bytes) {
   abytes3(bytes);
   if (hasHexBuiltin)
     return bytes.toHex();
-  let hex = "";
+  let hex2 = "";
   for (let i2 = 0; i2 < bytes.length; i2++) {
-    hex += hexes2[bytes[i2]];
+    hex2 += hexes2[bytes[i2]];
   }
-  return hex;
+  return hex2;
 }
 function asciiToBase16(ch) {
   if (ch >= asciis._0 && ch <= asciis._9)
@@ -3697,21 +3697,21 @@ function asciiToBase16(ch) {
     return ch - (asciis.a - 10);
   return;
 }
-function hexToBytes2(hex) {
-  if (typeof hex !== "string")
-    throw new Error("hex string expected, got " + typeof hex);
+function hexToBytes2(hex2) {
+  if (typeof hex2 !== "string")
+    throw new Error("hex string expected, got " + typeof hex2);
   if (hasHexBuiltin)
-    return Uint8Array.fromHex(hex);
-  const hl = hex.length;
+    return Uint8Array.fromHex(hex2);
+  const hl = hex2.length;
   const al = hl / 2;
   if (hl % 2)
     throw new Error("hex string expected, got unpadded hex of length " + hl);
   const array = new Uint8Array(al);
   for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
-    const n12 = asciiToBase16(hex.charCodeAt(hi));
-    const n2 = asciiToBase16(hex.charCodeAt(hi + 1));
+    const n12 = asciiToBase16(hex2.charCodeAt(hi));
+    const n2 = asciiToBase16(hex2.charCodeAt(hi + 1));
     if (n12 === void 0 || n2 === void 0) {
-      const char = hex[hi] + hex[hi + 1];
+      const char = hex2[hi] + hex2[hi + 1];
       throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
     }
     array[ai] = n12 * 16 + n2;
@@ -3731,16 +3731,16 @@ function numberToBytesBE(n, len) {
 function numberToBytesLE(n, len) {
   return numberToBytesBE(n, len).reverse();
 }
-function ensureBytes(title, hex, expectedLength) {
+function ensureBytes(title, hex2, expectedLength) {
   let res;
-  if (typeof hex === "string") {
+  if (typeof hex2 === "string") {
     try {
-      res = hexToBytes2(hex);
+      res = hexToBytes2(hex2);
     } catch (e2) {
       throw new Error(title + " must be hex string or Uint8Array, cause: " + e2);
     }
-  } else if (isBytes3(hex)) {
-    res = Uint8Array.from(hex);
+  } else if (isBytes3(hex2)) {
+    res = Uint8Array.from(hex2);
   } else {
     throw new Error(title + " must be hex string or Uint8Array");
   }
@@ -4660,8 +4660,8 @@ function weierstrassPoints(opts) {
      * Converts hash string or Uint8Array to Point.
      * @param hex short/long ECDSA hex
      */
-    static fromHex(hex) {
-      const P2 = Point.fromAffine(fromBytes(ensureBytes("pointHex", hex)));
+    static fromHex(hex2) {
+      const P2 = Point.fromAffine(fromBytes(ensureBytes("pointHex", hex2)));
       P2.assertValidity();
       return P2;
     }
@@ -5016,15 +5016,15 @@ function weierstrass(curveDef) {
       Object.freeze(this);
     }
     // pair (bytes of r, bytes of s)
-    static fromCompact(hex) {
+    static fromCompact(hex2) {
       const l = nByteLength;
-      hex = ensureBytes("compactSignature", hex, l * 2);
-      return new Signature(slcNum(hex, 0, l), slcNum(hex, l, 2 * l));
+      hex2 = ensureBytes("compactSignature", hex2, l * 2);
+      return new Signature(slcNum(hex2, 0, l), slcNum(hex2, l, 2 * l));
     }
     // DER encoded ECDSA signature
     // https://bitcoin.stackexchange.com/questions/57644/what-are-the-parts-of-a-bitcoin-transaction-input-script
-    static fromDER(hex) {
-      const { r: r2, s: s2 } = DER.toSig(ensureBytes("DER", hex));
+    static fromDER(hex2) {
+      const { r: r2, s: s2 } = DER.toSig(ensureBytes("DER", hex2));
       return new Signature(r2, s2);
     }
     /**
@@ -5340,12 +5340,12 @@ var init_weierstrass = __esm({
           const { Err: E2 } = DER;
           if (num < _0n5)
             throw new E2("integer: negative integers are not allowed");
-          let hex = numberToHexUnpadded(num);
-          if (Number.parseInt(hex[0], 16) & 8)
-            hex = "00" + hex;
-          if (hex.length & 1)
+          let hex2 = numberToHexUnpadded(num);
+          if (Number.parseInt(hex2[0], 16) & 8)
+            hex2 = "00" + hex2;
+          if (hex2.length & 1)
             throw new E2("unexpected DER parsing assertion: unpadded hex");
-          return hex;
+          return hex2;
         },
         decode(data) {
           const { Err: E2 } = DER;
@@ -5356,9 +5356,9 @@ var init_weierstrass = __esm({
           return bytesToNumberBE(data);
         }
       },
-      toSig(hex) {
+      toSig(hex2) {
         const { Err: E2, _int: int, _tlv: tlv } = DER;
-        const data = ensureBytes("signature", hex);
+        const data = ensureBytes("signature", hex2);
         const { v: seqBytes, l: seqLeftBytes } = tlv.decode(48, data);
         if (seqLeftBytes.length)
           throw new E2("invalid signature: left bytes after parsing");
@@ -5500,40 +5500,55 @@ var ApiError = class extends Error {
     this.name = "ApiError";
   }
 };
-function createApi(base2, session, f = fetch) {
+function parseBody(text) {
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    return text;
+  }
+}
+function apiErrorOf(method, path, res, data) {
+  const err = data?.error;
+  const code = typeof err === "string" ? err : err?.code ?? `http_${res.status}`;
+  const message = typeof err === "object" && err?.message || `${method} ${path} \u2192 ${res.status}${typeof err === "string" ? ` ${err}` : ""}`;
+  return new ApiError(res.status, code, message, data, res.headers);
+}
+var API_TIMEOUT_MS = 3e4;
+var isTimeout = (error) => error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError");
+function createApi(base2, session, f = fetch, { timeoutMs = API_TIMEOUT_MS } = {}) {
   const root = base2.replace(/\/+$/, "");
   return {
     base: root,
     async request(method, path, body, headers = {}) {
       let res;
+      const signal = AbortSignal.timeout(timeoutMs);
       try {
+        const hasBody = body !== void 0;
         res = await f(`${root}${path}`, {
           method,
           headers: {
             accept: "application/json",
-            ...body !== void 0 ? { "content-type": "application/json" } : {},
+            ...hasBody ? { "content-type": "application/json" } : {},
             ...session ? { authorization: `Bearer ${session}` } : {},
             "user-agent": "doubleagent-cli",
             ...headers
           },
-          body: body !== void 0 ? JSON.stringify(body) : void 0
+          body: hasBody ? JSON.stringify(body) : void 0,
+          signal
         });
       } catch (e2) {
+        if (isTimeout(e2)) throw new ApiError(0, "timeout", `${root} did not answer within ${timeoutMs / 1e3} s`);
         throw new ApiError(0, "network", `cannot reach ${root}: ${e2.message}`);
       }
-      const text = await res.text();
-      let data = null;
+      let text;
       try {
-        data = text ? JSON.parse(text) : null;
-      } catch {
-        data = text;
+        text = await res.text();
+      } catch (e2) {
+        if (isTimeout(e2)) throw new ApiError(0, "timeout", `${root} did not answer within ${timeoutMs / 1e3} s`);
+        throw new ApiError(0, "network", `lost the connection to ${root}: ${e2.message}`);
       }
-      if (!res.ok) {
-        const err = data?.error;
-        const code = typeof err === "string" ? err : err?.code ?? `http_${res.status}`;
-        const message = typeof err === "object" && err?.message || `${method} ${path} \u2192 ${res.status}${typeof err === "string" ? ` ${err}` : ""}`;
-        throw new ApiError(res.status, code, message, data, res.headers);
-      }
+      const data = parseBody(text);
+      if (!res.ok) throw apiErrorOf(method, path, res, data);
       return { status: res.status, data, headers: res.headers };
     }
   };
@@ -5615,38 +5630,47 @@ function solve(prefix, d2) {
 }
 
 // src/account.ts
-var sleep = (io, ms) => io.sleep ? io.sleep(ms) : new Promise((r2) => setTimeout(r2, ms));
+var sleep = (io, ms) => io.sleep ? io.sleep(ms) : new Promise((r2) => {
+  setTimeout(r2, ms);
+});
+async function pollDeviceToken(api, deviceCode) {
+  try {
+    const { data } = await api.request("POST", "/v1/auth/device/token", { device_code: deviceCode });
+    if (!data?.session) throw new CliError("unexpected /v1/auth/device/token response");
+    return data;
+  } catch (e2) {
+    if (!(e2 instanceof ApiError)) throw e2;
+    if (e2.status === 428 || e2.code === "authorization_pending") return "pending";
+    if (e2.status === 429 || e2.code === "slow_down") return "slow_down";
+    if (e2.status === 410 || e2.code === "expired") throw new CliError("the code expired before it was approved; run `npx @doubleagent-so/cli login` again");
+    throw e2;
+  }
+}
+async function saveLogin(api, token, io, asJson) {
+  const email = token.user?.email ?? await whoami(api.base, token.session, io);
+  const path = saveCredentials(io.env, { api: api.base, session: token.session, email, saved_at: (/* @__PURE__ */ new Date()).toISOString() });
+  if (asJson) json(io, { ok: true, email: email ?? null, credentials: path });
+  else io.out(`Logged in${email ? ` as ${email}` : ""}. Session saved to ${path}`);
+}
 async function login(args, io) {
   const api = anonApi(args, io);
   const { data: d2 } = await api.request("POST", "/v1/auth/device", {});
   if (!d2?.device_code || !d2.user_code || !d2.verify_url) throw new CliError("unexpected /v1/auth/device response");
   const asJson = !!args.flags.json;
-  const msg = `Open ${d2.verify_url} and confirm the code ${d2.user_code}`;
   if (asJson) io.err(JSON.stringify({ verify_url: d2.verify_url, user_code: d2.user_code }));
-  else io.out(`${msg}
+  else io.out(`Open ${d2.verify_url} and confirm the code ${d2.user_code}
 Waiting for approval\u2026`);
+  await saveLogin(api, await waitForApproval(api, d2, io), io, asJson);
+  return 0;
+}
+async function waitForApproval(api, d2, io) {
   let interval = Math.max(1, d2.interval ?? 5) * 1e3;
   const deadline = Date.now() + (d2.expires_in ?? 600) * 1e3;
   while (Date.now() < deadline) {
     await sleep(io, interval);
-    try {
-      const { data } = await api.request("POST", "/v1/auth/device/token", { device_code: d2.device_code });
-      if (!data?.session) throw new CliError("unexpected /v1/auth/device/token response");
-      const email = data.user?.email ?? await whoami(api.base, data.session, io);
-      const path = saveCredentials(io.env, { api: api.base, session: data.session, email, saved_at: (/* @__PURE__ */ new Date()).toISOString() });
-      if (asJson) json(io, { ok: true, email: email ?? null, credentials: path });
-      else io.out(`Logged in${email ? ` as ${email}` : ""}. Session saved to ${path}`);
-      return 0;
-    } catch (e2) {
-      if (!(e2 instanceof ApiError)) throw e2;
-      if (e2.status === 428 || e2.code === "authorization_pending") continue;
-      if (e2.status === 429 || e2.code === "slow_down") {
-        interval += 5e3;
-        continue;
-      }
-      if (e2.status === 410 || e2.code === "expired") throw new CliError("the code expired before it was approved; run `npx @doubleagent-so/cli login` again");
-      throw e2;
-    }
+    const token = await pollDeviceToken(api, d2.device_code);
+    if (token === "slow_down") interval += 5e3;
+    else if (token !== "pending") return token;
   }
   throw new CliError("timed out waiting for approval");
 }
@@ -5705,7 +5729,8 @@ var keyRowOf = (r2) => {
 var secretOf = (k) => k.secret ?? (k.key?.startsWith("sk_") ? k.key : void 0);
 var when = (t) => typeof t === "number" ? new Date(t * 1e3).toISOString() : t;
 function printKey(io, k) {
-  const state = k.revoked_at ? "revoked" : k.expires_at ? `expires ${when(k.expires_at)}` : "active";
+  const expiry = k.expires_at ? `expires ${when(k.expires_at)}` : "active";
+  const state = k.revoked_at ? "revoked" : expiry;
   io.out(`  ${k.id}  ${k.kind ?? "?"}_${k.env ?? "?"}  ${k.public_key ?? k.prefix ?? ""}  ${state}${k.last_used_at ? `  last used ${when(k.last_used_at)}` : ""}`);
 }
 function showSecret(io, k) {
@@ -5715,63 +5740,68 @@ function showSecret(io, k) {
 Secret key (shown once, store it server-side only, never in client code):
   ${s2}`);
 }
-async function keys(args, io) {
-  const { api } = sessionApi(args, io);
-  const site = await resolveSite(args, api);
-  const sub = args.pos[0] ?? "list";
-  const base2 = `/v1/sites/${encodeURIComponent(site)}/keys`;
+function newKeyBody(args) {
+  const kind = str(args.flags.kind) ?? "pk";
+  const env = str(args.flags.env) ?? "live";
+  if (!["pk", "sk"].includes(kind) || !["live", "test"].includes(env)) throw new CliError("--kind must be pk|sk and --env live|test");
+  return { kind, env };
+}
+async function keysRequest(sub, args, api, base2) {
   const needId = () => {
     const id = args.pos[1];
     if (!id) throw new CliError(`usage: npx @doubleagent-so/cli keys ${sub} <key_id> [--site st_\u2026]`);
     return encodeURIComponent(id);
   };
-  let result;
   switch (sub) {
     case "list":
-      result = (await api.request("GET", base2)).data;
-      break;
-    case "create": {
-      const kind = str(args.flags.kind) ?? "pk";
-      const env = str(args.flags.env) ?? "live";
-      if (!["pk", "sk"].includes(kind) || !["live", "test"].includes(env)) throw new CliError("--kind must be pk|sk and --env live|test");
-      result = (await api.request("POST", base2, { kind, env })).data;
-      break;
-    }
+      return (await api.request("GET", base2)).data;
+    case "create":
+      return (await api.request("POST", base2, newKeyBody(args))).data;
     case "rotate":
-      result = (await api.request("POST", `${base2}/${needId()}/rotate`, {})).data;
-      break;
+      return (await api.request("POST", `${base2}/${needId()}/rotate`, {})).data;
     case "revoke":
-      result = (await api.request("DELETE", `${base2}/${needId()}`)).data ?? { revoked: args.pos[1] };
-      break;
+      return (await api.request("DELETE", `${base2}/${needId()}`)).data ?? { revoked: args.pos[1] };
     default:
       throw new CliError(`unknown keys command "${sub}" (list|create|rotate|revoke)`);
   }
-  if (args.flags.json) {
-    json(io, { site, ...typeof result === "object" && result && !Array.isArray(result) ? result : { keys: result } });
-    return 0;
-  }
+}
+function printKeysResult(io, sub, site, result, id) {
   if (sub === "list") {
     io.out(`Keys for ${site}:`);
-    rowsOf(result).forEach((k) => printKey(io, k));
-  } else if (sub === "revoke") {
-    io.out(`Revoked ${args.pos[1]}.`);
-  } else {
-    const k = keyRowOf(result);
-    io.out(sub === "rotate" ? "Rotated. The old key keeps working for 24 h." : "Created:");
-    printKey(io, k);
-    showSecret(io, k);
+    rowsOf(result).forEach((k2) => printKey(io, k2));
+    return;
   }
+  if (sub === "revoke") {
+    io.out(`Revoked ${id}.`);
+    return;
+  }
+  const k = keyRowOf(result);
+  io.out(sub === "rotate" ? "Rotated. The old key keeps working for 24 h." : "Created:");
+  printKey(io, k);
+  showSecret(io, k);
+}
+var isRecord = (value) => typeof value === "object" && !!value && !Array.isArray(value);
+async function keys(args, io) {
+  const { api } = sessionApi(args, io);
+  const site = await resolveSite(args, api);
+  const sub = args.pos[0] ?? "list";
+  const result = await keysRequest(sub, args, api, `/v1/sites/${encodeURIComponent(site)}/keys`);
+  if (args.flags.json) json(io, { site, ...isRecord(result) ? result : { keys: result } });
+  else printKeysResult(io, sub, site, result, args.pos[1]);
   return 0;
 }
 var METHODS = ["dns", "meta", "file", "script"];
 function howTo(method, host, info) {
-  const i2 = info.instructions;
-  if (method === "dns" && i2?.dns?.name && i2.dns.value) return `Add a DNS ${i2.dns.type ?? "TXT"} record: ${i2.dns.name}  "${i2.dns.value}"`;
-  if (method === "meta" && i2?.meta?.html) return `Add to the <head> of https://${host}/: ${i2.meta.html}`;
-  if (method === "file" && i2?.file?.url && i2.file.body) return `Serve ${i2.file.url} containing: ${i2.file.body}`;
-  if (method === "script" && i2?.script?.html) return `Deploy this tag on https://${host}/: ${i2.script.html}`;
+  const fromServer = info.instructions ? SERVER_HOW_TO[method](info.instructions, host) : void 0;
+  if (fromServer) return fromServer;
   return info.token ? instructions(method, host, info.token) : void 0;
 }
+var SERVER_HOW_TO = {
+  dns: ({ dns }) => dns?.name && dns.value ? `Add a DNS ${dns.type ?? "TXT"} record: ${dns.name}  "${dns.value}"` : void 0,
+  meta: ({ meta }, host) => meta?.html ? `Add to the <head> of https://${host}/: ${meta.html}` : void 0,
+  file: ({ file }) => file?.url && file.body ? `Serve ${file.url} containing: ${file.body}` : void 0,
+  script: ({ script }, host) => script?.html ? `Deploy this tag on https://${host}/: ${script.html}` : void 0
+};
 function instructions(method, host, token) {
   switch (method) {
     case "dns":
@@ -5784,36 +5814,48 @@ function instructions(method, host, token) {
       return `Deploy the SDK tag with this site's public key (data-key) on https://${host}/`;
   }
 }
-async function verifyDomain(args, io) {
+function verifyTarget(args) {
   const host = args.pos[0]?.toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
   if (!host || !/^[a-z0-9.-]+(:\d+)?$/.test(host)) throw new CliError("usage: npx @doubleagent-so/cli verify-domain <host> --method dns|meta|file|script [--site st_\u2026]");
   const method = str(args.flags.method) ?? "dns";
   if (!METHODS.includes(method)) throw new CliError(`--method must be one of ${METHODS.join("|")}`);
+  return { host, method };
+}
+async function addDomain(api, path, host) {
+  try {
+    return (await api.request("POST", path, { hostname: host })).data ?? {};
+  } catch (e2) {
+    if (!(e2 instanceof ApiError) || e2.status !== 409) throw e2;
+    return e2.body?.domain ?? e2.body ?? {};
+  }
+}
+function printUnverified(io, args, attempt) {
+  const { site, host, method, detail, how } = attempt;
+  io.out(`Not verified yet${detail ? `: ${detail}` : ""}.`);
+  if (how) io.out(how);
+  io.out(`Then run: npx @doubleagent-so/cli verify-domain ${host} --method ${method}${args.flags.site ? ` --site ${site}` : ""}`);
+}
+async function verifyDomain(args, io) {
+  const { host, method } = verifyTarget(args);
   const { api } = sessionApi(args, io);
   const site = await resolveSite(args, api);
   const path = `/v1/sites/${encodeURIComponent(site)}/domains`;
-  let info = {};
-  try {
-    info = (await api.request("POST", path, { hostname: host })).data ?? {};
-  } catch (e2) {
-    if (!(e2 instanceof ApiError) || e2.status !== 409) throw e2;
-    info = e2.body?.domain ?? e2.body ?? {};
-  }
+  const info = await addDomain(api, path, host);
   const { data: r2 } = await api.request("POST", `${path}/${encodeURIComponent(host)}/verify`, { method });
   const how = howTo(method, host, info);
-  if (args.flags.json) {
-    json(io, { site, hostname: host, method, verified: !!r2?.verified, detail: r2?.detail ?? null, claimed: r2?.claimed ?? null, token: info.token ?? null, instructions: how ?? info.instructions ?? null });
-    return r2?.verified ? 0 : 1;
-  }
-  if (r2?.verified) {
-    io.out(`Verified ${host} (${method}).`);
-    if (r2.claimed?.sessions) io.out(`Claimed ${r2.claimed.sessions} session(s) collected before you joined.`);
-    return 0;
-  }
-  io.out(`Not verified yet${r2?.detail ? `: ${r2.detail}` : ""}.`);
-  if (how) io.out(how);
-  io.out(`Then run: npx @doubleagent-so/cli verify-domain ${host} --method ${method}${args.flags.site ? ` --site ${site}` : ""}`);
-  return 1;
+  const verified = !!r2?.verified;
+  if (args.flags.json) json(io, verifyJson({ site, host, method, verified, how }, r2, info));
+  else if (verified) printVerified(io, host, method, r2);
+  else printUnverified(io, args, { site, host, method, detail: r2?.detail, how });
+  return verified ? 0 : 1;
+}
+function verifyJson(attempt, r2, info) {
+  const { site, host, method, verified, how } = attempt;
+  return { site, hostname: host, method, verified, detail: r2?.detail ?? null, claimed: r2?.claimed ?? null, token: info.token ?? null, instructions: how ?? info.instructions ?? null };
+}
+function printVerified(io, host, method, r2) {
+  io.out(`Verified ${host} (${method}).`);
+  if (r2?.claimed?.sessions) io.out(`Claimed ${r2.claimed.sessions} session(s) collected before you joined.`);
 }
 var ACCOUNT_POW_BITS = 18;
 async function createAccount(args, io, body) {
@@ -5896,20 +5938,20 @@ var SRC_EXT = ["tsx", "jsx", "ts", "js"];
 var withExt = (base2) => SRC_EXT.map((e2) => `${base2}.${e2}`);
 var nextAppLayout = (p2) => p2.first(...withExt("app/layout"), ...withExt("src/app/layout"));
 var nextDocumentPath = (p2) => p2.first(...withExt("pages/_document"), ...withExt("src/pages/_document"));
-function detectId(p2) {
-  if (p2.has("layout/theme.liquid")) return "shopify-theme";
-  if (p2.has("header.php") || /Theme Name:/i.test(p2.read("style.css") ?? "")) return "wordpress-theme";
-  if (p2.dep("next")) {
-    if (nextAppLayout(p2)) return "next-app";
-    return "next-pages";
-  }
+function detectFramework(p2) {
+  if (p2.dep("next")) return nextAppLayout(p2) ? "next-app" : "next-pages";
   if (p2.dep("nuxt") || p2.first("nuxt.config.ts", "nuxt.config.js", "nuxt.config.mjs")) return "nuxt";
   if (p2.dep("@sveltejs/kit")) return "sveltekit";
   if (p2.dep("astro") || p2.first("astro.config.mjs", "astro.config.ts", "astro.config.js")) return "astro";
   if ((p2.dep("@remix-run/react") || p2.dep("@react-router/dev")) && p2.first(...withExt("app/root"))) return "remix";
   if (p2.dep("vite") && p2.has("index.html")) return "vite";
-  if (p2.has("index.html") || p2.has("public/index.html") || p2.files().some((f) => !f.includes("/") && /\.html?$/i.test(f))) return "html";
-  return "unknown";
+  return void 0;
+}
+var hasHtml = (p2) => p2.has("index.html") || p2.has("public/index.html") || p2.files().some((f) => !f.includes("/") && /\.html?$/i.test(f));
+function detectId(p2) {
+  if (p2.has("layout/theme.liquid")) return "shopify-theme";
+  if (p2.has("header.php") || /Theme Name:/i.test(p2.read("style.css") ?? "")) return "wordpress-theme";
+  return detectFramework(p2) ?? (hasHtml(p2) ? "html" : "unknown");
 }
 function detectPlatform(p2) {
   if (p2.dep("lovable-tagger")) return "lovable";
@@ -5936,7 +5978,7 @@ function unifiedDiff(path, before, after, context = 3) {
       i2++;
       continue;
     }
-    let start = Math.max(0, i2 - context);
+    const start = Math.max(0, i2 - context);
     let end = i2;
     while (end < ops.length) {
       if (ops[end].t !== " ") {
@@ -5958,7 +6000,6 @@ function unifiedDiff(path, before, after, context = 3) {
     hunks.push(`@@ -${aLen ? aStart + 1 : aStart},${aLen} +${bLen ? bStart + 1 : bStart},${bLen} @@`);
     for (const o of slice2) hunks.push(`${o.t}${o.line}`);
     i2 = end;
-    start = end;
   }
   const from = before === null ? "/dev/null" : `a/${path}`;
   return [`--- ${from}`, `+++ b/${path}`, ...hunks].join("\n");
@@ -5968,17 +6009,23 @@ var splitLines = (s2) => {
   if (lines[lines.length - 1] === "") lines.pop();
   return lines;
 };
-function diffLines(a, b) {
+function commonEnds(a, b) {
   let pre = 0;
   while (pre < a.length && pre < b.length && a[pre] === b[pre]) pre++;
   let suf = 0;
   while (suf < a.length - pre && suf < b.length - pre && a[a.length - 1 - suf] === b[b.length - 1 - suf]) suf++;
-  const am = a.slice(pre, a.length - suf), bm = b.slice(pre, b.length - suf);
+  return { pre, suf };
+}
+function lcsTable(am, bm) {
   const n = am.length, m2 = bm.length;
   const L = Array.from({ length: n + 1 }, () => new Array(m2 + 1).fill(0));
-  for (let x2 = n - 1; x2 >= 0; x2--) for (let y3 = m2 - 1; y3 >= 0; y3--) L[x2][y3] = am[x2] === bm[y3] ? L[x2 + 1][y3 + 1] + 1 : Math.max(L[x2 + 1][y3], L[x2][y3 + 1]);
+  for (let x = n - 1; x >= 0; x--) for (let y2 = m2 - 1; y2 >= 0; y2--) L[x][y2] = am[x] === bm[y2] ? L[x + 1][y2 + 1] + 1 : Math.max(L[x + 1][y2], L[x][y2 + 1]);
+  return L;
+}
+function middleOps(am, bm, pre) {
+  const L = lcsTable(am, bm);
+  const n = am.length, m2 = bm.length;
   const ops = [];
-  for (let k = 0; k < pre; k++) ops.push({ t: " ", line: a[k], ai: k, bi: k });
   let x = 0, y2 = 0;
   while (x < n || y2 < m2) {
     if (x < n && y2 < m2 && am[x] === bm[y2]) {
@@ -5993,6 +6040,13 @@ function diffLines(a, b) {
       x++;
     }
   }
+  return ops;
+}
+function diffLines(a, b) {
+  const { pre, suf } = commonEnds(a, b);
+  const ops = [];
+  for (let k = 0; k < pre; k++) ops.push({ t: " ", line: a[k], ai: k, bi: k });
+  ops.push(...middleOps(a.slice(pre, a.length - suf), b.slice(pre, b.length - suf), pre));
   for (let k = suf; k > 0; k--) ops.push({ t: " ", line: a[a.length - k], ai: a.length - k, bi: b.length - k });
   return ops;
 }
@@ -6402,9 +6456,53 @@ var timeoutSignal = (ms) => {
   return c2.signal;
 };
 var attr2 = (html, name) => new RegExp(`${name}["']?\\s*[:=]\\s*\\\\?["']([^"'\\\\]+)`).exec(html)?.[1];
+async function fetchPage(f, url, result) {
+  try {
+    const res = await f(url, { headers: { "User-Agent": "doubleagent-cli (install verify)", Accept: "text/html" }, redirect: "follow", signal: timeoutSignal(TIMEOUT_MS) });
+    result.status = res.status;
+    const html = await res.text();
+    if (!res.ok) result.problems.push(`GET ${url} returned ${res.status}`);
+    return html;
+  } catch (e2) {
+    result.problems.push(`could not fetch ${url}: ${e2.message}`);
+    return null;
+  }
+}
+function inspectHtml(result, html) {
+  result.script = /cdn\.doubleagent\.so\/v1\/doubleagent\.js/.test(html);
+  result.stub = html.includes("window.doubleagent=window.doubleagent||");
+  result.key = attr2(html, "data-key");
+  result.endpoint = attr2(html, "data-endpoint");
+  result.keyValid = !!result.key && KEY_RE.test(result.key) && result.key !== PLACEHOLDER_KEY;
+  result.integrations = detectInHtml(html);
+  result.keyless = result.script && !result.key;
+}
+function htmlProblems(result) {
+  const problems = [];
+  if (!result.script) problems.push("SDK script tag not found in the server HTML (client-side injection is not visible here)");
+  if (result.script && !result.stub) problems.push("queue stub missing: calls made before the SDK loads will throw");
+  if (result.key === PLACEHOLDER_KEY) problems.push(`placeholder key ${PLACEHOLDER_KEY} is still in place`);
+  else if (result.key && !result.keyValid) problems.push(`data-key "${result.key}" is not a pk_live_/pk_test_ key`);
+  return problems;
+}
+async function installCheck(f, api, url) {
+  try {
+    const res = await f(`${api}/v1/install-check?url=${encodeURIComponent(url)}`, { headers: { Accept: "application/json" }, signal: timeoutSignal(TIMEOUT_MS) });
+    const check = { reachable: true, status: res.status };
+    const text = await res.text();
+    try {
+      check.body = JSON.parse(text);
+    } catch {
+      check.body = text.slice(0, 500);
+    }
+    if (res.ok) check.check = parseInstallCheck(check.body);
+    return check;
+  } catch (e2) {
+    return { reachable: false, error: e2.message };
+  }
+}
 async function verify(url, opts = {}) {
   const f = opts.fetch ?? fetch;
-  const problems = [];
   const result = {
     url,
     ok: false,
@@ -6414,43 +6512,13 @@ async function verify(url, opts = {}) {
     keyless: false,
     integrations: [],
     installCheck: { reachable: false },
-    problems
+    problems: []
   };
-  let html = "";
-  try {
-    const res = await f(url, { headers: { "User-Agent": "doubleagent-cli (install verify)", Accept: "text/html" }, redirect: "follow", signal: timeoutSignal(TIMEOUT_MS) });
-    result.status = res.status;
-    html = await res.text();
-    if (!res.ok) problems.push(`GET ${url} returned ${res.status}`);
-  } catch (e2) {
-    problems.push(`could not fetch ${url}: ${e2.message}`);
-    return result;
-  }
-  result.script = /cdn\.doubleagent\.so\/v1\/doubleagent\.js/.test(html);
-  result.stub = html.includes("window.doubleagent=window.doubleagent||");
-  result.key = attr2(html, "data-key");
-  result.endpoint = attr2(html, "data-endpoint");
-  result.keyValid = !!result.key && KEY_RE.test(result.key) && result.key !== PLACEHOLDER_KEY;
-  result.integrations = detectInHtml(html);
-  if (!result.script) problems.push("SDK script tag not found in the server HTML (client-side injection is not visible here)");
-  if (result.script && !result.stub) problems.push("queue stub missing: calls made before the SDK loads will throw");
-  if (result.key === PLACEHOLDER_KEY) problems.push(`placeholder key ${PLACEHOLDER_KEY} is still in place`);
-  else if (result.key && !result.keyValid) problems.push(`data-key "${result.key}" is not a pk_live_/pk_test_ key`);
-  result.keyless = result.script && !result.key;
-  const api = (opts.api ?? result.endpoint ?? DEFAULT_API).replace(/\/+$/, "");
-  try {
-    const res = await f(`${api}/v1/install-check?url=${encodeURIComponent(url)}`, { headers: { Accept: "application/json" }, signal: timeoutSignal(TIMEOUT_MS) });
-    result.installCheck = { reachable: true, status: res.status };
-    const text = await res.text();
-    try {
-      result.installCheck.body = JSON.parse(text);
-    } catch {
-      result.installCheck.body = text.slice(0, 500);
-    }
-    if (res.ok) result.installCheck.check = parseInstallCheck(result.installCheck.body);
-  } catch (e2) {
-    result.installCheck = { reachable: false, error: e2.message };
-  }
+  const html = await fetchPage(f, url, result);
+  if (html === null) return result;
+  inspectHtml(result, html);
+  result.problems.push(...htmlProblems(result));
+  result.installCheck = await installCheck(f, (opts.api ?? result.endpoint ?? DEFAULT_API).replace(/\/+$/, ""), url);
   result.ok = result.script && result.stub && (result.keyless || result.keyValid);
   return result;
 }
@@ -6511,33 +6579,77 @@ var FINGERPRINTS = [
   { id: "legacy.headless", class: "bot", globals: [{ pattern: "^__nightmare$|^_phantom$|^callPhantom$|^domAutomation", code: "global.legacy_automation" }] }
 ];
 
-// src/simulation/fixtures.ts
-var globals = {
-  "global.browser_use": "__browserUseDemoPanelLoaded",
-  "global.stagehand": "__stagehand_simulation",
-  "global.skyvern": "GlobalSkyvernFrameIndex",
-  "global.chromedriver": "$cdc_simulation",
-  "global.selenium": "_Selenium_IDE_Recorder",
-  "global.playwright": "__playwright_simulation",
-  "global.puppeteer": "__puppeteer_simulation",
-  "global.legacy_automation": "__nightmare"
+// ../core/src/catalog/rules.ts
+var markerRules = () => FINGERPRINTS.flatMap((fingerprint) => (fingerprint.markers ?? []).map((marker) => ({
+  selector: marker.selector,
+  family: fingerprint.family ?? "unknown",
+  agentId: fingerprint.id,
+  target: marker.target ?? fingerprint.class,
+  code: marker.code,
+  ...marker.llr !== void 0 ? { llr: marker.llr } : {}
+})));
+var globalRules = () => FINGERPRINTS.flatMap((fingerprint) => (fingerprint.globals ?? []).map((rule) => ({
+  pattern: rule.pattern,
+  target: rule.target ?? fingerprint.class,
+  code: rule.code,
+  agentId: fingerprint.id,
+  ...fingerprint.family ? { family: fingerprint.family } : {}
+})));
+var fingerprints = new Map(FINGERPRINTS.map((fingerprint) => [fingerprint.id, fingerprint]));
+
+// ../core/src/signatures.ts
+var base = {
+  pageview: { tagOnly: true },
+  search: { challengeAt: 0.85 },
+  login: { challengeAt: 0.6, denyAt: 0.9, stepUp: true },
+  signup: { challengeAt: 0.5, denyAt: 0.85 },
+  password_reset: { challengeAt: 0.6, denyAt: 0.9 },
+  add_to_cart: { challengeAt: 0.9 },
+  checkout: { challengeAt: 0.8 },
+  payment: { challengeAt: 0.8 },
+  gift_card: { challengeAt: 0.5, denyAt: 0.85 },
+  promo: { challengeAt: 0.6, denyAt: 0.9 },
+  post: { challengeAt: 0.7, denyAt: 0.95 },
+  message: { challengeAt: 0.7, denyAt: 0.95 },
+  lead_form: { challengeAt: 0.7 },
+  api_key: { challengeAt: 0.6, denyAt: 0.9 }
 };
-var FIXTURES = FINGERPRINTS.flatMap((entry) => [
-  ...(entry.markers ?? []).flatMap((rule, i2) => rule.selector.split(",").map((selector, j) => ({
-    id: `${entry.id}:marker:${i2}:${j}`,
-    catalogId: entry.id,
-    kind: "marker",
-    value: selector.trim(),
-    reason: rule.code
-  }))),
-  ...(entry.globals ?? []).filter((rule) => globals[rule.code]).map((rule, i2) => ({
-    id: `${entry.id}:global:${i2}`,
-    catalogId: entry.id,
-    kind: "global",
-    value: globals[rule.code],
-    reason: rule.code
-  }))
-]);
+var withOverrides = (overrides) => ({ ...base, ...overrides });
+var policies = {
+  generic: base,
+  saas: withOverrides({ login: { challengeAt: 0.7, denyAt: 0.95, stepUp: true } }),
+  ecommerce: withOverrides({ checkout: { challengeAt: 0.85 }, add_to_cart: { challengeAt: 0.9 } }),
+  content: withOverrides({ pageview: { tagOnly: true }, search: { tagOnly: true } }),
+  social: withOverrides({ signup: { challengeAt: 0.45, denyAt: 0.85 } }),
+  payments: withOverrides({ payment: { challengeAt: 0.75 } }),
+  fintech: withOverrides({ login: { challengeAt: 0.5, denyAt: 0.85, stepUp: true } }),
+  ticketing: withOverrides({ add_to_cart: { challengeAt: 0.6, denyAt: 0.9 }, checkout: { challengeAt: 0.6, denyAt: 0.9 } }),
+  leadgen: withOverrides({ lead_form: { challengeAt: 0.75 } }),
+  // Public-service sites: never auto-deny (accessibility + legal access).
+  gov: Object.fromEntries(Object.keys(base).map((k) => [k, { tagOnly: true }]))
+};
+var DEFAULT_SIGNATURES = {
+  version: "2026.10.1",
+  priors: {
+    generic: { bot: 0.2, agent: 0.03 },
+    saas: { bot: 0.15, agent: 0.04 },
+    ecommerce: { bot: 0.2, agent: 0.03 },
+    content: { bot: 0.35, agent: 0.03 },
+    social: { bot: 0.25, agent: 0.04 },
+    payments: { bot: 0.1, agent: 0.02 },
+    fintech: { bot: 0.25, agent: 0.02 },
+    ticketing: { bot: 0.4, agent: 0.02 },
+    leadgen: { bot: 0.15, agent: 0.02 },
+    gov: { bot: 0.2, agent: 0.02 }
+  },
+  actionPriorBoost: { signup: 1.6, login: 1.4, gift_card: 2, promo: 1.4, add_to_cart: 1.2, lead_form: 1.3 },
+  groupCaps: { A: 12, E: 4, D: 6, R: 3, C: 3, H: 6, J: 3 },
+  markers: markerRules(),
+  globals: globalRules(),
+  policies,
+  judgeBand: [0.25, 0.75],
+  shadow: ["drive.synthetic_field_fill", "drive.scroll_jump", "drive.uniform_scroll_bursts", "bio.smooth_synthetic_curve", "bio.no_deceleration"]
+};
 
 // ../core/src/catalog/entries.ts
 var OAI = "https://developers.openai.com/api/docs/bots";
@@ -6561,7 +6673,7 @@ var GOOGLE_FETCHER_IPS = [
   { vendor: "google_user_fetchers", url: `${GIP}/user-triggered-fetchers.json` },
   { vendor: "google_user_fetchers_google", url: `${GIP}/user-triggered-fetchers-google.json` }
 ];
-var declared = (id, name, operator, ua, o = {}) => ({
+var declared = (id, name, operator, ua, overrides = {}) => ({
   id,
   name,
   operator,
@@ -6573,11 +6685,11 @@ var declared = (id, name, operator, ua, o = {}) => ({
   identify: { ua },
   respectsRobots: "unknown",
   source: AIROBOTS,
-  ...o
+  ...overrides
 });
-var withFp = (e2) => {
-  const f = FINGERPRINTS.find((x) => x.id === e2.id);
-  return { ...e2, identify: { ...e2.identify, ...f?.markers ? { markers: f.markers } : {}, ...f?.globals ? { globals: f.globals } : {} } };
+var withFp = (entry) => {
+  const fingerprint = FINGERPRINTS.find((x) => x.id === entry.id);
+  return { ...entry, identify: { ...entry.identify, ...fingerprint?.markers ? { markers: fingerprint.markers } : {}, ...fingerprint?.globals ? { globals: fingerprint.globals } : {} } };
 };
 var automation = (id, name, operator, source, ua) => withFp({
   id,
@@ -7012,7 +7124,7 @@ var social = [
   monitor("webpagetest.ptst", "WebPageTest", "webpagetest", ["PTST"]),
   monitor("gtmetrix.monitor", "GTmetrix", "gtmetrix", ["GTmetrix"])
 ];
-var tool = (id, name, operator, surface, identify, source, o = {}) => ({
+var tool = (id, name, operator, surface, identify, source, overrides = {}) => ({
   id,
   name,
   operator,
@@ -7024,7 +7136,7 @@ var tool = (id, name, operator, surface, identify, source, o = {}) => ({
   identify,
   respectsRobots: "unknown",
   source,
-  ...o
+  ...overrides
 });
 var scrapers = [
   tool("brightdata.unlocker", "Bright Data", "brightdata", "scraper_api", {}, "https://brightdata.com"),
@@ -7058,81 +7170,54 @@ var scrapers = [
 ];
 var CATALOG = [...fingerprinted, ...agents, ...aiFetch, ...aiCrawlers, ...search, ...seo, ...social, ...scrapers];
 
-// ../core/src/catalog/rules.ts
-var markerRules = () => FINGERPRINTS.flatMap((f) => (f.markers ?? []).map((m2) => ({
-  selector: m2.selector,
-  family: f.family ?? "unknown",
-  agentId: f.id,
-  target: m2.target ?? f.class,
-  code: m2.code,
-  ...m2.llr !== void 0 ? { llr: m2.llr } : {}
-})));
-var globalRules = () => FINGERPRINTS.flatMap((f) => (f.globals ?? []).map((g2) => ({
-  pattern: g2.pattern,
-  target: g2.target ?? f.class,
-  code: g2.code,
-  agentId: f.id,
-  ...f.family ? { family: f.family } : {}
-})));
-
 // ../core/src/catalog/index.ts
-var byId = new Map(CATALOG.map((e2) => [e2.id, e2]));
+var byId = new Map(CATALOG.map((entry) => [entry.id, entry]));
 var compiled = CATALOG.flatMap(
   (entry) => (entry.identify.ua ?? []).map((src) => ({ entry, re: new RegExp(`(?:^|[^A-Za-z0-9-])(${src})(?=$|[^A-Za-z0-9-])`, "i") }))
 );
+function ipListSources() {
+  const out = /* @__PURE__ */ new Map();
+  for (const entry of CATALOG) {
+    for (const list of entry.identify.ipLists ?? []) {
+      const cur = out.get(list.vendor);
+      if (cur) cur.entries.push(entry);
+      else out.set(list.vendor, { ...list, entries: [entry] });
+    }
+  }
+  return [...out.values()];
+}
+var listOperators = new Map(ipListSources().flatMap((list) => {
+  const operators = new Set(list.entries.map((entry) => entry.operator));
+  return operators.size === 1 ? [[list.vendor, list.entries[0].operator]] : [];
+}));
 
-// ../core/src/signatures.ts
-var base = {
-  pageview: { tagOnly: true },
-  search: { challengeAt: 0.85 },
-  login: { challengeAt: 0.6, denyAt: 0.9, stepUp: true },
-  signup: { challengeAt: 0.5, denyAt: 0.85 },
-  password_reset: { challengeAt: 0.6, denyAt: 0.9 },
-  add_to_cart: { challengeAt: 0.9 },
-  checkout: { challengeAt: 0.8 },
-  payment: { challengeAt: 0.8 },
-  gift_card: { challengeAt: 0.5, denyAt: 0.85 },
-  promo: { challengeAt: 0.6, denyAt: 0.9 },
-  post: { challengeAt: 0.7, denyAt: 0.95 },
-  message: { challengeAt: 0.7, denyAt: 0.95 },
-  lead_form: { challengeAt: 0.7 },
-  api_key: { challengeAt: 0.6, denyAt: 0.9 }
+// src/simulation/fixtures.ts
+var globals = {
+  "global.browser_use": "__browserUseDemoPanelLoaded",
+  "global.stagehand": "__stagehand_simulation",
+  "global.skyvern": "GlobalSkyvernFrameIndex",
+  "global.chromedriver": "$cdc_simulation",
+  "global.selenium": "_Selenium_IDE_Recorder",
+  "global.playwright": "__playwright_simulation",
+  "global.puppeteer": "__puppeteer_simulation",
+  "global.legacy_automation": "__nightmare"
 };
-var withOverrides = (o) => ({ ...base, ...o });
-var policies = {
-  generic: base,
-  saas: withOverrides({ login: { challengeAt: 0.7, denyAt: 0.95, stepUp: true } }),
-  ecommerce: withOverrides({ checkout: { challengeAt: 0.85 }, add_to_cart: { challengeAt: 0.9 } }),
-  content: withOverrides({ pageview: { tagOnly: true }, search: { tagOnly: true } }),
-  social: withOverrides({ signup: { challengeAt: 0.45, denyAt: 0.85 } }),
-  payments: withOverrides({ payment: { challengeAt: 0.75 } }),
-  fintech: withOverrides({ login: { challengeAt: 0.5, denyAt: 0.85, stepUp: true } }),
-  ticketing: withOverrides({ add_to_cart: { challengeAt: 0.6, denyAt: 0.9 }, checkout: { challengeAt: 0.6, denyAt: 0.9 } }),
-  leadgen: withOverrides({ lead_form: { challengeAt: 0.75 } }),
-  // Public-service sites: never auto-deny (accessibility + legal access).
-  gov: Object.fromEntries(Object.keys(base).map((k) => [k, { tagOnly: true }]))
-};
-var DEFAULT_SIGNATURES = {
-  version: "2026.09.4",
-  priors: {
-    generic: { bot: 0.2, agent: 0.03 },
-    saas: { bot: 0.15, agent: 0.04 },
-    ecommerce: { bot: 0.2, agent: 0.03 },
-    content: { bot: 0.35, agent: 0.03 },
-    social: { bot: 0.25, agent: 0.04 },
-    payments: { bot: 0.1, agent: 0.02 },
-    fintech: { bot: 0.25, agent: 0.02 },
-    ticketing: { bot: 0.4, agent: 0.02 },
-    leadgen: { bot: 0.15, agent: 0.02 },
-    gov: { bot: 0.2, agent: 0.02 }
-  },
-  actionPriorBoost: { signup: 1.6, login: 1.4, gift_card: 2, promo: 1.4, add_to_cart: 1.2, lead_form: 1.3 },
-  groupCaps: { A: 12, E: 4, D: 6, R: 3, C: 3, H: 6, J: 3 },
-  markers: markerRules(),
-  globals: globalRules(),
-  policies,
-  judgeBand: [0.25, 0.75]
-};
+var FIXTURES = FINGERPRINTS.flatMap((entry) => [
+  ...(entry.markers ?? []).flatMap((rule, i2) => rule.selector.split(",").map((selector, j) => ({
+    id: `${entry.id}:marker:${i2}:${j}`,
+    catalogId: entry.id,
+    kind: "marker",
+    value: selector.trim(),
+    reason: rule.code
+  }))),
+  ...(entry.globals ?? []).filter((rule) => globals[rule.code]).map((rule, i2) => ({
+    id: `${entry.id}:global:${i2}`,
+    catalogId: entry.id,
+    kind: "global",
+    value: globals[rule.code],
+    reason: rule.code
+  }))
+]);
 
 // ../identity/src/reference.ts
 var ETHEREUM_REGISTRIES = {
@@ -7169,10 +7254,10 @@ function agentReference(raw) {
 function reputationQuery(raw, reference) {
   if (raw.reviewers === void 0 || Array.isArray(raw.reviewers) && raw.reviewers.length === 0) return null;
   if (!Array.isArray(raw.reviewers) || raw.reviewers.length > 5) throw new IdentityInputError("reviewers must contain 1\u20135 trusted reviewer addresses.");
-  const reviewers = [...new Set(raw.reviewers.map((v) => address(v, "reviewer")))];
+  const reviewers = [...new Set(raw.reviewers.map((reviewer) => address(reviewer, "reviewer")))];
   const registry = raw.reputation_registry ?? (reference.chain_id === "1" && reference.registry_address === ETHEREUM_REGISTRIES.identity ? ETHEREUM_REGISTRIES.reputation : void 0);
   const tags = [raw.tag1 ?? "", raw.tag2 ?? ""];
-  if (tags.some((v) => typeof v !== "string" || v.length > 128)) throw new IdentityInputError("Reputation tags must be strings of at most 128 characters.");
+  if (tags.some((tag) => typeof tag !== "string" || tag.length > 128)) throw new IdentityInputError("Reputation tags must be strings of at most 128 characters.");
   return { registry_address: address(registry, "reputation_registry"), reviewers, tag1: tags[0], tag2: tags[1] };
 }
 
@@ -7190,67 +7275,76 @@ function parseReference(name, ref) {
   if (parts.length !== 4 || parts[0] !== "eip155") throw new IdentityInputError("Invalid ERC-8004 reference.");
   return agentReference({ agent_name: name, chain_id: parts[1], registry_address: parts[2], token_id: parts[3] });
 }
-function parseAgentUserAgent(ua) {
-  if (!ua || ua.length > AGENT_UA_MAX || /[^\x20-\x7e\t]/.test(ua)) return null;
-  let pos = 0;
+function commentEnd(ua, pos) {
+  let depth = 1;
+  while (pos < ua.length && depth) {
+    if (ua[pos] === "\\") {
+      pos += 2;
+      continue;
+    }
+    if (ua[pos] === "(") depth++;
+    if (ua[pos] === ")") depth--;
+    pos++;
+  }
+  return depth || pos < ua.length && !/[ \t]/.test(ua[pos]) ? -1 : pos;
+}
+function readProduct(ua, pos) {
+  let end = pos;
+  while (end < ua.length && !/[ \t]/.test(ua[end])) end++;
+  const [name, version3, extra] = ua.slice(pos, end).split("/");
+  if (!TOKEN.test(name) || version3 !== void 0 && !TOKEN.test(version3) || extra !== void 0) return null;
+  return { name, end };
+}
+function readProducts(ua) {
   const products = [];
+  let pos = 0;
   while (pos < ua.length) {
     while (/[ \t]/.test(ua[pos] ?? "") && pos < ua.length) pos++;
     if (pos === ua.length) break;
     if (ua[pos] === "(") {
       if (!products.length) return null;
-      const start = ++pos;
-      let depth = 1;
-      while (pos < ua.length && depth) {
-        if (ua[pos] === "\\") {
-          pos += 2;
-          continue;
-        }
-        if (ua[pos] === "(") depth++;
-        if (ua[pos] === ")") depth--;
-        pos++;
-      }
-      if (depth || pos < ua.length && !/[ \t]/.test(ua[pos])) return null;
+      const start = pos + 1;
+      pos = commentEnd(ua, start);
+      if (pos < 0) return null;
       products[products.length - 1].comments.push(ua.slice(start, pos - 1));
     } else {
-      const start = pos;
-      while (pos < ua.length && !/[ \t]/.test(ua[pos])) pos++;
-      const [name2, version3, extra] = ua.slice(start, pos).split("/");
-      if (!TOKEN.test(name2) || version3 !== void 0 && !TOKEN.test(version3) || extra !== void 0) return null;
-      products.push({ name: name2, comments: [] });
+      const product = readProduct(ua, pos);
+      if (!product) return null;
+      products.push({ name: product.name, comments: [] });
+      pos = product.end;
     }
   }
-  const candidates = products.filter(({ name: name2 }) => {
-    try {
-      agentName(name2);
-      return true;
-    } catch {
-      return false;
-    }
-  });
-  if (candidates.length !== 1) return null;
-  const [{ name, comments }] = candidates;
+  return products;
+}
+var isAgentName = (name) => {
+  try {
+    agentName(name);
+    return true;
+  } catch {
+    return false;
+  }
+};
+function commentReference(name, comments) {
   const references = comments.filter((comment) => /erc8004/i.test(comment));
+  if (!references.length) return void 0;
   if (references.length > 1) return null;
-  let reference;
-  if (references.length) {
-    const match = /^erc8004=(eip155:[^\s()]+)$/.exec(references[0]);
-    if (!match) return null;
-    try {
-      reference = parseReference(name, match[1]);
-    } catch {
-      return null;
-    }
+  const match = /^erc8004=(eip155:[^\s()]+)$/.exec(references[0]);
+  if (!match) return null;
+  try {
+    return parseReference(name, match[1]);
+  } catch {
+    return null;
   }
-  return {
-    agent_name: name,
-    agent_ref: reference?.agent_ref ?? null,
-    chain_id: reference?.chain_id ?? null,
-    registry_address: reference?.registry_address ?? null,
-    token_id: reference?.token_id ?? null,
-    source: "user-agent",
-    verification: "declared"
-  };
+}
+function parseAgentUserAgent(ua) {
+  if (!ua || ua.length > AGENT_UA_MAX || /[^\x20-\x7e\t]/.test(ua)) return null;
+  const candidates = readProducts(ua)?.filter(({ name: name2 }) => isAgentName(name2));
+  if (candidates?.length !== 1) return null;
+  const [{ name, comments }] = candidates;
+  const reference = commentReference(name, comments);
+  if (reference === null) return null;
+  const fields = reference ? { agent_ref: reference.agent_ref, chain_id: reference.chain_id, registry_address: reference.registry_address, token_id: reference.token_id } : { agent_ref: null, chain_id: null, registry_address: null, token_id: null };
+  return { agent_name: name, ...fields, source: "user-agent", verification: "declared" };
 }
 
 // src/simulation/options.ts
@@ -7276,29 +7370,37 @@ function integer(raw, name, fallback, min, max) {
     throw new Error(`${name} must be a whole number from ${min} to ${max}.`);
   return Number(raw);
 }
+function oneOf(raw, fallback, allowed, message) {
+  const value = raw ?? fallback;
+  if (!allowed(value)) throw new Error(message);
+  return value;
+}
+function checkUserAgent(value) {
+  if (value === void 0) return;
+  if (typeof value !== "string" || !value.trim() || value.length > 512 || /[\r\n]/.test(value))
+    throw new Error("user-agent must be a non-empty single line of at most 512 characters.");
+}
+function declarationOf(raw) {
+  if (raw["agent-name"] === void 0) return void 0;
+  const name = agentName(raw["agent-name"]);
+  const ref = raw["token-id"] === void 0 ? void 0 : agentReference({ agent_name: name, token_id: raw["token-id"], chain_id: raw["chain-id"], registry_address: raw.registry }).agent_ref;
+  const declaration = agentUserAgent(name, ref);
+  const userAgent = raw.userAgent;
+  if (userAgent && (parseAgentUserAgent(userAgent) || /erc8004=/i.test(userAgent)))
+    throw new Error("Use --agent-name for one declaration; do not also embed an identity in --user-agent.");
+  return declaration;
+}
 function siteOptions(raw) {
-  const scenario = raw.scenario ?? "observe";
-  if (!SITE_SCENARIOS.includes(scenario)) throw new Error("scenario must be observe, bot or agent.");
-  const evidence = raw.evidence ?? "behavior";
-  if (evidence !== "behavior" && evidence !== "marker") throw new Error("evidence must be behavior or marker.");
-  const agent = raw.agent ?? "browser-use.agent";
-  if (!SIMULATED_AGENTS.some((entry) => entry.id === agent)) throw new Error("Choose an agent with a browser fixture (use --list).");
-  const profile = raw.profile ?? "generic";
-  if (!SITE_PROFILES.includes(profile)) throw new Error("Unknown site profile.");
+  const scenario = oneOf(raw.scenario, "observe", (value) => SITE_SCENARIOS.includes(value), "scenario must be observe, bot or agent.");
+  const evidence = oneOf(raw.evidence, "behavior", (value) => value === "behavior" || value === "marker", "evidence must be behavior or marker.");
+  const agent = oneOf(raw.agent, "browser-use.agent", (value) => SIMULATED_AGENTS.some((entry) => entry.id === value), "Choose an agent with a browser fixture (use --list).");
+  const profile = oneOf(raw.profile, "generic", (value) => SITE_PROFILES.includes(value), "Unknown site profile.");
   const duration = integer(raw.duration, "duration (seconds)", 20, 2, 120);
   const delay = integer(raw.delay, "delay (milliseconds)", 1500, 0, 6e4);
   if (delay >= duration * 1e3) throw new Error("delay must be shorter than duration.");
-  if (raw.userAgent !== void 0 && (typeof raw.userAgent !== "string" || !raw.userAgent.trim() || raw.userAgent.length > 512 || /[\r\n]/.test(raw.userAgent)))
-    throw new Error("user-agent must be a non-empty single line of at most 512 characters.");
+  checkUserAgent(raw.userAgent);
   for (const key of ["report", "headed"]) if (raw[key] !== void 0 && typeof raw[key] !== "boolean") throw new Error(`${key} must be a boolean.`);
-  let declaration;
-  if (raw["agent-name"] !== void 0) {
-    const name = agentName(raw["agent-name"]);
-    const ref = raw["token-id"] === void 0 ? void 0 : agentReference({ agent_name: name, token_id: raw["token-id"], chain_id: raw["chain-id"], registry_address: raw.registry }).agent_ref;
-    declaration = agentUserAgent(name, ref);
-    if (raw.userAgent && (parseAgentUserAgent(raw.userAgent) || /erc8004=/i.test(raw.userAgent)))
-      throw new Error("Use --agent-name for one declaration; do not also embed an identity in --user-agent.");
-  }
+  const declaration = declarationOf(raw);
   return {
     url: siteUrl(raw.url),
     scenario,
@@ -7316,9 +7418,10 @@ function siteOptions(raw) {
     ...declaration ? { declaration } : {}
   };
 }
+var BOT_FIXTURE = { bot: "playwright.automation" };
 function siteFixture(options) {
   if (options.evidence !== "marker") return void 0;
-  const id = options.scenario === "agent" ? options.agent : options.scenario === "bot" ? "playwright.automation" : void 0;
+  const id = options.scenario === "agent" ? options.agent : BOT_FIXTURE[options.scenario ?? ""];
   return id ? FIXTURES.find((fixture) => fixture.catalogId === id) : void 0;
 }
 
@@ -7334,9 +7437,9 @@ import { promisify } from "node:util";
 async function behaviorActions(page, options) {
   if (options.evidence !== "behavior" || options.scenario === "observe") return null;
   const id = `da-simulation-${crypto.randomUUID()}`;
-  await page.evaluate((id2) => {
+  await page.evaluate((panelId) => {
     const panel = document.createElement("section");
-    panel.id = id2;
+    panel.id = panelId;
     panel.setAttribute("aria-label", "Double Agent simulation controls");
     panel.style.cssText = "position:fixed;inset:20px 20px auto auto;z-index:2147483647;width:300px;padding:16px;background:#fff;color:#111;border:2px solid #111;font:14px system-ui";
     panel.innerHTML = '<b>Double Agent behavior simulation</b><p>Temporary test controls. No site forms are submitted.</p><p role="status">Waiting for the first action\u2026</p><label>Test name<input autocomplete="off" type="text"></label><label>Test note<input autocomplete="off" type="text"></label><button type="button">Inspect sample</button><button type="button">Choose sample</button><button type="button">Complete sample</button>';
@@ -7376,23 +7479,33 @@ function isCollection(url, method) {
   return method === "POST" && new URL(url).pathname === "/v1/collect";
 }
 var identifier = (value, max) => typeof value === "string" && value.length <= max && /^[a-z0-9._:-]+$/i.test(value) ? value : null;
+function payloadOf(body) {
+  if (!body || body.length > 131072) return null;
+  try {
+    return JSON.parse(body);
+  } catch {
+    return null;
+  }
+}
+function outcomeOf(status, acceptedHeader, blocked) {
+  if (blocked) return { outcome: "blocked", reason: "isolated_mode" };
+  if (status === null) return { outcome: "failed", reason: "network_error" };
+  if (acceptedHeader === "0") return { outcome: "rejected", reason: "telemetry_not_accepted" };
+  return status >= 200 && status < 300 ? { outcome: "accepted", reason: null } : { outcome: "rejected", reason: "http_error" };
+}
+var verdictClassOf = (cls) => typeof cls === "string" && ["human", "bot", "agent"].includes(cls) ? cls : null;
 function collectionReceipt(url, body, status, acceptedHeader, blocked = false) {
   const endpoint = new URL(url);
-  let payload = null;
-  try {
-    if (body && body.length <= 131072) payload = JSON.parse(body);
-  } catch {
-  }
-  const outcome = blocked ? "blocked" : status === null ? "failed" : status >= 200 && status < 300 && acceptedHeader !== "0" ? "accepted" : "rejected";
-  const cls = payload?.verdict?.class;
+  const payload = payloadOf(body);
+  const { outcome, reason } = outcomeOf(status, acceptedHeader, blocked);
   return {
     endpoint: endpoint.origin + endpoint.pathname,
     sessionId: identifier(payload?.sid, 128),
     siteHost: identifier(payload?.page?.host, 253),
-    verdictClass: typeof cls === "string" && ["human", "bot", "agent"].includes(cls) ? cls : null,
+    verdictClass: verdictClassOf(payload?.verdict?.class),
     status,
     outcome,
-    reason: blocked ? "isolated_mode" : status === null ? "network_error" : acceptedHeader === "0" ? "telemetry_not_accepted" : outcome === "rejected" ? "http_error" : null
+    reason
   };
 }
 
@@ -7422,183 +7535,268 @@ async function installSimulationBrowser(cwd) {
   const { cli } = playwrightRuntime(cwd);
   await exec(process.execPath, [cli, "install", "chromium"], { maxBuffer: 8 * 1024 * 1024 });
 }
-async function runSiteSimulation(options, deps) {
-  const chromium = deps.chromium ?? playwrightRuntime(deps.cwd).chromium;
-  const source = deps.probeSource ?? readFileSync3(new URL("./simulation-probe.js", import.meta.url), "utf8");
-  const fixture = siteFixture(options);
-  const startedAt = (/* @__PURE__ */ new Date()).toISOString();
-  const snapshots = [], errors = [];
-  const actionLog = [], receipts = [];
-  const pending = /* @__PURE__ */ new Set();
-  let browser, context, page;
-  let accepted = 0, blocked = 0, signed = 0, signFailed = 0;
-  const cancel = () => {
-    void context?.close().catch(() => {
-    });
-  };
-  deps.signal?.throwIfAborted();
-  deps.signal?.addEventListener("abort", cancel, { once: true });
+async function ignoreCloseError(closing) {
   try {
-    deps.onStatus?.(`Launching ${options.headed ? "visible" : "headless"} Chromium\u2026`);
+    await closing;
+  } catch {
+  }
+}
+var pause = (ms) => new Promise((r2) => {
+  setTimeout(r2, ms);
+});
+var LIMITS = [
+  "Behavior scenarios are scripted patterns using trusted browser input on temporary test controls, not real LLM agents or tasks on the website.",
+  "Behavior-only is a diagnostic score excluding identity and environment signals. The full verdict remains authoritative for this test.",
+  "Fixture pass means the requested signal was observed, not that a real AI agent or provider was verified.",
+  "Playwright remains detectable. Observe is not proof of a human visit; human controls require a person in a normal browser.",
+  "Local detector output and the installed SDK/server verdict can differ; both are reported when available.",
+  "Isolated blocks standard Double Agent telemetry paths; the target website can still receive page requests and its other analytics."
+];
+var REPORTING_LIMIT = "Reporting uses the installed SDK and its consent/settings. Accepted collection is not proof of dashboard indexing; synthetic visits are not automatically labelled as tests.";
+var SiteSimulation = class {
+  #options;
+  #deps;
+  #chromium;
+  #source;
+  #fixture;
+  #snapshots = [];
+  #errors = [];
+  #actions = [];
+  #receipts = [];
+  #pending = /* @__PURE__ */ new Set();
+  #browser;
+  #context;
+  #accepted = 0;
+  #blocked = 0;
+  #signed = 0;
+  #signFailed = 0;
+  constructor(options, deps, chromium, source) {
+    this.#options = options;
+    this.#deps = deps;
+    this.#chromium = chromium;
+    this.#source = source;
+    this.#fixture = siteFixture(options);
+  }
+  async run() {
+    const startedAt = (/* @__PURE__ */ new Date()).toISOString();
+    const cancel = () => {
+      void ignoreCloseError(this.#context?.close());
+    };
+    const { signal } = this.#deps;
+    signal?.throwIfAborted();
+    signal?.addEventListener("abort", cancel, { once: true });
     try {
-      browser = await chromium.launch({ headless: !options.headed });
+      const browser = await this.#launch();
+      const userAgent = await this.#userAgent(browser);
+      const page = await this.#open(browser, userAgent);
+      const actions = await behaviorActions(page, this.#options);
+      const { scenario, evidence, duration } = this.#options;
+      this.#deps.onStatus?.(`Page ready. Running ${scenario} / ${evidence} for ${duration}s${actions ? `, pausing ${this.#options.pause}ms between actions` : ""}.`);
+      await this.#observe(page, actions);
+      const injectionError = await page.evaluate(() => window.__daSiteProbe.injectionError);
+      if (injectionError) this.#errors.push(injectionError);
+      if (this.#options.report) await this.#flush(page);
+      return this.#report({ startedAt, browser: browser.version(), userAgent, injectionError, actionsCompleted: actions?.count ?? 0 });
+    } finally {
+      signal?.removeEventListener("abort", cancel);
+      await ignoreCloseError(this.#context?.close());
+      await ignoreCloseError(this.#browser?.close());
+    }
+  }
+  async #launch() {
+    this.#deps.onStatus?.(`Launching ${this.#options.headed ? "visible" : "headless"} Chromium\u2026`);
+    try {
+      this.#browser = await this.#chromium.launch({ headless: !this.#options.headed });
     } catch (error) {
-      throw new Error(`Chromium could not start. Run doubleagent simulate --install-browser first. ${String(error)}`);
+      throw new Error(`Chromium could not start. Run doubleagent simulate --install-browser first. ${String(error)}`, { cause: error });
     }
-    let userAgent = options.userAgent;
-    if (options.declaration) {
-      if (!userAgent) {
-        const initial = await browser.newContext();
-        try {
-          userAgent = await (await initial.newPage()).evaluate(() => navigator.userAgent);
-        } finally {
-          await initial.close();
-        }
-      }
-      userAgent = `${userAgent} ${options.declaration}`;
-      if (userAgent.length > AGENT_UA_MAX) throw new Error("Combined User-Agent exceeds 1024 characters.");
-    }
-    context = await browser.newContext({
+    return this.#browser;
+  }
+  /** The --user-agent override; with a declaration, Chromium's own product and version plus the declaration. */
+  async #userAgent(browser) {
+    const { declaration } = this.#options;
+    if (!declaration) return this.#options.userAgent;
+    const base2 = this.#options.userAgent ?? await chromiumUserAgent(browser);
+    const userAgent = `${base2} ${declaration}`;
+    if (userAgent.length > AGENT_UA_MAX) throw new Error("Combined User-Agent exceeds 1024 characters.");
+    return userAgent;
+  }
+  /** A fresh context with telemetry routing and the probe, opened on the target once the probe is ready. */
+  async #open(browser, userAgent) {
+    const context = await browser.newContext({
       viewport: { width: 1280, height: 800 },
       serviceWorkers: "block",
       ...userAgent ? { userAgent } : {}
     });
-    deps.signal?.throwIfAborted();
-    await context.route("**/*", async (route) => {
-      if (!options.report && telemetryRequest(route.request().url())) {
-        blocked++;
-        await route.abort();
-      } else if (deps.signRequest && options.report) {
-        try {
-          const req = route.request();
-          const authenticated = await deps.signRequest(new Request(req.url(), {
-            method: req.method(),
-            headers: await req.allHeaders(),
-            ...req.postDataBuffer() ? { body: new Uint8Array(req.postDataBuffer()) } : {}
-          }));
-          if (authenticated) {
-            signed++;
-            await route.continue({ headers: Object.fromEntries(authenticated.headers) });
-          } else await route.continue();
-        } catch {
-          signFailed++;
-          if (errors.length < 20) errors.push("Request signing failed; that request was blocked.");
-          await route.abort();
-        }
-      } else await route.continue();
-    });
-    await context.addInitScript({ content: `window.__daSiteOptions=${JSON.stringify(options)};
-${source}` });
-    page = await context.newPage();
+    this.#context = context;
+    this.#deps.signal?.throwIfAborted();
+    await context.route("**/*", (route) => this.#route(route));
+    await context.addInitScript({ content: `window.__daSiteOptions=${JSON.stringify(this.#options)};
+${this.#source}` });
+    const page = await context.newPage();
     page.on("pageerror", (error) => {
-      if (errors.length < 20) errors.push(error.message.slice(0, 300));
+      if (this.#errors.length < 20) this.#errors.push(error.message.slice(0, 300));
     });
+    this.#watchCollection(page);
+    this.#deps.onStatus?.(`Opening ${cleanTarget(this.#options.url)}\u2026`);
+    await page.goto(this.#options.url, { waitUntil: "domcontentloaded", timeout: 3e4 });
+    await page.waitForFunction(() => Boolean(window.__daSiteProbe), void 0, { timeout: 15e3 });
+    await page.evaluate(() => window.__daSiteProbe.ready);
+    return page;
+  }
+  /** Isolated runs block telemetry; reporting runs pass it on, signed when a signer is given. */
+  async #route(route) {
+    const { report } = this.#options;
+    if (!report && telemetryRequest(route.request().url())) {
+      this.#blocked++;
+      await route.abort();
+    } else if (report && this.#deps.signRequest) {
+      await this.#continueSigned(route, this.#deps.signRequest);
+    } else {
+      await route.continue();
+    }
+  }
+  /** A request the signer can't sign goes on unsigned; one whose signing fails is blocked. */
+  async #continueSigned(route, sign2) {
+    try {
+      const req = route.request();
+      const body = req.postDataBuffer();
+      const authenticated = await sign2(new Request(req.url(), {
+        method: req.method(),
+        headers: await req.allHeaders(),
+        ...body ? { body: new Uint8Array(body) } : {}
+      }));
+      if (authenticated) {
+        this.#signed++;
+        await route.continue({ headers: Object.fromEntries(authenticated.headers) });
+      } else await route.continue();
+    } catch {
+      this.#signFailed++;
+      if (this.#errors.length < 20) this.#errors.push("Request signing failed; that request was blocked.");
+      await route.abort();
+    }
+  }
+  /** Tracks each collection request until it gets a response or fails, and records its receipt. */
+  #watchCollection(page) {
     const collect = (request, status, acceptedHeader) => {
       if (!isCollection(request.url(), request.method())) return;
-      pending.delete(request);
-      const receipt = collectionReceipt(request.url(), request.postData(), status, acceptedHeader, !options.report);
-      if (receipt.outcome === "accepted") accepted++;
-      if (receipts.length < 50) receipts.push(receipt);
-      deps.onCollection?.(receipt);
+      this.#pending.delete(request);
+      const receipt = collectionReceipt(request.url(), request.postData(), status, acceptedHeader, !this.#options.report);
+      if (receipt.outcome === "accepted") this.#accepted++;
+      if (this.#receipts.length < 50) this.#receipts.push(receipt);
+      this.#deps.onCollection?.(receipt);
     };
     page.on("request", (request) => {
-      if (isCollection(request.url(), request.method())) pending.add(request);
+      if (isCollection(request.url(), request.method())) this.#pending.add(request);
     });
     page.on("requestfailed", (request) => collect(request, null));
     page.on("response", (response) => {
       collect(response.request(), response.status(), response.headers()["da-telemetry-accepted"]);
     });
-    deps.onStatus?.(`Opening ${cleanTarget(options.url)}\u2026`);
-    await page.goto(options.url, { waitUntil: "domcontentloaded", timeout: 3e4 });
-    await page.waitForFunction(() => Boolean(window.__daSiteProbe), void 0, { timeout: 15e3 });
-    await page.evaluate(() => window.__daSiteProbe.ready);
-    const actions = await behaviorActions(page, options);
-    deps.onStatus?.(`Page ready. Running ${options.scenario} / ${options.evidence} for ${options.duration}s${actions ? `, pausing ${options.pause}ms between actions` : ""}.`);
+  }
+  /** Until the duration is up: a snapshot every half second, actions at the pause, scrolls at the interval. */
+  async #observe(page, actions) {
+    const options = this.#options;
     const runningAt = Date.now();
     const until = Date.now() + options.duration * 1e3;
-    let scrollAt = Date.now() + options.interval, actionAt = Date.now() + options.delay, previewAt = 0;
+    const due = { scroll: Date.now() + options.interval, action: Date.now() + options.delay, preview: 0 };
     while (Date.now() < until) {
-      deps.signal?.throwIfAborted();
-      const snapshot = await page.evaluate(() => window.__daSiteProbe.snapshot());
-      snapshots.push(snapshot);
-      let preview2;
-      if (deps.previews && Date.now() >= previewAt) {
-        preview2 = Buffer.from(await page.screenshot({ type: "jpeg", quality: 55, timeout: 5e3 })).toString("base64");
-        previewAt = Date.now() + 2e3;
+      this.#deps.signal?.throwIfAborted();
+      await this.#snapshot(page, due);
+      if (actions && Date.now() >= due.action) {
+        await this.#act(actions, runningAt);
+        due.action = Date.now() + options.pause;
       }
-      deps.onSnapshot?.(snapshot, preview2);
-      if (actions && Date.now() >= actionAt) {
-        const description = await actions.next();
-        const action = { step: actions.count, elapsedMs: Date.now() - runningAt, description };
-        actionLog.push(action);
-        deps.onAction?.(action);
-        actionAt = Date.now() + options.pause;
-      }
-      if (options.scroll && Date.now() >= scrollAt) {
+      if (options.scroll && Date.now() >= due.scroll) {
         await page.mouse.wheel(0, options.scroll);
-        scrollAt = Date.now() + options.interval;
+        due.scroll = Date.now() + options.interval;
       }
-      await new Promise((r2) => setTimeout(r2, Math.min(500, Math.max(0, until - Date.now()))));
+      await pause(Math.min(500, Math.max(0, until - Date.now())));
     }
-    const injectionError = await page.evaluate(() => window.__daSiteProbe.injectionError);
-    if (injectionError) errors.push(injectionError);
-    if (options.report) {
-      deps.onStatus?.("Flushing the installed SDK and waiting for collection responses\u2026");
-      const canReport = await page.evaluate(() => {
-        const sdk = window.doubleagent;
-        if (typeof sdk?.flush !== "function") return false;
-        sdk.flush();
-        return true;
-      });
-      if (!canReport) errors.push("No installed Double Agent SDK was available to report this visit.");
-      const drainStarted = Date.now();
-      do {
-        await new Promise((r2) => setTimeout(r2, 100));
-      } while (Date.now() - drainStarted < 1200 || pending.size > 0 && Date.now() - drainStarted < 6500);
+  }
+  /** Records the probe's snapshot, with a screenshot at most every two seconds when previews are on. */
+  async #snapshot(page, due) {
+    const snapshot = await page.evaluate(() => window.__daSiteProbe.snapshot());
+    this.#snapshots.push(snapshot);
+    let preview2;
+    if (this.#deps.previews && Date.now() >= due.preview) {
+      preview2 = Buffer.from(await page.screenshot({ type: "jpeg", quality: 55, timeout: 5e3 })).toString("base64");
+      due.preview = Date.now() + 2e3;
     }
-    const observed = fixture ? snapshots.some((row) => row.injected?.id === fixture.id && row.observed) : null;
+    this.#deps.onSnapshot?.(snapshot, preview2);
+  }
+  async #act(actions, runningAt) {
+    const description = await actions.next();
+    const action = { step: actions.count, elapsedMs: Date.now() - runningAt, description };
+    this.#actions.push(action);
+    this.#deps.onAction?.(action);
+  }
+  /** Flushes the installed SDK, then waits for its collection requests (including signature verification). */
+  async #flush(page) {
+    this.#deps.onStatus?.("Flushing the installed SDK and waiting for collection responses\u2026");
+    const canReport = await page.evaluate(() => {
+      const sdk = window.doubleagent;
+      if (typeof sdk?.flush !== "function") return false;
+      sdk.flush();
+      return true;
+    });
+    if (!canReport) this.#errors.push("No installed Double Agent SDK was available to report this visit.");
+    const drainStarted = Date.now();
+    do {
+      await pause(100);
+    } while (Date.now() - drainStarted < 1200 || this.#pending.size > 0 && Date.now() - drainStarted < 6500);
+  }
+  /** Fails on any signing problem, a probe injection error, an unseen fixture, or reporting nothing accepted. */
+  #status(injectionError, observed) {
+    const unsigned = !!this.#deps.signRequest && !this.#signed;
+    const unreported = this.#options.report && !this.#accepted;
+    if (this.#signFailed || unsigned || injectionError || this.#fixture && !observed || unreported) return "fail";
+    return this.#fixture ? "pass" : "observed";
+  }
+  #reporting() {
+    const { report } = this.#options;
+    let outcome = "blocked";
+    if (report) outcome = this.#accepted ? "accepted" : "not-confirmed";
+    return { mode: report ? "site" : "isolated", accepted: this.#accepted, blocked: this.#blocked, outcome, receipts: [...this.#receipts], pending: this.#pending.size };
+  }
+  #report(result) {
+    const fixture = this.#fixture;
+    const observed = fixture ? this.#snapshots.some((row) => row.injected?.id === fixture.id && row.observed) : null;
+    const { url: _url, ...options } = this.#options;
     return {
       schemaVersion: "1",
       runId: randomUUID(),
-      target: cleanTarget(options.url),
-      options: (({ url: _url, ...rest }) => rest)(options),
-      startedAt,
+      target: cleanTarget(this.#options.url),
+      options,
+      startedAt: result.startedAt,
       finishedAt: (/* @__PURE__ */ new Date()).toISOString(),
-      browser: browser.version(),
-      status: signFailed || deps.signRequest && !signed || injectionError || fixture && !observed || options.report && !accepted ? "fail" : fixture ? "pass" : "observed",
+      browser: result.browser,
+      status: this.#status(result.injectionError, observed),
       expectedSignal: fixture?.reason ?? null,
       injectedFixtureObserved: observed,
-      actionsCompleted: actions?.count ?? 0,
-      actions: actionLog,
-      declared_identity: parseAgentUserAgent(userAgent ?? ""),
-      ...deps.signRequest ? { signing: { signed, failed: signFailed } } : {},
-      reporting: {
-        mode: options.report ? "site" : "isolated",
-        accepted,
-        blocked,
-        outcome: !options.report ? "blocked" : accepted ? "accepted" : "not-confirmed",
-        receipts: [...receipts],
-        pending: pending.size
-      },
-      snapshots,
-      errors,
-      limits: [
-        "Behavior scenarios are scripted patterns using trusted browser input on temporary test controls, not real LLM agents or tasks on the website.",
-        "Behavior-only is a diagnostic score excluding identity and environment signals. The full verdict remains authoritative for this test.",
-        "Fixture pass means the requested signal was observed, not that a real AI agent or provider was verified.",
-        "Playwright remains detectable. Observe is not proof of a human visit; human controls require a person in a normal browser.",
-        "Local detector output and the installed SDK/server verdict can differ; both are reported when available.",
-        "Isolated blocks standard Double Agent telemetry paths; the target website can still receive page requests and its other analytics.",
-        ...options.report ? ["Reporting uses the installed SDK and its consent/settings. Accepted collection is not proof of dashboard indexing; synthetic visits are not automatically labelled as tests."] : []
-      ]
+      actionsCompleted: result.actionsCompleted,
+      actions: this.#actions,
+      declared_identity: parseAgentUserAgent(result.userAgent ?? ""),
+      ...this.#deps.signRequest ? { signing: { signed: this.#signed, failed: this.#signFailed } } : {},
+      reporting: this.#reporting(),
+      snapshots: this.#snapshots,
+      errors: this.#errors,
+      limits: this.#options.report ? [...LIMITS, REPORTING_LIMIT] : [...LIMITS]
     };
-  } finally {
-    deps.signal?.removeEventListener("abort", cancel);
-    await context?.close().catch(() => {
-    });
-    await browser?.close().catch(() => {
-    });
   }
+};
+async function chromiumUserAgent(browser) {
+  const initial = await browser.newContext();
+  try {
+    return await (await initial.newPage()).evaluate(() => navigator.userAgent);
+  } finally {
+    await initial.close();
+  }
+}
+async function runSiteSimulation(options, deps) {
+  const chromium = deps.chromium ?? playwrightRuntime(deps.cwd).chromium;
+  const source = deps.probeSource ?? readFileSync3(new URL("./simulation-probe.js", import.meta.url), "utf8");
+  return new SiteSimulation(options, deps, chromium, source).run();
 }
 
 // ../../node_modules/@slicekit/erc8128/node_modules/@noble/hashes/_u64.js
@@ -10203,14 +10401,15 @@ function simulationSigner(privateKey, chainId, apiOrigin, targetHost) {
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname as dirname2, resolve } from "node:path";
 
-// ../identity/src/erc8004.ts
+// ../identity/src/chain.ts
 var RegistryError = class extends Error {
-  constructor(code, message) {
-    super(message);
+  constructor(code, message, options) {
+    super(message, options);
     this.code = code;
   }
 };
-async function boundedJson(response) {
+var DEFAULT_MAX_BYTES = 131072;
+async function boundedJson(response, maxBytes = DEFAULT_MAX_BYTES) {
   if (!response.ok || !response.body) throw new RegistryError("rpc_unavailable", "The configured RPC did not return a successful response.");
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
@@ -10220,19 +10419,21 @@ async function boundedJson(response) {
       const { value, done } = await reader.read();
       if (done) break;
       size2 += value.byteLength;
-      if (size2 > 131072) throw new RegistryError("rpc_response_too_large", "RPC response exceeded 128 KiB.");
+      if (size2 > maxBytes) throw new RegistryError("rpc_response_too_large", `RPC response exceeded ${Math.round(maxBytes / 1024)} KiB.`);
       text += decoder.decode(value, { stream: true });
     }
     return JSON.parse(text + decoder.decode());
   } finally {
-    await reader.cancel().catch(() => {
-    });
+    try {
+      await reader.cancel();
+    } catch {
+    }
     reader.releaseLock();
   }
 }
-async function resolveAgent(raw, options) {
-  const reference = agentReference(raw);
-  const reputation = reputationQuery(raw, reference);
+var hex = (value) => `0x${value.toString(16)}`;
+var abis = /* @__PURE__ */ new Map();
+function chainClient(options) {
   let rpcUrl;
   try {
     rpcUrl = new URL(options.rpcUrl);
@@ -10244,102 +10445,150 @@ async function resolveAgent(raw, options) {
   const abort = () => controller.abort();
   options.signal?.throwIfAborted();
   options.signal?.addEventListener("abort", abort, { once: true });
-  const timer = setTimeout(abort, 15e3);
+  const timer = setTimeout(abort, options.timeoutMs ?? 15e3);
   let requestId = 0;
-  const rpc = async (method, params) => {
+  const rpc = async (method, params, maxBytes = DEFAULT_MAX_BYTES) => {
     const id = ++requestId;
     const response = await (options.fetcher ?? fetch)(rpcUrl.href, {
+      // Workers reject redirect: 'error'; with 'manual' a 3xx is !ok and fails in boundedJson.
       method: "POST",
-      redirect: "error",
+      redirect: "manual",
       signal: controller.signal,
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ jsonrpc: "2.0", id, method, params })
     });
-    const body = await boundedJson(response);
+    const body = await boundedJson(response, maxBytes);
     if (!body || body.id !== id || body.jsonrpc !== "2.0" || body.error || !("result" in body))
       throw new RegistryError("rpc_error", "RPC rejected a registry read or returned an invalid response.");
     return body.result;
   };
-  try {
-    const chain = await rpc("eth_chainId", []);
-    if (typeof chain !== "string" || !/^0x[0-9a-f]+$/i.test(chain) || BigInt(chain).toString() !== reference.chain_id)
-      throw new RegistryError("wrong_chain", "RPC chain ID does not match the requested registry.");
-    const block = await rpc("eth_getBlockByNumber", [options.blockTag ?? "finalized", false]);
-    if (!block || typeof block.number !== "string" || !/^0x[0-9a-f]+$/i.test(block.number) || typeof block.hash !== "string" || !/^0x[0-9a-f]{64}$/i.test(block.hash))
+  const block = async (tag) => {
+    const found = await rpc("eth_getBlockByNumber", [typeof tag === "bigint" ? hex(tag) : tag, false]);
+    if (!found || typeof found.number !== "string" || !/^0x[0-9a-f]+$/i.test(found.number) || typeof found.hash !== "string" || !/^0x[0-9a-f]{64}$/i.test(found.hash))
       throw new RegistryError("invalid_block", "RPC must support finalized block lookups.");
-    const blockNumber = block.number;
-    const read = async (to, signature, args = []) => {
-      const abi = parseAbi([signature]);
-      const functionName = signature.match(/^function (\w+)/)[1];
-      const data = encodeFunctionData({ abi, functionName, args });
-      const result = await rpc("eth_call", [{ to, data }, blockNumber]);
-      if (typeof result !== "string" || !/^0x(?:[0-9a-f]{2})+$/i.test(result)) throw new RegistryError("invalid_contract", "Registry returned empty or malformed contract data.");
-      return decodeFunctionResult({ abi, functionName, data: result });
-    };
+    const timestamp = typeof found.timestamp === "string" && /^0x[0-9a-f]+$/i.test(found.timestamp) ? Number(BigInt(found.timestamp)) : null;
+    return { number: BigInt(found.number), hash: found.hash.toLowerCase(), timestamp };
+  };
+  const call = async (to, signature, args, at, maxBytes) => {
+    let abi = abis.get(signature);
+    if (!abi) {
+      abi = parseAbi([signature]);
+      abis.set(signature, abi);
+    }
+    const functionName = signature.match(/^function (\w+)/)[1];
+    const data = encodeFunctionData({ abi, functionName, args });
+    const result = await rpc("eth_call", [{ to, data }, hex(at)], maxBytes);
+    if (typeof result !== "string" || !/^0x(?:[0-9a-f]{2})+$/i.test(result)) throw new RegistryError("invalid_contract", "Registry returned empty or malformed contract data.");
+    return decodeFunctionResult({ abi, functionName, data: result });
+  };
+  const logs = async (filter, maxBytes) => {
+    const result = await rpc("eth_getLogs", [{ address: filter.address, topics: filter.topics, fromBlock: hex(filter.fromBlock), toBlock: hex(filter.toBlock) }], maxBytes);
+    if (!Array.isArray(result)) throw new RegistryError("invalid_logs", "RPC returned malformed logs.");
+    return result.filter((log) => !!log && typeof log === "object" && Array.isArray(log.topics) && typeof log.data === "string" && typeof log.blockNumber === "string");
+  };
+  const chainId = async () => {
+    const chain = await rpc("eth_chainId", []);
+    if (typeof chain !== "string" || !/^0x[0-9a-f]+$/i.test(chain)) throw new RegistryError("wrong_chain", "RPC chain ID does not match the requested registry.");
+    return BigInt(chain).toString();
+  };
+  return {
+    signal: controller.signal,
+    rpc,
+    chainId,
+    block,
+    call,
+    logs,
+    close: () => {
+      clearTimeout(timer);
+      options.signal?.removeEventListener("abort", abort);
+    }
+  };
+}
+
+// ../identity/src/erc8004.ts
+async function readFeedback(read, query, token) {
+  let truncated = false;
+  const perReviewer = await Promise.all(query.reviewers.map(async (reviewer) => {
+    const last = await read(query.registry_address, "function getLastIndex(uint256,address) view returns (uint64)", [token, reviewer]);
+    if (last > 5n) truncated = true;
+    const indexes = Array.from({ length: Number(last > 5n ? 5n : last) }, (_, i2) => last - BigInt(i2));
+    return Promise.all(indexes.map(async (index) => {
+      const [rawValue, valueDecimals, tag1, tag2, revoked] = await read(
+        query.registry_address,
+        "function readFeedback(uint256,address,uint64) view returns (int128,uint8,string,string,bool)",
+        [token, reviewer, index]
+      );
+      if (valueDecimals > 18 || tag1.length > 1024 || tag2.length > 1024) throw new RegistryError("invalid_reputation", "Unsupported feedback data.");
+      return { reviewer, feedback_index: index.toString(), value: rawValue.toString(), value_decimals: valueDecimals, tag1, tag2, revoked };
+    }));
+  }));
+  return { feedback: perReviewer.flat(), truncated };
+}
+async function readReputation(read, identityRegistry, query, token) {
+  const identity = await read(query.registry_address, "function getIdentityRegistry() view returns (address)");
+  if (address(identity) !== identityRegistry) throw new RegistryError("wrong_registry", "Reputation registry belongs to a different identity registry.");
+  const [count, value, decimals] = await read(
+    query.registry_address,
+    "function getSummary(uint256,address[],string,string) view returns (uint64,int128,uint8)",
+    [token, query.reviewers, query.tag1, query.tag2]
+  );
+  if (decimals > 18) throw new RegistryError("invalid_reputation", "Unsupported reputation scale.");
+  const { feedback, truncated } = await readFeedback(read, query, token);
+  const matching = feedback.filter((item) => (!query.tag1 || item.tag1 === query.tag1) && (!query.tag2 || item.tag2 === query.tag2));
+  return { query, count: count.toString(), value: value.toString(), value_decimals: decimals, feedback: matching, feedback_limit_per_reviewer: 5, feedback_truncated: truncated };
+}
+function registeredSnapshot(reference, token, pinned, now) {
+  const { owner, uri, wallet } = token;
+  if (typeof uri !== "string" || uri.length > 16384) throw new RegistryError("invalid_metadata", "Agent URI exceeded the supported size.");
+  return {
+    ...reference,
+    standard: "erc-8004",
+    registry_status: "registered",
+    visit_binding: "unverified",
+    owner_address: address(owner, "owner"),
+    agent_wallet: wallet === "0x0000000000000000000000000000000000000000" ? null : address(wallet, "agent_wallet"),
+    agent_uri: uri,
+    metadata_status: "uri-only",
+    block_number: pinned.number.toString(),
+    block_hash: pinned.hash,
+    resolved_at: new Date(now).toISOString(),
+    reputation: null,
+    reputation_status: "not-requested",
+    warnings: []
+  };
+}
+async function resolveAgent(raw, options) {
+  const reference = agentReference(raw);
+  const reputation = reputationQuery(raw, reference);
+  const client = chainClient(options);
+  try {
+    if (await client.chainId() !== reference.chain_id) throw new RegistryError("wrong_chain", "RPC chain ID does not match the requested registry.");
+    const pinned = await client.block(options.blockTag ?? "finalized");
+    const read = (to, signature, args = []) => client.call(to, signature, args, pinned.number);
     const token = BigInt(reference.token_id);
     const [owner, uri, wallet] = await Promise.all([
       read(reference.registry_address, "function ownerOf(uint256) view returns (address)", [token]),
       read(reference.registry_address, "function tokenURI(uint256) view returns (string)", [token]),
       read(reference.registry_address, "function getAgentWallet(uint256) view returns (address)", [token])
     ]);
-    if (typeof uri !== "string" || uri.length > 16384) throw new RegistryError("invalid_metadata", "Agent URI exceeded the supported size.");
-    const snapshot = {
-      ...reference,
-      standard: "erc-8004",
-      registry_status: "registered",
-      visit_binding: "unverified",
-      owner_address: address(owner, "owner"),
-      agent_wallet: wallet === "0x0000000000000000000000000000000000000000" ? null : address(wallet, "agent_wallet"),
-      agent_uri: uri,
-      metadata_status: "uri-only",
-      block_number: BigInt(blockNumber).toString(),
-      block_hash: block.hash.toLowerCase(),
-      resolved_at: new Date(options.now?.() ?? Date.now()).toISOString(),
-      reputation: null,
-      reputation_status: "not-requested",
-      warnings: []
-    };
+    const snapshot = registeredSnapshot(reference, { owner, uri, wallet }, pinned, options.now?.() ?? Date.now());
     if (reputation) {
       try {
-        const identity = await read(reputation.registry_address, "function getIdentityRegistry() view returns (address)");
-        if (address(identity) !== reference.registry_address) throw new RegistryError("wrong_registry", "Reputation registry belongs to a different identity registry.");
-        const [count, value, decimals] = await read(
-          reputation.registry_address,
-          "function getSummary(uint256,address[],string,string) view returns (uint64,int128,uint8)",
-          [token, reputation.reviewers, reputation.tag1, reputation.tag2]
-        );
-        if (decimals > 18) throw new RegistryError("invalid_reputation", "Unsupported reputation scale.");
-        let truncated = false;
-        const feedback = (await Promise.all(reputation.reviewers.map(async (reviewer) => {
-          const last = await read(reputation.registry_address, "function getLastIndex(uint256,address) view returns (uint64)", [token, reviewer]);
-          if (last > 5n) truncated = true;
-          const indexes = Array.from({ length: Number(last > 5n ? 5n : last) }, (_, i2) => last - BigInt(i2));
-          return Promise.all(indexes.map(async (index) => {
-            const [v, d2, tag1, tag2, revoked] = await read(
-              reputation.registry_address,
-              "function readFeedback(uint256,address,uint64) view returns (int128,uint8,string,string,bool)",
-              [token, reviewer, index]
-            );
-            if (d2 > 18 || tag1.length > 1024 || tag2.length > 1024) throw new RegistryError("invalid_reputation", "Unsupported feedback data.");
-            return { reviewer, feedback_index: index.toString(), value: v.toString(), value_decimals: d2, tag1, tag2, revoked };
-          }));
-        }))).flat().filter((f) => (!reputation.tag1 || f.tag1 === reputation.tag1) && (!reputation.tag2 || f.tag2 === reputation.tag2));
-        snapshot.reputation = { query: reputation, count: count.toString(), value: value.toString(), value_decimals: decimals, feedback, feedback_limit_per_reviewer: 5, feedback_truncated: truncated };
+        snapshot.reputation = await readReputation(read, reference.registry_address, reputation, token);
         snapshot.reputation_status = "resolved";
       } catch {
         snapshot.reputation_status = "unavailable";
         snapshot.warnings.push("Reputation could not be resolved. No rating was substituted.");
       }
     }
-    const confirm = await rpc("eth_getBlockByNumber", [blockNumber, false]);
+    const confirm = await client.rpc("eth_getBlockByNumber", [`0x${pinned.number.toString(16)}`, false]);
     if (confirm?.hash?.toLowerCase() !== snapshot.block_hash) throw new RegistryError("block_changed", "Registry block changed during lookup; retry.");
     return snapshot;
   } catch (error) {
     if (error instanceof RegistryError) throw error;
-    throw new RegistryError(controller.signal.aborted ? "rpc_timeout" : "registry_unavailable", "Could not resolve the registry with the configured RPC.");
+    throw new RegistryError(client.signal.aborted ? "rpc_timeout" : "registry_unavailable", "Could not resolve the registry with the configured RPC.", { cause: error });
   } finally {
-    clearTimeout(timer);
-    options.signal?.removeEventListener("abort", abort);
+    client.close();
   }
 }
 
@@ -10356,7 +10605,7 @@ var AGENTS_HELP = `doubleagent agents resolve --agent-name acme.shopping-assista
   --api <origin>               API origin for site associations
   --json                       Print machine-readable output
 
-Direct lookups need DOUBLEAGENT_ETHEREUM_RPC_URL (HTTPS). Site lookups use the API's ERC8004_RPC_URLS.
+Direct lookups need DOUBLEAGENT_ETHEREUM_RPC_URL (HTTPS). Site lookups use the API's own RPC endpoints.
 doubleagent agents list --site st_... [--agent-name acme.shopping-assistant] [--json]
 doubleagent agents remove <association-id> --site st_... [--json]
 
@@ -10389,39 +10638,49 @@ async function resolveIdentityFlags(flags, io) {
     throw new CliError(error.message);
   }
 }
-async function agentsCmd(args, io) {
-  const [action, id] = args.pos;
-  const allowed = /* @__PURE__ */ new Set(["agent-name", "token-id", "chain-id", "registry", "reviewers", "reputation-registry", "tag1", "tag2", "output", "site", "api", "json"]);
+var AGENTS_FLAGS = /* @__PURE__ */ new Set(["agent-name", "token-id", "chain-id", "registry", "reviewers", "reputation-registry", "tag1", "tag2", "output", "site", "api", "json"]);
+function checkAgentsArgs(args) {
   for (const [key, value] of Object.entries(args.flags)) {
-    if (!allowed.has(key)) throw new CliError(`unknown agents option --${key}`);
+    if (!AGENTS_FLAGS.has(key)) throw new CliError(`unknown agents option --${key}`);
     if (key === "json" && value !== true || key !== "json" && typeof value !== "string") throw new CliError(`invalid --${key}`);
   }
+  const action = args.pos[0];
   if (!["resolve", "list", "remove"].includes(action) || args.pos.length > (action === "remove" ? 2 : 1)) throw new CliError(AGENTS_HELP);
+}
+async function resolveCmd(args, io, site, path) {
+  const raw = identityFlags(args.flags);
+  try {
+    reputationQuery(raw, agentReference(raw));
+  } catch (error) {
+    throw new CliError(error.message);
+  }
+  return site ? (await sessionApi(args, io).api.request("POST", path, raw)).data : resolveIdentityFlags(args.flags, io);
+}
+async function listCmd(args, io, path) {
+  const name = args.flags["agent-name"];
+  return (await sessionApi(args, io).api.request("GET", path + (name ? `?agent_name=${encodeURIComponent(String(name))}` : ""))).data;
+}
+async function removeCmd(args, io, path, id) {
+  if (!id) throw new CliError("Supply the association ID to remove.");
+  await sessionApi(args, io).api.request("DELETE", `${path}/${encodeURIComponent(id)}`);
+  return { removed: id };
+}
+async function writeOutput(io, file, result) {
+  const output = resolve(io.cwd, file);
+  await mkdir(dirname2(output), { recursive: true });
+  await writeFile(output, JSON.stringify(result, null, 2) + "\n");
+}
+async function agentsCmd(args, io) {
+  checkAgentsArgs(args);
+  const [action, id] = args.pos;
   const site = str(args.flags.site);
   const path = site ? `/v1/sites/${encodeURIComponent(site)}/agent-identities` : "";
+  if (action !== "resolve" && !site) throw new CliError("--site is required.");
   let result;
-  if (action === "resolve") {
-    const raw = identityFlags(args.flags);
-    try {
-      reputationQuery(raw, agentReference(raw));
-    } catch (error) {
-      throw new CliError(error.message);
-    }
-    result = site ? (await sessionApi(args, io).api.request("POST", path, raw)).data : await resolveIdentityFlags(args.flags, io);
-  } else {
-    if (!site) throw new CliError("--site is required.");
-    if (action === "list") result = (await sessionApi(args, io).api.request("GET", path + (args.flags["agent-name"] ? `?agent_name=${encodeURIComponent(String(args.flags["agent-name"]))}` : ""))).data;
-    else {
-      if (!id) throw new CliError("Supply the association ID to remove.");
-      await sessionApi(args, io).api.request("DELETE", `${path}/${encodeURIComponent(id)}`);
-      result = { removed: id };
-    }
-  }
-  if (args.flags.output) {
-    const output = resolve(io.cwd, String(args.flags.output));
-    await mkdir(dirname2(output), { recursive: true });
-    await writeFile(output, JSON.stringify(result, null, 2) + "\n");
-  }
+  if (action === "resolve") result = await resolveCmd(args, io, site, path);
+  else if (action === "list") result = await listCmd(args, io, path);
+  else result = await removeCmd(args, io, path, id);
+  if (args.flags.output) await writeOutput(io, String(args.flags.output), result);
   io.out(JSON.stringify(result, null, 2));
   if (!args.flags.json) io.out("Registry association only. Website visit identity remains unverified.");
   return 0;
@@ -10461,76 +10720,97 @@ var SIMULATE_HELP = `doubleagent simulate <url> [options]
 
 Isolated by default. Behavior patterns use temporary test controls on the page; site forms are not submitted.
 Fixture assertions check evidence, not real-agent identity. Use a normal browser for human controls.`;
-async function simulateCmd(args, io) {
-  const identityKeys = ["agent-name", "token-id", "chain-id", "registry", "reviewers", "reputation-registry", "tag1", "tag2"];
-  const allowed = /* @__PURE__ */ new Set(["url", "scenario", "evidence", "pause", "agent", "profile", "duration", "delay", "scroll", "interval", "user-agent", "headed", "report", "output", "json", "list", "install-browser", "resolve-identity", "sign-requests", "sign-api", "sign-chain-id", ...identityKeys]);
-  for (const key of Object.keys(args.flags)) if (!allowed.has(key)) throw new CliError(`unknown simulate option --${key}`);
-  for (const key of ["headed", "report", "json", "list", "install-browser", "resolve-identity", "sign-requests"])
-    if (args.flags[key] !== void 0 && args.flags[key] !== true) throw new CliError(`--${key} does not take a value`);
-  if (args.flags.output === true) throw new CliError("--output needs a file path");
-  for (const key of identityKeys) if (args.flags[key] !== void 0 && typeof args.flags[key] !== "string") throw new CliError(`--${key} needs a value`);
+var IDENTITY_KEYS = ["agent-name", "token-id", "chain-id", "registry", "reviewers", "reputation-registry", "tag1", "tag2"];
+var SWITCHES = ["headed", "report", "json", "list", "install-browser", "resolve-identity", "sign-requests"];
+var SIMULATE_FLAGS = /* @__PURE__ */ new Set(["url", "scenario", "evidence", "pause", "agent", "profile", "duration", "delay", "scroll", "interval", "user-agent", "output", "sign-api", "sign-chain-id", ...SWITCHES, ...IDENTITY_KEYS]);
+function checkFlags(flags) {
+  for (const key of Object.keys(flags)) if (!SIMULATE_FLAGS.has(key)) throw new CliError(`unknown simulate option --${key}`);
+  for (const key of SWITCHES) if (flags[key] !== void 0 && flags[key] !== true) throw new CliError(`--${key} does not take a value`);
+  if (flags.output === true) throw new CliError("--output needs a file path");
+  for (const key of IDENTITY_KEYS) if (flags[key] !== void 0 && typeof flags[key] !== "string") throw new CliError(`--${key} needs a value`);
+}
+var given = (flags, keys2) => keys2.some((key) => flags[key] !== void 0);
+function checkDependentFlags(flags, report) {
+  if (given(flags, IDENTITY_KEYS.filter((key) => key !== "agent-name")) && !flags["agent-name"]) throw new CliError("--agent-name is required for an identity declaration.");
+  if (flags["token-id"] === void 0 && given(flags, ["chain-id", "registry"])) throw new CliError("--token-id is required for a registry reference.");
+  if (!flags["resolve-identity"] && given(flags, ["reviewers", "reputation-registry", "tag1", "tag2"])) throw new CliError("Reputation options need --resolve-identity.");
+  if (flags["sign-requests"] && (!report || typeof flags["sign-api"] !== "string")) throw new CliError("--sign-requests requires --report and --sign-api <https-origin>.");
+  if (!flags["sign-requests"] && given(flags, ["sign-api", "sign-chain-id"])) throw new CliError("Signing options require --sign-requests.");
+}
+function readOptions(args) {
+  if (args.pos.length > 1 || args.pos.length && args.flags.url) throw new CliError("Supply one URL, either positional or --url.");
+  try {
+    return siteOptions({ ...args.flags, url: str(args.flags.url) ?? args.pos[0], userAgent: args.flags["user-agent"] });
+  } catch (error) {
+    throw new CliError(error.message);
+  }
+}
+function signerFor(args, io, options) {
+  const { flags } = args;
+  if (!flags["sign-requests"]) return void 0;
+  return simulationSigner(io.env.DOUBLEAGENT_ETHEREUM_PRIVATE_KEY, String(flags["sign-chain-id"] ?? flags["chain-id"] ?? "1"), String(flags["sign-api"]), new URL(options.url).host);
+}
+function progress(io, quiet) {
+  const say = (message) => {
+    if (!quiet) io.out(message);
+  };
+  let previous = "";
+  return {
+    onStatus: say,
+    onAction: (action) => say(`${(action.elapsedMs / 1e3).toFixed(1)}s  Action ${action.step}: ${action.description}`),
+    onCollection: (receipt) => say(`Collection ${receipt.outcome}${receipt.status === null ? "" : ` (HTTP ${receipt.status})`}: ${receipt.endpoint}${receipt.sessionId ? `; SDK session ${receipt.sessionId}` : ""}${receipt.reason ? `; ${receipt.reason}` : ""}`),
+    onSnapshot: (snapshot) => {
+      const code = snapshot.behaviorOnly.class + ":" + snapshot.verdict.class + ":" + Boolean(snapshot.injected) + ":" + snapshot.installed.verdict?.class;
+      if (quiet || code === previous) return;
+      previous = code;
+      io.out(`${(snapshot.elapsedMs / 1e3).toFixed(1)}s  ${snapshot.verdict.class}  ${snapshot.injected ? `fixture: ${snapshot.injected.reason}` : `behavior-only: ${snapshot.behaviorOnly.class}`}  installed SDK: ${snapshot.installed.verdict?.class ?? "unavailable"}`);
+    }
+  };
+}
+function printIntro(io, options) {
+  io.out(`Browser: ${options.headed ? "visible Chromium; closes when the run finishes" : "headless; add --headed to see the browser"}.`);
+  io.out(`Dashboard reporting: ${options.report ? "enabled through the installed SDK; this creates synthetic visits" : "OFF (isolated); add --report to send this visit"}.`);
+}
+function printSummary(io, report, options, output) {
+  io.out(`Completed ${report.actionsCompleted ?? 0} browser actions; captured ${report.snapshots?.length ?? 0} detector snapshots.`);
+  const sessionIds = [...new Set(report.reporting.receipts?.map((receipt) => receipt.sessionId).filter(Boolean) ?? [])];
+  if (sessionIds.length) io.out(`Find this SDK session in the dashboard: ${sessionIds.join(", ")}`);
+  if (options.report) io.out(`Collection accepted: ${report.reporting.accepted ?? 0}; still pending: ${report.reporting.pending ?? 0}. Dashboard indexing is not verified by this command.`);
+  io.out(`${report.status}: ${report.expectedSignal ?? "behavior observation"}; reporting ${report.reporting.outcome}. Report: ${output}`);
+  io.out("Behavior patterns and markers do not verify provider identity. Human controls need a person in a normal browser.");
+  for (const error of report.errors) io.err(error);
+}
+async function writeReport(io, file, report) {
+  const output = resolve2(io.cwd, file);
+  await mkdir2(dirname3(output), { recursive: true });
+  await writeFile2(output, JSON.stringify(report, null, 2) + "\n");
+  return output;
+}
+async function answerWithoutRun(args, io) {
   if (args.flags.list) {
     io.out(JSON.stringify({ scenarios: ["observe", "bot", "agent"], agents: SIMULATED_AGENTS, profiles: SITE_PROFILES }, null, 2));
     return 0;
   }
-  if (args.flags["install-browser"]) {
-    await installSimulationBrowser(io.cwd);
-    io.out(args.flags.json ? JSON.stringify({ installed: "chromium" }) : "Chromium installed.");
-    return 0;
-  }
-  if (args.pos.length > 1 || args.pos.length && args.flags.url) throw new CliError("Supply one URL, either positional or --url.");
-  let options;
-  try {
-    options = siteOptions({ ...args.flags, url: str(args.flags.url) ?? args.pos[0], userAgent: args.flags["user-agent"] });
-  } catch (error) {
-    throw new CliError(error.message);
-  }
-  if (identityKeys.some((key) => key !== "agent-name" && args.flags[key] !== void 0) && !args.flags["agent-name"]) throw new CliError("--agent-name is required for an identity declaration.");
-  if (args.flags["token-id"] === void 0 && ["chain-id", "registry"].some((key) => args.flags[key] !== void 0)) throw new CliError("--token-id is required for a registry reference.");
-  if (!args.flags["resolve-identity"] && ["reviewers", "reputation-registry", "tag1", "tag2"].some((key) => args.flags[key] !== void 0)) throw new CliError("Reputation options need --resolve-identity.");
-  if (args.flags["sign-requests"] && (!options.report || typeof args.flags["sign-api"] !== "string")) throw new CliError("--sign-requests requires --report and --sign-api <https-origin>.");
-  if (!args.flags["sign-requests"] && ["sign-api", "sign-chain-id"].some((key) => args.flags[key] !== void 0)) throw new CliError("Signing options require --sign-requests.");
-  const signRequest = args.flags["sign-requests"] ? simulationSigner(io.env.DOUBLEAGENT_ETHEREUM_PRIVATE_KEY, String(args.flags["sign-chain-id"] ?? args.flags["chain-id"] ?? "1"), String(args.flags["sign-api"]), new URL(options.url).host) : void 0;
+  if (!args.flags["install-browser"]) return null;
+  await installSimulationBrowser(io.cwd);
+  io.out(args.flags.json ? JSON.stringify({ installed: "chromium" }) : "Chromium installed.");
+  return 0;
+}
+async function simulateCmd(args, io) {
+  checkFlags(args.flags);
+  const answered = await answerWithoutRun(args, io);
+  if (answered !== null) return answered;
+  const options = readOptions(args);
+  checkDependentFlags(args.flags, options.report);
+  const signRequest = signerFor(args, io, options);
   const identity = args.flags["resolve-identity"] ? await resolveIdentityFlags(args.flags, io) : void 0;
-  if (!args.flags.json) {
-    io.out(`Browser: ${options.headed ? "visible Chromium; closes when the run finishes" : "headless; add --headed to see the browser"}.`);
-    io.out(`Dashboard reporting: ${options.report ? "enabled through the installed SDK; this creates synthetic visits" : "OFF (isolated); add --report to send this visit"}.`);
-  }
-  let previous = "";
-  const report = await runSiteSimulation(options, {
-    cwd: io.cwd,
-    signRequest,
-    onStatus: (message) => {
-      if (!args.flags.json) io.out(message);
-    },
-    onAction: (action) => {
-      if (!args.flags.json) io.out(`${(action.elapsedMs / 1e3).toFixed(1)}s  Action ${action.step}: ${action.description}`);
-    },
-    onCollection: (receipt) => {
-      if (!args.flags.json) io.out(`Collection ${receipt.outcome}${receipt.status === null ? "" : ` (HTTP ${receipt.status})`}: ${receipt.endpoint}${receipt.sessionId ? `; SDK session ${receipt.sessionId}` : ""}${receipt.reason ? `; ${receipt.reason}` : ""}`);
-    },
-    onSnapshot: (snapshot) => {
-      const code = snapshot.behaviorOnly.class + ":" + snapshot.verdict.class + ":" + Boolean(snapshot.injected) + ":" + snapshot.installed.verdict?.class;
-      if (!args.flags.json && code !== previous) {
-        previous = code;
-        io.out(`${(snapshot.elapsedMs / 1e3).toFixed(1)}s  ${snapshot.verdict.class}  ${snapshot.injected ? `fixture: ${snapshot.injected.reason}` : `behavior-only: ${snapshot.behaviorOnly.class}`}  installed SDK: ${snapshot.installed.verdict?.class ?? "unavailable"}`);
-      }
-    }
-  });
+  const quiet = !!args.flags.json;
+  if (!quiet) printIntro(io, options);
+  const report = await runSiteSimulation(options, { cwd: io.cwd, signRequest, ...progress(io, quiet) });
   if (identity) report.registry_identity = { ...identity, association: "simulation-parameter", visit_binding: "unverified" };
-  const output = resolve2(io.cwd, str(args.flags.output) ?? "doubleagent-simulation.json");
-  await mkdir2(dirname3(output), { recursive: true });
-  await writeFile2(output, JSON.stringify(report, null, 2) + "\n");
-  if (args.flags.json) io.out(JSON.stringify(report, null, 2));
-  else {
-    io.out(`Completed ${report.actionsCompleted ?? 0} browser actions; captured ${report.snapshots?.length ?? 0} detector snapshots.`);
-    const sessionIds = [...new Set(report.reporting.receipts?.map((receipt) => receipt.sessionId).filter(Boolean) ?? [])];
-    if (sessionIds.length) io.out(`Find this SDK session in the dashboard: ${sessionIds.join(", ")}`);
-    if (options.report) io.out(`Collection accepted: ${report.reporting.accepted ?? 0}; still pending: ${report.reporting.pending ?? 0}. Dashboard indexing is not verified by this command.`);
-    io.out(`${report.status}: ${report.expectedSignal ?? "behavior observation"}; reporting ${report.reporting.outcome}. Report: ${output}`);
-    io.out("Behavior patterns and markers do not verify provider identity. Human controls need a person in a normal browser.");
-    for (const error of report.errors) io.err(error);
-  }
+  const output = await writeReport(io, str(args.flags.output) ?? "doubleagent-simulation.json", report);
+  if (quiet) io.out(JSON.stringify(report, null, 2));
+  else printSummary(io, report, options, output);
   return report.status === "fail" ? 1 : 0;
 }
 
@@ -10586,10 +10866,19 @@ var COMMANDS = {
   simulate: simulateCmd,
   agents: agentsCmd
 };
+var COMMAND_HELP = { simulate: SIMULATE_HELP, agents: AGENTS_HELP };
+var wantsHelp = (args) => !!(args.flags.help || args.flags.h) || !args.cmd || args.cmd === "help";
+function reportError(args, io, e2) {
+  const known = e2 instanceof InstallError || e2 instanceof CliError || e2 instanceof ApiError;
+  const msg = known ? e2.message : e2.stack ?? String(e2);
+  if (args.flags.json) io.out(JSON.stringify({ error: msg, ...e2 instanceof ApiError ? { code: e2.code, status: e2.status } : {} }, null, 2));
+  else io.err(`error: ${msg}`);
+  return e2 instanceof CliError ? e2.exitCode : 1;
+}
 async function run(argv, io) {
   const args = parseArgs(argv);
-  if (args.flags.help || args.flags.h || !args.cmd || args.cmd === "help") {
-    io.out(args.cmd === "simulate" ? SIMULATE_HELP : args.cmd === "agents" ? AGENTS_HELP : HELP);
+  if (wantsHelp(args)) {
+    io.out(COMMAND_HELP[args.cmd ?? ""] ?? HELP);
     return 0;
   }
   const cmd = COMMANDS[args.cmd];
@@ -10604,11 +10893,7 @@ ${HELP}`);
     if (bare) throw new CliError(`invalid --${bare}: expected a value`);
     return await cmd(args, io);
   } catch (e2) {
-    const known = e2 instanceof InstallError || e2 instanceof CliError || e2 instanceof ApiError;
-    const msg = known ? e2.message : e2.stack ?? String(e2);
-    if (args.flags.json) io.out(JSON.stringify({ error: msg, ...e2 instanceof ApiError ? { code: e2.code, status: e2.status } : {} }, null, 2));
-    else io.err(`error: ${msg}`);
-    return e2 instanceof CliError ? e2.exitCode : 1;
+    return reportError(args, io, e2);
   }
 }
 function guessDomain(p2) {
@@ -10650,94 +10935,123 @@ function nextSteps(c2) {
   return steps;
 }
 function readKey(args, io) {
-  const given = str(args.flags.key) ?? io.env.DOUBLEAGENT_KEY;
-  if (given === void 0) return void 0;
-  if (SECRET_KEY_RE.test(given)) throw new InstallError("that is a secret key (sk_\u2026): it must never be put in client code. Use the site's public key (pk_\u2026).");
-  if (!KEY_RE.test(given)) throw new InstallError(`"${given}" is not a public key (expected pk_live_\u2026 or pk_test_\u2026)`);
-  return given;
+  const given2 = str(args.flags.key) ?? io.env.DOUBLEAGENT_KEY;
+  if (given2 === void 0) return void 0;
+  if (SECRET_KEY_RE.test(given2)) throw new InstallError("that is a secret key (sk_\u2026): it must never be put in client code. Use the site's public key (pk_\u2026).");
+  if (!KEY_RE.test(given2)) throw new InstallError(`"${given2}" is not a public key (expected pk_live_\u2026 or pk_test_\u2026)`);
+  return given2;
 }
-async function init(args, io) {
-  const asJson = !!args.flags.json;
+function initOptions(args, io) {
   const cwd = resolve3(io.cwd, str(args.flags.cwd) ?? ".");
   const email = str(args.flags.email);
-  const given = readKey(args, io);
-  if (email && given) throw new InstallError("use either --email (creates a key) or --key, not both");
+  const given2 = readKey(args, io);
+  if (email && given2) throw new InstallError("use either --email (creates a key) or --key, not both");
   if (email !== void 0 && !EMAIL_RE.test(email)) throw new InstallError(`"${email}" is not an email address`);
-  const env = args.flags.test ? "test" : "live";
-  const profile = str(args.flags.profile) ?? "auto";
-  const dryRun = !!args.flags["dry-run"];
-  const yes = !!(args.flags.yes || args.flags.y);
-  const project = openProject(cwd);
-  const stack = detectStack(project);
-  const domain = str(args.flags.domain)?.toLowerCase() ?? guessDomain(project);
-  const pending = `pk_${env}_PENDING`;
-  const key = email ? pending : given;
-  const plan = planInstall(project, stack, { key, profile });
-  const integrations = detectIntegrations(project);
-  const warnings = [];
-  if (email && dryRun) warnings.push("dry run: no account is created; the diff shows a placeholder key");
-  const diffs = plan.changes.map((c2) => unifiedDiff(c2.path, c2.before, c2.after));
-  const claimUrl = `${portalBase(args, io)}/claim${domain ? `?domain=${encodeURIComponent(domain)}` : ""}`;
-  if (!asJson) printHuman(io, stack, plan, integrations, diffs, warnings);
-  let applied = false;
-  let account;
-  let finalKey = given;
-  if (!dryRun) {
-    const question = plan.changes.length ? `Apply ${plan.changes.length} change(s)${email ? ` and create an account for ${email}` : ""}? [Y/n] ` : void 0;
-    if (question && !asJson && !yes && io.confirm && !await io.confirm(question)) {
-      io.out("Aborted, nothing written.");
-      return 1;
-    }
-    if (email) {
-      account = await createAccount(args, io, { email, domain, name: str(args.flags.name) });
-      finalKey = account.keys?.[`pk_${env}`] ?? account.keys?.pk_live ?? account.keys?.pk_test;
-      if (!finalKey) throw new CliError("the account was created but the API returned no public key");
-    }
-    for (const c2 of plan.changes) {
-      const abs = join4(cwd, c2.path);
-      mkdirSync2(dirname4(abs), { recursive: true });
-      writeFileSync2(abs, finalKey && email ? c2.after.split(pending).join(finalKey) : c2.after);
-    }
-    applied = plan.changes.length > 0;
+  return {
+    asJson: !!args.flags.json,
+    cwd,
+    email,
+    given: given2,
+    env: args.flags.test ? "test" : "live",
+    profile: str(args.flags.profile) ?? "auto",
+    dryRun: !!args.flags["dry-run"],
+    yes: !!(args.flags.yes || args.flags.y)
+  };
+}
+async function confirmInit(io, o, plan) {
+  if (!plan.changes.length || o.asJson || o.yes || !io.confirm) return true;
+  return io.confirm(`Apply ${plan.changes.length} change(s)${o.email ? ` and create an account for ${o.email}` : ""}? [Y/n] `);
+}
+function publicKeyOf(account, env) {
+  const key = account.keys?.[`pk_${env}`] ?? account.keys?.pk_live ?? account.keys?.pk_test;
+  if (!key) throw new CliError("the account was created but the API returned no public key");
+  return key;
+}
+function writeChanges(cwd, plan, replace) {
+  for (const c2 of plan.changes) {
+    const abs = join4(cwd, c2.path);
+    mkdirSync2(dirname4(abs), { recursive: true });
+    writeFileSync2(abs, replace ? c2.after.split(replace.pending).join(replace.key) : c2.after);
   }
-  const ctx = { stack, plan, profile, key: finalKey, keyless: !email && !given, domain, claimUrl, account, email };
-  const steps = nextSteps(ctx);
-  const code = plan.status === "unsupported" ? 2 : 0;
-  if (asJson) {
-    io.out(JSON.stringify({
-      stack: stack.id,
-      stack_label: stack.label,
-      platform: stack.platform ?? null,
-      status: plan.status,
-      dry_run: dryRun,
-      keyless: ctx.keyless,
-      key: finalKey ?? null,
-      domain: domain ?? null,
-      claim_url: ctx.keyless ? claimUrl : null,
-      files_changed: applied ? plan.changes.map((c2) => c2.path) : [],
-      planned_changes: plan.changes.map((c2) => ({ path: c2.path, created: c2.before === null })),
-      account: account ? { ...account, warning: "keys.sk_test is shown once: store it server-side, never in client code" } : null,
-      integrations: integrations.map((i2) => i2.name),
-      warnings,
-      notes: plan.notes,
-      next_steps: steps,
-      diff: diffs.join("\n")
-    }, null, 2));
-    return code;
-  }
-  if (applied) io.out(`
+}
+async function applyInit(args, io, o, plan, place) {
+  if (o.dryRun) return { applied: false, key: o.given };
+  if (!await confirmInit(io, o, plan)) return null;
+  const account = o.email ? await createAccount(args, io, { email: o.email, domain: place.domain, name: str(args.flags.name) }) : void 0;
+  const key = account ? publicKeyOf(account, o.env) : o.given;
+  writeChanges(o.cwd, plan, account && key ? { pending: place.pending, key } : null);
+  return { applied: plan.changes.length > 0, account, key };
+}
+function printInitJson(io, r2) {
+  const { ctx } = r2;
+  const { plan } = ctx;
+  io.out(JSON.stringify({
+    stack: ctx.stack.id,
+    stack_label: ctx.stack.label,
+    platform: ctx.stack.platform ?? null,
+    status: plan.status,
+    dry_run: r2.dryRun,
+    keyless: ctx.keyless,
+    key: ctx.key ?? null,
+    domain: ctx.domain ?? null,
+    claim_url: ctx.keyless ? ctx.claimUrl : null,
+    files_changed: r2.applied ? plan.changes.map((c2) => c2.path) : [],
+    planned_changes: plan.changes.map((c2) => ({ path: c2.path, created: c2.before === null })),
+    account: ctx.account ? { ...ctx.account, warning: "keys.sk_test is shown once: store it server-side, never in client code" } : null,
+    integrations: r2.integrations.map((i2) => i2.name),
+    warnings: r2.warnings,
+    notes: plan.notes,
+    next_steps: r2.steps,
+    diff: r2.diffs.join("\n")
+  }, null, 2));
+}
+function printInitSummary(io, r2) {
+  const { plan, account } = r2.ctx;
+  if (r2.applied) io.out(`
 Wrote ${plan.changes.map((c2) => c2.path).join(", ")}.`);
-  else if (dryRun && plan.changes.length) io.out("\nDry run: nothing written.");
+  else if (r2.dryRun && plan.changes.length) io.out("\nDry run: nothing written.");
   if (account) {
     io.out(`
-Created account ${account.account_id} with site ${account.site_id}; installed ${finalKey}.`);
+Created account ${account.account_id} with site ${account.site_id}; installed ${r2.ctx.key}.`);
     if (account.keys?.sk_test) io.out(`Test secret key (shown once, server-side only, never in client code):
   ${account.keys.sk_test}`);
   }
   io.out(`
 Next steps:
-${steps.map((s2) => s2.startsWith("  ") ? s2 : `  - ${s2}`).join("\n")}`);
-  return code;
+${r2.steps.map((s2) => s2.startsWith("  ") ? s2 : `  - ${s2}`).join("\n")}`);
+}
+var claimUrlOf = (args, io, domain) => `${portalBase(args, io)}/claim${domain ? `?domain=${encodeURIComponent(domain)}` : ""}`;
+async function init(args, io) {
+  const o = initOptions(args, io);
+  const project = openProject(o.cwd);
+  const stack = detectStack(project);
+  const domain = str(args.flags.domain)?.toLowerCase() ?? guessDomain(project);
+  const pending = `pk_${o.env}_PENDING`;
+  const plan = planInstall(project, stack, { key: o.email ? pending : o.given, profile: o.profile });
+  const integrations = detectIntegrations(project);
+  const warnings = o.email && o.dryRun ? ["dry run: no account is created; the diff shows a placeholder key"] : [];
+  const diffs = plan.changes.map((c2) => unifiedDiff(c2.path, c2.before, c2.after));
+  if (!o.asJson) printHuman(io, stack, plan, integrations, diffs, warnings);
+  const done = await applyInit(args, io, o, plan, { domain, pending });
+  if (!done) {
+    io.out("Aborted, nothing written.");
+    return 1;
+  }
+  const ctx = {
+    stack,
+    plan,
+    profile: o.profile,
+    key: done.key,
+    keyless: !o.email && !o.given,
+    domain,
+    claimUrl: claimUrlOf(args, io, domain),
+    account: done.account,
+    email: o.email
+  };
+  const report = { ctx, applied: done.applied, dryRun: o.dryRun, integrations, diffs, warnings, steps: nextSteps(ctx) };
+  if (o.asJson) printInitJson(io, report);
+  else printInitSummary(io, report);
+  return plan.status === "unsupported" ? 2 : 0;
 }
 function printHuman(io, stack, plan, integrations, diffs, warnings) {
   io.out(`Stack: ${stack.label}${stack.platform ? ` (${stack.platform})` : ""}`);
@@ -10762,25 +11076,43 @@ async function verifyCmd(args, io) {
   io.out(`${mark(r2.stub)} queue stub`);
   io.out(r2.keyless && r2.script ? "ok   keyless install (claim the domain to see its data)" : `${mark(r2.keyValid)} key ${r2.key ?? "(none)"}`);
   if (r2.integrations.length) io.out(`     integrations on page: ${r2.integrations.join(", ")}`);
-  const ic = r2.installCheck;
-  if (!ic.reachable) io.out(`     install check: API unreachable (${ic.error})`);
-  else if (ic.status === 404) io.out("     install check: not available on this API yet");
-  else if (ic.check) printInstallCheck(io, ic.check);
-  else io.out(`     install check (${ic.status}): ${typeof ic.body === "string" ? ic.body : JSON.stringify(ic.body)}`);
+  printInstallCheckResult(io, r2.installCheck);
   for (const p2 of r2.problems) io.err(`problem: ${p2}`);
   io.out(r2.ok ? "\nInstalled correctly." : "\nNot installed correctly.");
   return r2.ok ? 0 : 1;
 }
+function printInstallCheckResult(io, ic) {
+  if (!ic.reachable) io.out(`     install check: API unreachable (${ic.error})`);
+  else if (ic.status === 404) io.out("     install check: not available on this API yet");
+  else if (ic.check) printInstallCheck(io, ic.check);
+  else io.out(`     install check (${ic.status}): ${typeof ic.body === "string" ? ic.body : JSON.stringify(ic.body)}`);
+}
+function verdictText(ok) {
+  if (ok === void 0) return "no verdict";
+  return ok ? "ok" : "NOT ok";
+}
+var yn = (b) => {
+  if (b === void 0) return "?";
+  return b ? "yes" : "no";
+};
+function keyLine(c2) {
+  if (c2.keyless) return `       keyless: yes${c2.claim_url ? ` (claim at ${c2.claim_url})` : ""}`;
+  if (c2.key !== void 0 || c2.key_valid !== void 0) return `       key: ${c2.key ?? "?"} (valid: ${yn(c2.key_valid)})`;
+  return void 0;
+}
+function installFacts(c2) {
+  return [
+    c2.script_found === void 0 ? void 0 : `       script found: ${yn(c2.script_found)}${c2.script_src ? ` (${c2.script_src})` : ""}`,
+    keyLine(c2),
+    c2.profile_attr === void 0 ? void 0 : `       data-profile: ${c2.profile_attr}`,
+    c2.stub_before_script === void 0 ? void 0 : `       stub before script: ${yn(c2.stub_before_script)}`,
+    c2.integrations_detected?.length ? `       integrations: ${c2.integrations_detected.join(", ")}` : void 0,
+    c2.last_beacon_at === void 0 ? void 0 : `       last beacon: ${c2.last_beacon_at ?? "never"}`
+  ];
+}
 function printInstallCheck(io, c2) {
-  const yn = (b) => b === void 0 ? "?" : b ? "yes" : "no";
-  io.out(`     install check: ${c2.ok === void 0 ? "no verdict" : c2.ok ? "ok" : "NOT ok"}`);
-  if (c2.script_found !== void 0) io.out(`       script found: ${yn(c2.script_found)}${c2.script_src ? ` (${c2.script_src})` : ""}`);
-  if (c2.keyless) io.out(`       keyless: yes${c2.claim_url ? ` (claim at ${c2.claim_url})` : ""}`);
-  else if (c2.key !== void 0 || c2.key_valid !== void 0) io.out(`       key: ${c2.key ?? "?"} (valid: ${yn(c2.key_valid)})`);
-  if (c2.profile_attr !== void 0) io.out(`       data-profile: ${c2.profile_attr}`);
-  if (c2.stub_before_script !== void 0) io.out(`       stub before script: ${yn(c2.stub_before_script)}`);
-  if (c2.integrations_detected?.length) io.out(`       integrations: ${c2.integrations_detected.join(", ")}`);
-  if (c2.last_beacon_at !== void 0) io.out(`       last beacon: ${c2.last_beacon_at ?? "never"}`);
+  io.out(`     install check: ${verdictText(c2.ok)}`);
+  for (const line of installFacts(c2)) if (line) io.out(line);
   for (const p2 of c2.problems ?? []) {
     io.out(`       problem: ${p2.message ?? p2.code ?? "unknown"}${p2.code && p2.message ? ` [${p2.code}]` : ""}`);
     if (p2.fix) io.out(`         fix: ${p2.fix}`);

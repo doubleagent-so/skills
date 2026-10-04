@@ -59,6 +59,7 @@ and an optional account upgrade.
 | Skill | Purpose | Included resources |
 | --- | --- | --- |
 | [doubleagent](skills/doubleagent/SKILL.md) | Install, verify, simulate detection and resolve ERC-8004 identities | Framework runbook, platform references and five Node.js helpers |
+| [doubleagent-agents](skills/doubleagent-agents/SKILL.md) | Register an agent with Double Agent, sign and list its Agent Card, add observability | Agent runbook, 19 references and four Node.js helpers |
 
 The skill guides installation and controlled simulations for your coding agent. Visitor classification
 runs in the Double Agent SDK and service; the skill itself is not a detector.
@@ -105,11 +106,9 @@ does not, by itself, mean malicious behavior. See the
 
 ## Maintenance and support
 
-Maintained by [Double Agent](https://github.com/doubleagent-so). This is the official
-distribution repository; its source lives in the
-[Double Agent monorepo](https://github.com/doubleagent-so/doubleagent/tree/main/skills).
-Documentation and helpers are published together so installation guidance stays
-aligned with the CLI.
+Maintained by [Double Agent](https://github.com/doubleagent-so). This is the official distribution repository: its
+files are generated from Double Agent's private source repository, and documentation and helpers are published
+together so installation guidance stays aligned with the CLI.
 
 For installation issues, [open an issue](https://github.com/doubleagent-so/skills/issues/new/choose).
 For private account or credential issues, contact

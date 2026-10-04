@@ -16,21 +16,13 @@ exposures and vulnerabilities.
 
 ## Propose a change
 
-This repository is a distribution mirror. Durable changes belong in the
-[source monorepo](https://github.com/doubleagent-so/doubleagent), which generates
-the published files. If you cannot access that repository, open an issue here with
-the proposed wording or reproduction; maintainers can apply it upstream.
+This repository is a distribution mirror: its files are generated from Double Agent's private source repository.
+Open an issue here with the proposed wording or a reproduction, and maintainers apply it at the source. That covers
+the skill runbooks and references, this README and its documentation and templates, and the bundled helpers.
 
-| Change | Source location in the monorepo |
-| --- | --- |
-| Skill runbook and platform guidance | `skills/doubleagent/` |
-| Distribution README, documentation and GitHub templates | `skills/repository/` |
-| Bundled helper behavior | `packages/cli/src/` |
-| Repository publication | `scripts/publish-skills.sh` |
-
-Do not manually patch generated `skills/doubleagent/scripts/*.mjs` files. Rebuild
-them from the CLI source and include the generated result. See
-[Maintenance](docs/maintenance.md) for the validation and publishing process.
+The helpers in `skills/*/scripts/*.mjs` are generated from the CLI source, so a pull request that edits them cannot
+be merged as is; describe the behavior you need instead. See [Maintenance](docs/maintenance.md) for the validation
+and publishing process.
 
 Keep examples executable and placeholders explicit. Distinguish automated edits
 from manual platform instructions, optional account creation from keyless setup,

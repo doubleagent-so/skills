@@ -23,6 +23,7 @@ To install this skill itself, run from the project:
 ```sh
 npx skills add doubleagent-so/skills
 ```
+For an AI agent's own access (registration, Agent Cards, directory, observability), use the `doubleagent-agents` skill.
 
 ## Simulate traffic
 
@@ -180,8 +181,7 @@ For direct API diagnostics, use the published URL in this request:
 curl -s "https://api.doubleagent.so/v1/install-check?url=https://your-site.example"
 ```
 
-Inspect the complete result. Exit `0` checks HTML presence and key format; it does
-not prove browser execution, successful reporting or classification accuracy.
+Inspect the complete result. Exit `0` checks HTML presence and key format; it does not prove browser execution, successful reporting or classification accuracy.
 For local-only sites, use browser checks and report remote verification as incomplete.
 
 ## Account access

@@ -261,3 +261,47 @@ npx @doubleagent-so/cli verify-domain your-site.example --method dns --site st_R
 If proof is missing, the command prints the record to publish and returns exit
 code `1`. Publish that record, then run the same command again. See
 [Claim a domain](../skills/doubleagent/references/claim.md) for the other methods.
+
+## Agent helpers
+
+The `doubleagent-agents` skill ships four helpers for AI agents. Run them from the installed skill directory with
+Node.js 20+. Each one prints its full options with `--help`.
+
+```sh
+node scripts/portal.mjs register --name <name> [--owner-email <email>] [--role viewer|admin] [--card-url <url>] [--mcp-url <url>] [--token-file <path>] [--json] [--print-secret]
+node scripts/portal.mjs status [--name <name> | --token-file <path>] [--json]
+node scripts/portal.mjs call <tool> [--args '<json object>'] [--name <name> | --token-file <path>] [--secret-file <path> [--force]] [--print-secret]
+```
+
+```sh
+node scripts/proof.mjs hmac [--secret-file <start_verification answer file>] --nonce=<nonce>
+node scripts/proof.mjs jws --key <private jwk> --proof-id <apf_…> --nonce=<nonce> [--aud https://app.doubleagent.so] [--lifetime 300]
+node scripts/proof.mjs ed25519 --key <private Ed25519 jwk> --proof-id <apf_…> --nonce=<nonce>
+node scripts/proof.mjs mcp-record --key <private Ed25519 jwk>
+```
+
+```sh
+node scripts/card.mjs keygen --alg ES256|EdDSA --kid <kid> --out <dir>
+node scripts/card.mjs sign <card.json> --key <private jwk> --jku <https URL of your jwks.json> [--card-url <url>] [--out <file> [--force]]
+node scripts/card.mjs check <card URL or https origin> [--api <origin>] [--json]
+```
+
+```sh
+node scripts/observe.mjs create --name <name> --env test|live [--account acc_…] (--write <env file> [--force] | --print-secret) [--json]
+node scripts/observe.mjs status <agt_…> [--json]
+node scripts/observe.mjs test-event <src_…>
+```
+
+Replace each `<…>` value. `proof.mjs hmac` reads the proof secret from the `start_verification` answer file that
+`portal.mjs call --secret-file` wrote, else from `DOUBLEAGENT_PROOF_SECRET`; never pass a secret as a command-line
+value. `card.mjs sign` refuses a `jku` that is not on the origin serving the card. `--force` replaces an existing
+output file. `portal.mjs register` and `observe.mjs create` create accounts or resources and write secrets to 0600 or
+git-ignored files.
+
+| Exit code | Meaning |
+| --- | --- |
+| `0` | Done |
+| `1` | Failed (`card.mjs check`: problems found) |
+| `2` | Usage error |
+| `3` | Waiting for approval (`portal.mjs`) |
+| `4` | Declined, expired or revoked (`portal.mjs`) |

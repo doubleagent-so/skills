@@ -17,8 +17,12 @@ function walk(dir) {
   }
 }
 walk(root);
-const documents = files.filter(f => extname(f) === '.md');
-const bodies = new Map(documents.map(f => [f, readFileSync(f, 'utf8')]));
+const skillRoots = readdirSync(resolve(root, 'skills'), { withFileTypes: true })
+  .filter(entry => entry.isDirectory() && existsSync(resolve(root, 'skills', entry.name, 'SKILL.md')))
+  .map(entry => resolve(root, 'skills', entry.name));
+assert(skillRoots.length > 0, 'No skills found');
+const documents = files.filter(file => extname(file) === '.md');
+const bodies = new Map(documents.map(file => [file, readFileSync(file, 'utf8')]));
 const anchors = new Map();
 for (const [file, body] of bodies) {
   const counts = new Map(), ids = new Set();
@@ -41,24 +45,23 @@ for (const [file, body] of bodies) {
   assert(!inFence, `${relative(root, file)}: unclosed code fence`);
   anchors.set(file, ids);
 }
+const skillOf = file => skillRoots.find(skillRoot => !relative(skillRoot, file).startsWith('..'));
 let links = 0;
 for (const [file, body] of bodies) {
   const withoutBlocks = body.replace(/^\s*```[^\n]*\n[\s\S]*?^\s*```\s*$/gm, '');
   assert(!/`(?:npx|npm|node|curl|bash|git|python3?)\s+[^`\n]+`/.test(withoutBlocks), `${relative(root, file)}: put runnable commands in fenced code blocks`);
   const prose = withoutBlocks.replace(/`[^`\n]+`/g, '');
   const targets = [
-    ...[...prose.matchAll(/\[[^\]\n]*\]\(([^)\s]+)\)/g)].map(m => m[1]),
-    ...[...prose.matchAll(/(?:href|src)="([^"]+)"/g)].map(m => m[1]),
+    ...[...prose.matchAll(/\[[^\]\n]*\]\(([^)\s]+)\)/g)].map(match => match[1]),
+    ...[...prose.matchAll(/(?:href|src)="([^"]+)"/g)].map(match => match[1]),
   ];
   for (const target of targets) {
     if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(target)) continue;
     const [path, fragment] = target.split('#');
     const dest = path ? resolve(dirname(file), decodeURIComponent(path)) : file;
     assert(!relative(root, dest).startsWith('..'), `${relative(root, file)}: link escapes repository: ${target}`);
-    const skillRoot = resolve(root, 'skills/doubleagent');
-    if (!relative(skillRoot, file).startsWith('..')) {
-      assert(!relative(skillRoot, dest).startsWith('..'), `${relative(root, file)}: local link escapes installed skill: ${target}`);
-    }
+    const skillRoot = skillOf(file);
+    if (skillRoot) assert(!relative(skillRoot, dest).startsWith('..'), `${relative(root, file)}: local link escapes installed skill: ${target}`);
     assert(existsSync(dest), `${relative(root, file)}: missing target ${target}`);
     if (fragment && statSync(dest).isFile() && extname(dest) === '.md') {
       assert(anchors.get(dest)?.has(decodeURIComponent(fragment)), `${relative(root, file)}: missing anchor ${target}`);
@@ -66,14 +69,28 @@ for (const [file, body] of bodies) {
     links++;
   }
 }
-const skill = readFileSync(resolve(root, 'skills/doubleagent/SKILL.md'), 'utf8');
-const frontmatter = /^---\n([\s\S]*?)\n---/.exec(skill)?.[1] ?? '';
-assert(/^name: doubleagent$/m.test(frontmatter), 'Missing doubleagent skill name');
-assert(/^license: MIT$/m.test(frontmatter), 'Missing skill license');
-const helper = name => resolve(root, 'skills/doubleagent/scripts', `${name}.mjs`);
-for (const name of ['snippet', 'verify', 'create-account', 'simulate', 'agents']) execFileSync(process.execPath, ['--check', helper(name)]);
+let helpers = 0;
+for (const skillRoot of skillRoots) {
+  const name = relative(resolve(root, 'skills'), skillRoot);
+  const frontmatter = /^---\n([\s\S]*?)\n---/.exec(readFileSync(resolve(skillRoot, 'SKILL.md'), 'utf8'))?.[1] ?? '';
+  assert(new RegExp(`^name: ${name}$`, 'm').test(frontmatter), `skills/${name}: frontmatter name must be ${name}`);
+  assert(/^license: MIT$/m.test(frontmatter), `skills/${name}: missing license`);
+  const scripts = resolve(skillRoot, 'scripts');
+  if (!existsSync(scripts)) continue;
+  for (const script of readdirSync(scripts).filter(file => /\.(?:mjs|js)$/.test(file))) {
+    execFileSync(process.execPath, ['--check', resolve(scripts, script)]);
+    helpers++;
+  }
+}
+const agents = resolve(root, 'skills/doubleagent-agents/scripts');
+if (existsSync(agents)) {
+  for (const name of ['portal', 'proof', 'card', 'observe']) {
+    assert(execFileSync(process.execPath, [resolve(agents, `${name}.mjs`), '--help'], { encoding: 'utf8' }).includes(`usage: ${name}.mjs`), `${name}.mjs --help`);
+  }
+}
+const website = resolve(root, 'skills/doubleagent');
+const helper = name => resolve(website, 'scripts', `${name}.mjs`);
 assert(execFileSync(process.execPath, [helper('agents'), '--help'], { encoding: 'utf8' }).includes('agent-name'));
-execFileSync(process.execPath, ['--check', resolve(root, 'skills/doubleagent/scripts/simulation-probe.js')]);
 assert(JSON.parse(execFileSync(process.execPath, [helper('simulate'), '--list'], { encoding: 'utf8' })).agents.length > 0);
 const stacks = ['html','vite','next-app','next-pages','astro','nuxt','sveltekit','remix','wordpress','wix','squarespace','webflow','shopify'];
 for (const stack of stacks) {
@@ -82,4 +99,4 @@ for (const stack of stacks) {
   assert(Array.isArray(result.lines));
   assert(result.lines.join('\n').includes('https://cdn.doubleagent.so/v1/doubleagent.js'));
 }
-console.log(`Checked ${documents.length} Markdown files, ${links} local references, 5 helper scripts and the simulation probe and ${stacks.length} platform snippets.`);
+process.stdout.write(`Checked ${documents.length} Markdown files in ${skillRoots.length} skills, ${links} local references, ${helpers} helper scripts and ${stacks.length} platform snippets.\n`);

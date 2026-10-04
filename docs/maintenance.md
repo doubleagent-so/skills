@@ -2,95 +2,48 @@
 
 [Documentation home](../README.md) · [Contributing](../CONTRIBUTING.md)
 
-Use this guide to validate and publish changes from the source monorepo.
-Maintainer access is required for the source repository and publication.
+This guide is for maintainers: what is generated, how to check a distribution tree, and how publication works.
 
 ## Source of truth
 
-The [Double Agent monorepo](https://github.com/doubleagent-so/doubleagent) owns the
-source. This repository distributes a self-contained skill and its documentation.
+Double Agent's private source repository owns every file here. This repository distributes self-contained skills and
+their documentation.
 
-| Source | Published destination | How it is produced |
+| Published path | What it is | How it is produced |
 | --- | --- | --- |
-| `skills/doubleagent/SKILL.md` | `skills/doubleagent/SKILL.md` | Copied from source |
-| `skills/doubleagent/references/` | Same relative path | Copied from source |
-| `packages/cli/src/skill-bin/` and shared CLI code | `skills/doubleagent/scripts/*.mjs` | Bundled by the CLI build |
-| `skills/repository/` | Repository root | Copied by the publisher, including dotfiles |
-| `skills/LICENSE` | `LICENSE` | Copied by the publisher |
+| `skills/<name>/SKILL.md` | A skill's runbook | Copied from source |
+| `skills/<name>/references/` | The skill's references | Copied from source |
+| `skills/<name>/scripts/` | The skill's helpers | Bundled from the CLI source; never edited by hand |
+| Repository root files | This README, `docs/`, templates and `tools/` | Copied from source, including dotfiles |
+| `LICENSE` | MIT | Copied from source |
 
-The published helper scripts are generated. Installation helpers have no external
-runtime dependencies and support Node.js 18+. Simulation requires Node.js 20+,
-Playwright and Chromium. Its generated `simulation-probe.js` browser asset must
-ship beside `simulate.mjs`. Their entry points call the
-same CLI implementation used by the npm package.
+Helpers have no runtime dependencies. Installation helpers support Node.js 18+. Website simulation needs Node.js 20+,
+Playwright and Chromium, and its `simulation-probe.js` browser asset must ship beside `simulate.mjs`. The `agents.mjs`
+registry helper bundles its ABI codec and needs an HTTPS RPC for direct lookups. The `doubleagent-agents` helpers
+(`portal.mjs`, `proof.mjs`, `card.mjs`, `observe.mjs`) need Node.js 20+.
 
-The `agents.mjs` registry helper also bundles its dependencies, including the pinned
-ABI codec from `packages/identity`. It supports Node.js 18+ and needs an HTTPS RPC
-for direct lookups. Test identity resolution with the CLI tests when changing it:
+## Check a distribution tree
 
-```sh
-npx vitest run packages/identity/test packages/cli/test apps/api/test/agent-identities.test.ts
-```
-
-## Validate a source change
-
-From the monorepo root, install dependencies and rebuild the CLI and bundled helpers:
+From the root of this repository:
 
 ```sh
-npm ci
-npm run build -w @doubleagent-so/cli
+node tools/check-docs.mjs
 ```
 
-Check types and run the installer/skill tests:
-
-```sh
-npm run typecheck -w @doubleagent-so/cli
-npx vitest run packages/cli/test
-```
-
-The skill tests check frontmatter, local references, exact snippet agreement with
-the installer, generated-script freshness and helper behavior against a local API.
-They do not provision real accounts.
-
-Still from the monorepo root, assemble a temporary distribution preview and run
-its checker. This command block uses a POSIX-compatible shell:
-
-```sh
-SKILLS_PREVIEW="$(mktemp -d)"
-mkdir -p "$SKILLS_PREVIEW/skills"
-cp -R skills/doubleagent "$SKILLS_PREVIEW/skills/"
-cp -R skills/repository/. "$SKILLS_PREVIEW/"
-cp skills/LICENSE "$SKILLS_PREVIEW/LICENSE"
-node "$SKILLS_PREVIEW/tools/check-docs.mjs"
-```
-
-The documentation check validates local Markdown links and anchors, language-tagged
-code fences, command formatting, the brand asset, helper syntax and stack-snippet output. It makes no network requests
-and does not create accounts. GitHub Actions runs it on pushes and pull requests.
-External product links and hosted-platform instructions still need editorial review.
-Inspect rendered Markdown, especially code blocks and tables, before publishing.
+The check validates local Markdown links and anchors, language-tagged code fences, command formatting, the brand
+asset, helper syntax and the website helpers' snippet output. It makes no network requests and creates no accounts.
+GitHub Actions runs it on every push and pull request. External product links and hosted-platform instructions still
+need editorial review: inspect rendered Markdown, especially code blocks and tables, before publishing.
 
 ## Publish
 
-Review the generated tree and source changes before publication. The existing
-publisher is run from the monorepo:
-
-```sh
-bash scripts/publish-skills.sh "Sync Double Agent skills and documentation"
-```
-
-This command clones the distribution repository, replaces its generated tree,
-commits differences and pushes **directly to `main`**. It requires write access and
-SSH authentication. It is not a dry run or a pull-request preview. Use a separate
-branch and pull request when reviewing a proposed distribution update.
-
-Keep source and distribution changes together: a distribution edit that is
-not reflected in `skills/repository/` or `skills/doubleagent/` will be overwritten
-by a later publication. Do not hand-edit the compiled helpers.
+Maintainers publish from the source repository. Publication replaces this repository's tree, commits the difference
+and pushes **directly to `main`**; it is not a dry run. Review a proposed update on a branch and pull request first. A
+change made only here is overwritten by the next publication, so make durable changes at the source. Never hand-edit
+the generated helpers.
 
 ## Compatibility and change history
 
-Review the [commit history](https://github.com/doubleagent-so/skills/commits/main/)
-for the version installed from this repository. The npm CLI and browser SDK have
-their own releases; a skills-repository commit does not deploy either service.
-Record the skills commit and relevant CLI/SDK version when investigating an issue.
+Review the [commit history](https://github.com/doubleagent-so/skills/commits/main/) for the version installed from
+this repository. The npm CLI and browser SDK have their own releases; a skills-repository commit does not deploy either
+service. Record the skills commit and relevant CLI/SDK version when investigating an issue.
