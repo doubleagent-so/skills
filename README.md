@@ -1,8 +1,10 @@
 <p align="center">
-  <img src="assets/doubleagent.svg" width="80" height="80" alt="Double Agent">
+  <img src="https://raw.githubusercontent.com/doubleagent-so/skills/main/assets/doubleagent.svg" width="80" height="80" alt="Double Agent">
 </p>
 
 <h1 align="center">Double Agent Skills</h1>
+
+<p align="center"><code>doubleagent-so/skills</code></p>
 
 <p align="center">Official agent skills for installing and testing Double Agent on your website.</p>
 
@@ -10,10 +12,15 @@
   <strong><a href="https://lab.doubleagent.dev">Live demo</a></strong> ·
   <a href="https://doubleagent.so/docs/skill/">Docs</a> ·
   <a href="https://doubleagent.so">Website</a> ·
-  <a href="docs/getting-started.md">Getting started</a> ·
-  <a href="CHANGELOG.md">Changelog</a> ·
+  <a href="https://github.com/doubleagent-so/skills/blob/main/docs/getting-started.md">Getting started</a> ·
+  <a href="https://github.com/doubleagent-so/skills/blob/main/CHANGELOG.md">Changelog</a> ·
   <a href="https://github.com/doubleagent-so/skills/issues">Report an issue</a> ·
-  <a href="LICENSE">MIT license</a>
+  <a href="https://github.com/doubleagent-so/skills/blob/main/LICENSE">MIT license</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/doubleagent-so/skills/actions/workflows/docs.yml"><img src="https://github.com/doubleagent-so/skills/actions/workflows/docs.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/doubleagent-so/skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
 </p>
 
 Double Agent helps you understand whether website traffic comes from humans, bots
@@ -106,15 +113,23 @@ does not, by itself, mean malicious behavior. See the
 | [Maintenance](docs/maintenance.md) | Source ownership, generated files, validation and publishing |
 | [Security](SECURITY.md) | Credential handling and private vulnerability reporting |
 
-## Maintenance and support
+## About this repository
 
-Maintained by [Double Agent](https://github.com/doubleagent-so). This is the official distribution repository: its
-files are generated from Double Agent's private source repository, and documentation and helpers are published
-together so installation guidance stays aligned with the CLI.
+This is the official distribution repository: its files are generated from Double Agent's private source repository,
+and documentation and helpers are published together so installation guidance stays aligned with the CLI.
 
-For installation issues, [open an issue](https://github.com/doubleagent-so/skills/issues/new/choose).
-For private account or credential issues, contact
-[support@doubleagent.so](mailto:support@doubleagent.so). Never include secret keys
-or session tokens in a public issue.
+---
 
-Licensed under the [MIT License](LICENSE).
+## Support
+
+- Questions and bugs: [open an issue](https://github.com/doubleagent-so/skills/issues/new/choose).
+- Private account or billing questions: [support@doubleagent.so](mailto:support@doubleagent.so). Never post secret keys or session tokens in a public issue.
+- Security problems: report them privately as described in [SECURITY.md](https://github.com/doubleagent-so/skills/blob/main/SECURITY.md).
+
+<p align="center">
+  Maintained by <a href="https://doubleagent.so">Double Agent</a> ·
+  <a href="https://github.com/doubleagent-so/skills/blob/main/CONTRIBUTING.md">Contributing</a> ·
+  <a href="https://github.com/doubleagent-so/skills/blob/main/CODE_OF_CONDUCT.md">Code of conduct</a> ·
+  <a href="https://github.com/doubleagent-so/skills/blob/main/SECURITY.md">Security</a> ·
+  <a href="https://github.com/doubleagent-so/skills/blob/main/LICENSE">MIT license</a>
+</p>
