@@ -23,9 +23,9 @@ when your human asks, with their own address as the owner.
 | Browser SDK | `/v1/` (permanent) |
 | A2A | 1.0 and 0.3; send `A2A-Version` |
 | MCP | `2025-11-25`, `2025-06-18`, `2025-03-26` |
-| `@doubleagent-so/observe` | 0.1.0 |
-| `@doubleagent-so/cli` | 0.1.0 |
-| `@doubleagent-so/agent-detector` | 0.3.0 |
+| `@doubleagent-so/observe` | 0.2.0 |
+| `@doubleagent-so/cli` | 0.2.0 |
+| `@doubleagent-so/agent-detector` | 0.4.0 |
 
 Read an Agent Card's `version` to notice changes, and tolerate fields you do not know.
 

@@ -7219,7 +7219,7 @@ var FIXTURES = FINGERPRINTS.flatMap((entry) => [
   }))
 ]);
 
-// ../identity/src/reference.ts
+// src/identity/reference.ts
 var ETHEREUM_REGISTRIES = {
   chain_id: "1",
   identity: "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
@@ -7261,7 +7261,7 @@ function reputationQuery(raw, reference) {
   return { registry_address: address(registry, "reputation_registry"), reviewers, tag1: tags[0], tag2: tags[1] };
 }
 
-// ../identity/src/user-agent.ts
+// src/identity/user-agent.ts
 var TOKEN = /^[!#$%&'*+.^_`|~0-9a-z-]+$/i;
 var AGENT_UA_MAX = 1024;
 function agentUserAgent(name, ref) {
@@ -10374,7 +10374,7 @@ function privateKeyToAccount(privateKey, options = {}) {
   };
 }
 
-// ../identity/src/sign-request.ts
+// src/identity/sign-request.ts
 function simulationSigner(privateKey, chainId, apiOrigin, targetHost) {
   if (!privateKey || !/^0x[0-9a-f]{64}$/i.test(privateKey)) throw new Error("Set DOUBLEAGENT_ETHEREUM_PRIVATE_KEY to a signing wallet private key (0x + 64 hex digits).");
   if (!/^[1-9][0-9]*$/.test(chainId) || !Number.isSafeInteger(Number(chainId))) throw new Error("Signing chain ID must be a positive safe integer.");
@@ -10401,7 +10401,7 @@ function simulationSigner(privateKey, chainId, apiOrigin, targetHost) {
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname as dirname2, resolve } from "node:path";
 
-// ../identity/src/chain.ts
+// src/identity/chain.ts
 var RegistryError = class extends Error {
   constructor(code, message, options) {
     super(message, options);
@@ -10481,11 +10481,6 @@ function chainClient(options) {
     if (typeof result !== "string" || !/^0x(?:[0-9a-f]{2})+$/i.test(result)) throw new RegistryError("invalid_contract", "Registry returned empty or malformed contract data.");
     return decodeFunctionResult({ abi, functionName, data: result });
   };
-  const logs = async (filter, maxBytes) => {
-    const result = await rpc("eth_getLogs", [{ address: filter.address, topics: filter.topics, fromBlock: hex(filter.fromBlock), toBlock: hex(filter.toBlock) }], maxBytes);
-    if (!Array.isArray(result)) throw new RegistryError("invalid_logs", "RPC returned malformed logs.");
-    return result.filter((log) => !!log && typeof log === "object" && Array.isArray(log.topics) && typeof log.data === "string" && typeof log.blockNumber === "string");
-  };
   const chainId = async () => {
     const chain = await rpc("eth_chainId", []);
     if (typeof chain !== "string" || !/^0x[0-9a-f]+$/i.test(chain)) throw new RegistryError("wrong_chain", "RPC chain ID does not match the requested registry.");
@@ -10497,7 +10492,6 @@ function chainClient(options) {
     chainId,
     block,
     call,
-    logs,
     close: () => {
       clearTimeout(timer);
       options.signal?.removeEventListener("abort", abort);
@@ -10505,7 +10499,7 @@ function chainClient(options) {
   };
 }
 
-// ../identity/src/erc8004.ts
+// src/identity/erc8004.ts
 async function readFeedback(read, query, token) {
   let truncated = false;
   const perReviewer = await Promise.all(query.reviewers.map(async (reviewer) => {
@@ -11145,5 +11139,5 @@ async function main(p2, prefix = []) {
   return code;
 }
 
-// src/skill-bin/simulate.ts
+// ../../tools/skill-scripts/src/skill-bin/simulate.ts
 await main(process, ["simulate"]);

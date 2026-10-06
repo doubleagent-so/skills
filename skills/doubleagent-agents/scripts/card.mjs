@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generated helper from Double Agent (source and issues: github.com/doubleagent-so/skills). Do not edit.
 
-// src/agent-skill/card.ts
+// ../../tools/skill-scripts/src/agent-skill/card.ts
 import { existsSync as existsSync2, readFileSync as readFileSync3, writeFileSync as writeFileSync2 } from "node:fs";
 import { join, resolve as resolve2 } from "node:path";
 import { parseArgs } from "node:util";
@@ -81,10 +81,10 @@ var CliError = class extends Error {
   }
 };
 
-// src/agent-skill/jose.ts
+// ../../tools/skill-scripts/src/agent-skill/jose.ts
 import { readFileSync } from "node:fs";
 
-// src/agent-skill/run.ts
+// ../../tools/skill-scripts/src/agent-skill/run.ts
 var EXIT = { ok: 0, failed: 1, usage: 2, waiting: 3, closed: 4 };
 async function runAgentCommand(command) {
   process.exitCode = await command(process.argv.slice(2), {
@@ -117,7 +117,7 @@ async function guarded(io, work) {
   }
 }
 
-// src/agent-skill/jose.ts
+// ../../tools/skill-scripts/src/agent-skill/jose.ts
 var PARAMS = {
   ES256: { import: { name: "ECDSA", namedCurve: "P-256" }, sign: { name: "ECDSA", hash: "SHA-256" } },
   EdDSA: { import: { name: "Ed25519" }, sign: { name: "Ed25519" } }
@@ -166,7 +166,7 @@ async function signJws(header, encodedPayload, key) {
   return { protected: encodedHeader, signature, compact: `${encodedHeader}.${encodedPayload}.${signature}` };
 }
 
-// src/agent-skill/origin.ts
+// ../../tools/skill-scripts/src/agent-skill/origin.ts
 var LOOPBACK = /* @__PURE__ */ new Set(["127.0.0.1", "localhost", "[::1]"]);
 function originOf(value, flag) {
   let url;
@@ -180,7 +180,7 @@ function originOf(value, flag) {
   return url.origin;
 }
 
-// src/agent-skill/secret-files.ts
+// ../../tools/skill-scripts/src/agent-skill/secret-files.ts
 import { execFile } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readFileSync as readFileSync2, statSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -223,7 +223,7 @@ async function assertSafeSecretPath(path, cwd) {
   }
 }
 
-// src/agent-skill/card.ts
+// ../../tools/skill-scripts/src/agent-skill/card.ts
 var USAGE = `usage: card.mjs keygen --alg ES256|EdDSA --kid <kid> --out <dir>
        card.mjs sign <card.json> --key <private jwk> --jku <https URL of your jwks.json> [--card-url <url>] [--out <file> [--force]]
        card.mjs check <card URL or https origin> [--api <origin>] [--json]
@@ -408,5 +408,5 @@ var cardCommand = async (argv, io) => await guarded(io, async () => {
 ${USAGE}`, EXIT.usage);
 });
 
-// src/skill-bin/card.ts
+// ../../tools/skill-scripts/src/skill-bin/card.ts
 await runAgentCommand(cardCommand);

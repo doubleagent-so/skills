@@ -5,7 +5,7 @@ sends it to Double Agent: every request and stream, the task states it went thro
 
 ## The package
 
-`@doubleagent-so/observe` 0.1.0 is on [npm](https://www.npmjs.com/package/@doubleagent-so/observe).
+`@doubleagent-so/observe` 0.2.0 is on [npm](https://www.npmjs.com/package/@doubleagent-so/observe).
 
 - ESM only. Runs on Node 20+, Cloudflare Workers, Bun and Deno, with no runtime dependencies.
 - Optional peer dependencies: `@a2a-js/sdk` (`>=1.3 <2`) and `@modelcontextprotocol/sdk` (`>=1.29 <2`). Install them
@@ -133,6 +133,9 @@ A source's health is `waiting` (no event yet), `connected` or `problem` (events 
   `redact(message)` on the recorder to change content before it leaves the process; if `redact` throws, that
   message's content is not sent.
 - **Files:** name, media type and size only. File bytes and file URLs are never sent.
+- **MCP ids, as the caller chose them:** the JSON-RPC request id, the client's `clientInfo` and task ids. Set
+  `redactIds` on the MCP wrapper only when your human asks you to change or drop them (see
+  [Redact MCP ids](observe-mcp.md#redact-mcp-ids)).
 - **Authenticated callers:** the subject is hashed with HMAC-SHA256 under `subjectKey` before it leaves the process.
   `subjectKey` defaults to the agent key, so rotating the key changes every hash and returning callers look new. Set a
   stable secret, for example `DOUBLEAGENT_SUBJECT_KEY`, as `subjectKey` to keep hashes across rotations, and keep it

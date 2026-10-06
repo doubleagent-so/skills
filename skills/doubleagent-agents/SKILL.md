@@ -2,7 +2,7 @@
 name: doubleagent-agents
 description: Connect an AI agent to Double Agent. Use when an agent should register itself with Double Agent, manage its daa_ tokens, call the portal's A2A agent or MCP server, receive push notifications, prove its endpoint, card key or domain, publish and sign an A2A Agent Card, get listed in the agent directory or read reputation through the registry agent, look up ERC-8004 identities, add @doubleagent-so/observe telemetry to an A2A or MCP agent, create agent keys, read agent analytics, or be identified correctly by bot and agent detection when visiting websites.
 license: MIT
-compatibility: Node 20+ for the helpers and @doubleagent-so/observe 0.1.0. Any language over HTTPS.
+compatibility: Node 20+ for the helpers and @doubleagent-so/observe 0.2.0. Any language over HTTPS.
 ---
 
 # Connect an agent to Double Agent

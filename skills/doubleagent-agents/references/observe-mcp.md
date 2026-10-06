@@ -68,6 +68,7 @@ await client.connect(transport);
 | `issuer` | Server role: the issuer recorded with the SDK's `authInfo.clientId`, which is hashed. Default `mcp`. The token is never read. |
 | `serverUrl` | Client role: the server's URL. Only its origin is recorded, as the counterparty's `card_url`. |
 | `onOperation` | `(op, info) => void`, called as each operation starts, with the method, kind, direction, target, request id, session id and params. |
+| `redactIds` | Optional. Replaces or drops the request id, `clientInfo` or task id before they are recorded; see [Redact MCP ids](#redact-mcp-ids). Default: recorded as sent. |
 | `log` | `(event, fields) => void` for telemetry failures. Default: JSON lines on `console.warn`. |
 
 The wrapped transport keeps the type of the one you pass in. A stdio server or client wraps its stdio transport with
@@ -111,6 +112,48 @@ export default {
 - `waitUntil: true` hands background work to the Workers `ctx`, and the recorder is flushed after each request.
 - A handler that throws is recorded as `protocol_error` with code `internal_error`, and the error is rethrown
   unchanged.
+
+## Redact MCP ids
+
+Both wrappers record three caller-chosen values as sent: the JSON-RPC request id (`mcp.request_id`), the client's
+`initialize` name and version (`client_info`) and a tasks `taskId` (`task_ref`). Leave them alone by default. Set
+`redactIds` only when your human asks you to change or drop them, for example because a client puts a user's name in
+its request ids:
+
+<!-- check:ts node -->
+```ts
+import { createHmac } from 'node:crypto';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import type { Recorder } from '@doubleagent-so/observe';
+import { instrumentMcpTransport } from '@doubleagent-so/observe/mcp';
+
+declare const recorder: Recorder;
+
+const idKey = process.env.ID_REDACTION_KEY;
+if (!idKey) throw new Error('ID_REDACTION_KEY is not set');
+const pseudonym = (id: string) => createHmac('sha256', idKey).update(id).digest('hex').slice(0, 32);
+
+const transport = instrumentMcpTransport(new StdioServerTransport(), {
+  recorder,
+  role: 'server',
+  binding: 'stdio',
+  redactIds: {
+    requestId: () => undefined, // drop it
+    clientInfo: ({ name }) => ({ name }), // keep the name, drop the version
+    taskId: pseudonym, // the same task gets the same ref, so its states stay linked
+  },
+});
+```
+
+- `withMcpTelemetry` takes the same `redactIds`. Each function is optional; a numeric request id arrives as its
+  decimal string.
+- Return the value to record, or `undefined` to drop it. A returned value is checked like the original; one the wire
+  would reject is dropped.
+- A function that throws drops that value and logs `agent_telemetry_redact_failed`; the operation is still recorded.
+- Keep `taskId` deterministic: every event that names the task uses what it returns. Dropping it records `tasks/*`
+  requests without a task and skips the task's states.
+- Only what is recorded changes: pairing, your handlers and `onOperation` still see the original values.
+- Needs `@doubleagent-so/observe` 0.2.0 or later.
 
 ## Paid tools
 

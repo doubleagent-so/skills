@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generated helper from Double Agent (source and issues: github.com/doubleagent-so/skills). Do not edit.
 
-// src/agent-skill/observe.ts
+// ../../tools/skill-scripts/src/agent-skill/observe.ts
 import { resolve as resolve2 } from "node:path";
 import { parseArgs } from "node:util";
 
@@ -97,7 +97,7 @@ var CliError = class extends Error {
   }
 };
 
-// src/agent-skill/run.ts
+// ../../tools/skill-scripts/src/agent-skill/run.ts
 var EXIT = { ok: 0, failed: 1, usage: 2, waiting: 3, closed: 4 };
 async function runAgentCommand(command) {
   process.exitCode = await command(process.argv.slice(2), {
@@ -130,7 +130,7 @@ async function guarded(io, work) {
   }
 }
 
-// src/agent-skill/origin.ts
+// ../../tools/skill-scripts/src/agent-skill/origin.ts
 var LOOPBACK = /* @__PURE__ */ new Set(["127.0.0.1", "localhost", "[::1]"]);
 function originOf(value, flag) {
   let url;
@@ -144,7 +144,7 @@ function originOf(value, flag) {
   return url.origin;
 }
 
-// src/agent-skill/secret-files.ts
+// ../../tools/skill-scripts/src/agent-skill/secret-files.ts
 import { execFile } from "node:child_process";
 import { chmodSync as chmodSync2, existsSync, mkdirSync as mkdirSync2, readFileSync as readFileSync2, statSync, writeFileSync as writeFileSync2 } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -201,7 +201,7 @@ function upsertEnvVar(path, name, value) {
   return index >= 0 ? "replaced" : "added";
 }
 
-// src/agent-skill/observe.ts
+// ../../tools/skill-scripts/src/agent-skill/observe.ts
 var USAGE = `usage: observe.mjs create --name <name> --env test|live [--account acc_\u2026] (--write <env file> [--force] | --print-secret) [--json]
        observe.mjs status <agt_\u2026> [--json]
        observe.mjs test-event <src_\u2026>
@@ -337,5 +337,5 @@ ${USAGE}`, EXIT.usage);
   });
 }
 
-// src/skill-bin/observe.ts
+// ../../tools/skill-scripts/src/skill-bin/observe.ts
 await runAgentCommand(async (argv, io) => await observeCommand(argv, io));

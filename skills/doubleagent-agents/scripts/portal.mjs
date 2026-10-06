@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generated helper from Double Agent (source and issues: github.com/doubleagent-so/skills). Do not edit.
 
-// src/agent-skill/portal.ts
+// ../../tools/skill-scripts/src/agent-skill/portal.ts
 import { accessSync, constants, existsSync as existsSync2, mkdirSync as mkdirSync2, readFileSync as readFileSync2 } from "node:fs";
 import { dirname as dirname2, join as join2, resolve as resolve2 } from "node:path";
 import { parseArgs } from "node:util";
@@ -25,7 +25,7 @@ var CliError = class extends Error {
   }
 };
 
-// src/agent-skill/run.ts
+// ../../tools/skill-scripts/src/agent-skill/run.ts
 var EXIT = { ok: 0, failed: 1, usage: 2, waiting: 3, closed: 4 };
 async function runAgentCommand(command) {
   process.exitCode = await command(process.argv.slice(2), {
@@ -58,7 +58,7 @@ async function guarded(io, work) {
   }
 }
 
-// src/agent-skill/mcp-client.ts
+// ../../tools/skill-scripts/src/agent-skill/mcp-client.ts
 var PROTOCOL_VERSION = "2025-11-25";
 var McpClient = class {
   #endpoint;
@@ -128,7 +128,7 @@ var McpClient = class {
   }
 };
 
-// src/agent-skill/origin.ts
+// ../../tools/skill-scripts/src/agent-skill/origin.ts
 var LOOPBACK = /* @__PURE__ */ new Set(["127.0.0.1", "localhost", "[::1]"]);
 function originOf(value, flag) {
   let url;
@@ -142,7 +142,7 @@ function originOf(value, flag) {
   return url.origin;
 }
 
-// src/agent-skill/pow.ts
+// ../../tools/skill-scripts/src/agent-skill/pow.ts
 import { createHash } from "node:crypto";
 var MAX_POW_BITS = 24;
 var POW_DEADLINE_MS = 6e4;
@@ -175,7 +175,7 @@ function solveAgentPow(challenge, difficulty, { now = Date.now, deadlineMs = POW
   }
 }
 
-// src/agent-skill/secret-files.ts
+// ../../tools/skill-scripts/src/agent-skill/secret-files.ts
 import { execFile } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -229,7 +229,7 @@ async function assertSafeSecretPath(path, cwd) {
   }
 }
 
-// src/agent-skill/portal.ts
+// ../../tools/skill-scripts/src/agent-skill/portal.ts
 var USAGE = `usage: portal.mjs register --name <name> [--owner-email <email>] [--role viewer|admin] [--card-url <url>] [--mcp-url <url>] [--token-file <path>] [--json] [--print-secret]
        portal.mjs status [--name <name> | --token-file <path>] [--json]
        portal.mjs call <tool> [--args '<json object>'] [--name <name> | --token-file <path>] [--secret-file <path> [--force]] [--print-secret]
@@ -440,5 +440,5 @@ var portalCommand = async (argv, io) => await guarded(io, async () => {
 ${USAGE}`, EXIT.usage);
 });
 
-// src/skill-bin/portal.ts
+// ../../tools/skill-scripts/src/skill-bin/portal.ts
 await runAgentCommand(portalCommand);

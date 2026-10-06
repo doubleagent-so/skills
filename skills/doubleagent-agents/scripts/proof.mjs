@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generated helper from Double Agent (source and issues: github.com/doubleagent-so/skills). Do not edit.
 
-// src/agent-skill/proof.ts
+// ../../tools/skill-scripts/src/agent-skill/proof.ts
 import { createHmac } from "node:crypto";
 import { readFileSync as readFileSync3 } from "node:fs";
 import { resolve as resolve2 } from "node:path";
@@ -19,10 +19,10 @@ var CliError = class extends Error {
   }
 };
 
-// src/agent-skill/jose.ts
+// ../../tools/skill-scripts/src/agent-skill/jose.ts
 import { readFileSync } from "node:fs";
 
-// src/agent-skill/run.ts
+// ../../tools/skill-scripts/src/agent-skill/run.ts
 var EXIT = { ok: 0, failed: 1, usage: 2, waiting: 3, closed: 4 };
 async function runAgentCommand(command) {
   process.exitCode = await command(process.argv.slice(2), {
@@ -55,7 +55,7 @@ async function guarded(io, work) {
   }
 }
 
-// src/agent-skill/jose.ts
+// ../../tools/skill-scripts/src/agent-skill/jose.ts
 var PARAMS = {
   ES256: { import: { name: "ECDSA", namedCurve: "P-256" }, sign: { name: "ECDSA", hash: "SHA-256" } },
   EdDSA: { import: { name: "Ed25519" }, sign: { name: "Ed25519" } }
@@ -91,7 +91,7 @@ async function signJws(header, encodedPayload, key) {
   return { protected: encodedHeader, signature, compact: `${encodedHeader}.${encodedPayload}.${signature}` };
 }
 
-// src/agent-skill/origin.ts
+// ../../tools/skill-scripts/src/agent-skill/origin.ts
 var LOOPBACK = /* @__PURE__ */ new Set(["127.0.0.1", "localhost", "[::1]"]);
 function originOf(value, flag) {
   let url;
@@ -105,7 +105,7 @@ function originOf(value, flag) {
   return url.origin;
 }
 
-// src/agent-skill/secret-files.ts
+// ../../tools/skill-scripts/src/agent-skill/secret-files.ts
 import { execFile } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readFileSync as readFileSync2, statSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -143,7 +143,7 @@ async function assertSafeSecretPath(path, cwd) {
   }
 }
 
-// src/agent-skill/proof.ts
+// ../../tools/skill-scripts/src/agent-skill/proof.ts
 var USAGE = `usage: proof.mjs hmac [--secret-file <start_verification answer file>] --nonce=<nonce>
        proof.mjs jws --key <private jwk> --proof-id <apf_\u2026> --nonce=<nonce> [--aud https://app.doubleagent.so] [--lifetime 300]
        proof.mjs ed25519 --key <private Ed25519 jwk> --proof-id <apf_\u2026> --nonce=<nonce>
@@ -246,5 +246,5 @@ ${USAGE}`, EXIT.usage);
   });
 }
 
-// src/skill-bin/proof.ts
+// ../../tools/skill-scripts/src/skill-bin/proof.ts
 await runAgentCommand(async (argv, io) => await proofCommand(argv, io));
