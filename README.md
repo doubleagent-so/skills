@@ -9,9 +9,8 @@
 <p align="center">Official agent skills for installing and testing Double Agent on your website.</p>
 
 <p align="center">
-  <strong><a href="https://lab.doubleagent.dev">Live demo</a></strong> ·
+  <strong><a href="https://doubleagent.so">Website</a></strong> ·
   <a href="https://doubleagent.so/docs/skill/">Docs</a> ·
-  <a href="https://doubleagent.so">Website</a> ·
   <a href="https://github.com/doubleagent-so/skills/blob/main/docs/getting-started.md">Getting started</a> ·
   <a href="https://github.com/doubleagent-so/skills/blob/main/CHANGELOG.md">Changelog</a> ·
   <a href="https://github.com/doubleagent-so/skills/issues">Report an issue</a> ·

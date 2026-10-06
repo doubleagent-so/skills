@@ -5,6 +5,13 @@
 import { resolve as resolve2 } from "node:path";
 import { parseArgs } from "node:util";
 
+// src/text.ts
+function trimTrailing(text, char) {
+  let end = text.length;
+  while (end > 0 && text[end - 1] === char) end--;
+  return text.slice(0, end);
+}
+
 // src/api.ts
 var DEFAULT_API = "https://api.doubleagent.so";
 var ApiError = class extends Error {
@@ -33,7 +40,7 @@ function apiErrorOf(method, path, res, data) {
 var API_TIMEOUT_MS = 3e4;
 var isTimeout = (error) => error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError");
 function createApi(base, session, f = fetch, { timeoutMs = API_TIMEOUT_MS } = {}) {
-  const root = base.replace(/\/+$/, "");
+  const root = trimTrailing(base, "/");
   return {
     base: root,
     async request(method, path, body, headers = {}) {

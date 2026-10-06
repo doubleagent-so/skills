@@ -23,6 +23,15 @@ const skillRoots = readdirSync(resolve(root, 'skills'), { withFileTypes: true })
 assert(skillRoots.length > 0, 'No skills found');
 const documents = files.filter(file => extname(file) === '.md');
 const bodies = new Map(documents.map(file => [file, readFileSync(file, 'utf8')]));
+// HTML tags out of a heading, innermost first until none is left, so `<scr<script>ipt>` cannot leave a tag behind.
+function stripTags(text) {
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<[^<>]*>/g, '');
+  } while (text !== previous);
+  return text;
+}
 const anchors = new Map();
 for (const [file, body] of bodies) {
   const counts = new Map(), ids = new Set();
@@ -38,7 +47,7 @@ for (const [file, body] of bodies) {
     if (inFence) continue;
     const heading = /^#{1,6}\s+(.+?)\s*#*\s*$/.exec(line);
     if (!heading) continue;
-    const base = heading[1].toLowerCase().replace(/<[^>]*>/g, '').replace(/[^\p{L}\p{N}_\s-]/gu, '').replace(/ /g, '-');
+    const base = stripTags(heading[1].toLowerCase()).replace(/[^\p{L}\p{N}_\s-]/gu, '').replace(/ /g, '-');
     const count = counts.get(base) ?? 0;
     ids.add(count ? `${base}-${count}` : base); counts.set(base, count + 1);
   }

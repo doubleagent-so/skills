@@ -5487,6 +5487,14 @@ import { createInterface } from "node:readline/promises";
 import { mkdirSync as mkdirSync2, writeFileSync as writeFileSync2 } from "node:fs";
 import { dirname as dirname4, join as join4, resolve as resolve3 } from "node:path";
 
+// src/text.ts
+function trimTrailing(text, char) {
+  let end = text.length;
+  while (end > 0 && text[end - 1] === char) end--;
+  return text.slice(0, end);
+}
+var escapeRegExp = (text) => text.replace(/[\\^$.*+?()[\]{}|/]/g, "\\$&");
+
 // src/api.ts
 var DEFAULT_API = "https://api.doubleagent.so";
 var DEFAULT_PORTAL = "https://app.doubleagent.so";
@@ -5516,7 +5524,7 @@ function apiErrorOf(method, path, res, data) {
 var API_TIMEOUT_MS = 3e4;
 var isTimeout = (error) => error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError");
 function createApi(base2, session, f = fetch, { timeoutMs = API_TIMEOUT_MS } = {}) {
-  const root = base2.replace(/\/+$/, "");
+  const root = trimTrailing(base2, "/");
   return {
     base: root,
     async request(method, path, body, headers = {}) {
@@ -5592,8 +5600,8 @@ var CliError = class extends Error {
   }
 };
 var str = (v) => typeof v === "string" ? v : void 0;
-var apiBase = (args, io, creds) => (str(args.flags.api) ?? io.env.DOUBLEAGENT_API ?? creds?.api ?? DEFAULT_API).replace(/\/+$/, "");
-var portalBase = (args, io) => (str(args.flags.portal) ?? io.env.DOUBLEAGENT_PORTAL ?? DEFAULT_PORTAL).replace(/\/+$/, "");
+var apiBase = (args, io, creds) => trimTrailing(str(args.flags.api) ?? io.env.DOUBLEAGENT_API ?? creds?.api ?? DEFAULT_API, "/");
+var portalBase = (args, io) => trimTrailing(str(args.flags.portal) ?? io.env.DOUBLEAGENT_PORTAL ?? DEFAULT_PORTAL, "/");
 var anonApi = (args, io) => createApi(apiBase(args, io, loadCredentials(io.env)), void 0, io.fetch);
 function sessionApi(args, io) {
   const creds = loadCredentials(io.env);
@@ -5815,7 +5823,7 @@ function instructions(method, host, token) {
   }
 }
 function verifyTarget(args) {
-  const host = args.pos[0]?.toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+  const host = args.pos[0]?.toLowerCase().replace(/^https?:\/\//, "").split("/", 1)[0];
   if (!host || !/^[a-z0-9.-]+(:\d+)?$/.test(host)) throw new CliError("usage: npx @doubleagent-so/cli verify-domain <host> --method dns|meta|file|script [--site st_\u2026]");
   const method = str(args.flags.method) ?? "dns";
   if (!METHODS.includes(method)) throw new CliError(`--method must be one of ${METHODS.join("|")}`);
@@ -6178,7 +6186,7 @@ function withKey(src, key) {
   if (/data-key="|'data-key':|dataset\.key = '/.test(src)) {
     return src.replace(/(data-key=")[^"]*(")/g, `$1${key}$2`).replace(/('data-key':\s*')[^']*(')/g, `$1${key}$2`).replace(/(dataset\.key = ')[^']*(')/g, `$1${key}$2`);
   }
-  const url = CDN_URL.replace(/[./]/g, "\\$&");
+  const url = escapeRegExp(CDN_URL);
   return src.replace(new RegExp(`(src="${url}")`, "g"), `$1 data-key="${key}"`).replace(new RegExp(`(src: '${url}',)`, "g"), `$1 'data-key': '${key}',`).replace(new RegExp(`^([ \\t]*)(s\\.src = '${url}';)$`, "gm"), `$1$2
 $1s.dataset.key = '${key}';`);
 }
@@ -6518,7 +6526,7 @@ async function verify(url, opts = {}) {
   if (html === null) return result;
   inspectHtml(result, html);
   result.problems.push(...htmlProblems(result));
-  result.installCheck = await installCheck(f, (opts.api ?? result.endpoint ?? DEFAULT_API).replace(/\/+$/, ""), url);
+  result.installCheck = await installCheck(f, trimTrailing(opts.api ?? result.endpoint ?? DEFAULT_API, "/"), url);
   result.ok = result.script && result.stub && (result.keyless || result.keyValid);
   return result;
 }
